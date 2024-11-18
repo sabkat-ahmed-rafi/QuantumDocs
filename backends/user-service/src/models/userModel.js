@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const hashedPassMiddleware = require('../middlewares/hashedPassMiddleware');
+const checkHashedPass = require('../utils/checkHashedPass');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -34,14 +36,11 @@ const userSchema = new mongoose.Schema({
             x: "",
         }
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-        Default: Date.now,
-    }
-})
+}, { timestamps: true }); // This will automatically adds the createdAt and updatedAt field
+
+// middleware and methods
+hashedPassMiddleware(userSchema);
+checkHashedPass(userSchema);
+
 
 module.exports = mongoose.model('User', userSchema);
