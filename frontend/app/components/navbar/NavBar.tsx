@@ -11,7 +11,7 @@ export default function App() {
       <Navbar className="sticky top-0">
       <NavbarContent justify="start" className=" gap-2">
       <SiGoogledocs size={30} className="text-purple-500 " />
-      <p className="text-2xl text-inherit p-0"><span className="">Q</span>uantums<span className="">D</span>ocs</p>
+      <p className="text-2xl text-inherit p-0">QuantumsDocs</p>
       </NavbarContent>
       
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
