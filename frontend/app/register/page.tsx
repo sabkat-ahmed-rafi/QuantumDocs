@@ -1,12 +1,16 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { SiGoogledocs } from 'react-icons/si'
 import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
+import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
+import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 
 
 const Register = () => {
 
+    const [isVisible, setIsVisible] = useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <section>
@@ -24,7 +28,21 @@ const Register = () => {
         <div className='w-full space-y-6 mt-14'>
          <Input variant='bordered' size="lg" type="name" placeholder="Name" />
          <Input variant='bordered' size="lg" type="email" placeholder="Email" />
-         <Input variant='bordered' size="lg" type="password"  placeholder="Password" />
+         <Input 
+         variant='bordered' 
+         size="lg" 
+         type={isVisible ? "text" : "password"} 
+         placeholder="Password"
+         endContent={
+            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+              {isVisible ? (
+                <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              ) : (
+                <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+              )}
+            </button>
+          }
+           />
          <div className='flex justify-end'>
          <Button className='bg-purple-500 text-white font-bold justify-end'>Sign up</Button>
          </div>
