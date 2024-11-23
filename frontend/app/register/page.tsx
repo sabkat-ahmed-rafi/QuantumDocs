@@ -14,7 +14,7 @@ const Register = () => {
 
   return (
     <section>
-    <div className='border p-10 mx-44 my-24 flex justify-between rounded-[15px] shadow-lg shadow-purple-600'>
+    <div className='md:border p-10 lg:mx-44 md:mx-20 lg:my-24 md:my-10 md:flex justify-between md:rounded-[15px] md:shadow-lg md:shadow-purple-600'>
         <div className='w-full flex flex-col justify-between'>
          <div className='space-y-4'>
          <SiGoogledocs size={45} className="text-purple-500 " />
