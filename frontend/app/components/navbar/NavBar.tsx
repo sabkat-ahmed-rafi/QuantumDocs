@@ -11,7 +11,7 @@ export default function App() {
       <Navbar className="sticky top-0">
       <NavbarContent justify="start" className=" gap-2">
       <SiGoogledocs size={30} className="text-purple-500 " />
-      <p className="text-2xl text-inherit p-0">QuantumDocs</p>
+      <p className="text-2xl text-inherit p-0"><span className="font-semibold">Q</span>uantums<span className="font-semibold">D</span>ocs</p>
       </NavbarContent>
       
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -45,7 +45,7 @@ export default function App() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
+            <DropdownItem key="settings"><Link href="" className="text-black">My Settings</Link></DropdownItem>
             <DropdownItem key="logout" color="danger">
               Log Out
             </DropdownItem>
