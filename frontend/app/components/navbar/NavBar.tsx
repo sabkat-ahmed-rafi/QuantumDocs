@@ -11,7 +11,7 @@ export default function App() {
       <Navbar className="sticky top-0">
       <NavbarContent justify="start" className=" gap-2">
       <SiGoogledocs size={30} className="text-purple-500 " />
-      <p className="text-2xl text-inherit p-0"><span className="font-semibold">Q</span>uantums<span className="font-semibold">D</span>ocs</p>
+      <p className="text-2xl text-inherit p-0"><span className="">Q</span>uantums<span className="">D</span>ocs</p>
       </NavbarContent>
       
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -21,7 +21,7 @@ export default function App() {
           type="Search"
           placeholder="Search"
           fullWidth
-          className=" focus:bg-white max-w-[800px] lg:w-[730px] md:w-[400px]"
+          className=" focus:bg-white max-w-[800px] lg:w-[720px] md:w-[400px]"
           startContent={
             <IoSearchOutline color="black" className="text-2xl text-default-400  pointer-events-none flex-shrink-0 animate-pulse" />
           }
