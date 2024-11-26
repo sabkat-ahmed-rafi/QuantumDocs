@@ -1,5 +1,6 @@
 'use client'
-import {Navbar, NavbarBrand, NavbarContent, Link, Button, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import Link from "next/link";
 import { IoSearchOutline } from "react-icons/io5";
 import { SiGoogledocs } from "react-icons/si";
 
@@ -45,7 +46,7 @@ export default function App() {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
-            <DropdownItem key="settings"><Link href="" className="text-black">My Settings</Link></DropdownItem>
+            <DropdownItem className="w-full"><Link href="/signin" className="block text-black w-full">My Settings</Link></DropdownItem>
             <DropdownItem key="logout" color="danger">
               Log Out
             </DropdownItem>
