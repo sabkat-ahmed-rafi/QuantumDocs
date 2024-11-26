@@ -20,7 +20,33 @@ const Register = () => {
     
 
     const handleCreateUser = async (e) => {
-   
+      e.preventDefault();
+
+      if(nameRef.current?.value == "" || emailRef.current?.value == "" || passwordRef.current?.value == "") {
+        return alert("Enter the credentials");
+      }
+      
+      const newUser = {
+        email: emailRef.current?.value || "",
+        password: passwordRef.current?.value || "",
+      }
+      const name = nameRef.current?.value || ""
+      
+
+      try{
+        const user = await dispatch(createUser(newUser)).unwrap();
+        if(user.email) {
+          const updatedUser = await dispatch(updateUser({ name })).unwrap();
+          nameRef.current.value = "";
+          emailRef.current.value = "";
+          passwordRef.current.value = "";
+          console.log(updatedUser);
+        }
+
+      } catch(error) {
+          console.error("Error creating user:", error.message);
+      }
+
     }
 
   return (
