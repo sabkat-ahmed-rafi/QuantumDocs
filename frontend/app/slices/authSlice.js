@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import auth from "../firebase/firebase.init";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth/web-extension";
-
 
 
 // create a user 
@@ -14,6 +13,19 @@ export const createUser = createAsyncThunk('auth/createUser',
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
+        }
+    }
+)
+
+// update a user 
+export const updateUser = createAsyncThunk('auth/updateUser', 
+    async ({name}) => {
+        await updateProfile(auth.currentUser, {displayName: name});
+        return {
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            displayName: auth.currentUser.displayName,
+            photoURL: auth.currentUser.photoURL,
         }
     }
 )
@@ -58,7 +70,7 @@ export const logout = createAsyncThunk('auth/logout',
 
 
 const authSlice = createSlice({
-    name: auth,
+    name: "auth",
     initialState: {
         user: null,
         loading: false
@@ -72,10 +84,14 @@ const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.
-        addCase(createUser.pending, (state) => {state.loading = true});
-        addCase(createUser.fulfilled, (state, action) => {state.user = action.payload, state.loading = false});
-        addCase(createUser.rejected, (state, action) => {state.error = action.error.message, state.loading = false})
+        builder
+        .addCase(createUser.pending, (state) => {state.loading = true})
+        .addCase(createUser.fulfilled, (state, action) => {state.user = action.payload, state.loading = false})
+        .addCase(createUser.rejected, (state, action) => {state.error = action.error.message, state.loading = false})
+
+        .addCase(updateUser.pending, (state) => {state.loading = true})
+        .addCase(updateUser.fulfilled, (state, action) => {state.user = action.payload, state.loading = false})
+        .addCase(updateUser.rejected, (state, action) => {state.error = action.error.message, state.loading = false})
 
         .addCase(loginUser.pending, (state) => { state.loading = true; })
         .addCase(loginUser.fulfilled, (state, action) => { state.user = action.payload; state.loading = false; })

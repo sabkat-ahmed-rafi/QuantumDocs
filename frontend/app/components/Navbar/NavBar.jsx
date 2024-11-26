@@ -8,8 +8,8 @@ import { SiGoogledocs } from "react-icons/si";
 
 export default function App() {
   return (
-    <div className="">
-      <Navbar className="sticky top-0">
+    <div>
+      <Navbar className="light text-black bg-white">
       <NavbarContent justify="start" className=" gap-2">
       <SiGoogledocs size={30} className="text-purple-500 " />
       <p className="text-2xl text-inherit p-0">QuantumsDocs</p>
@@ -42,12 +42,12 @@ export default function App() {
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
+            <DropdownItem key="profile" className="h-14 gap-2 text-black">
+              <p className="font-semibold ">Signed in as</p>
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
-            <DropdownItem className="w-full"><Link href="/signin" className="block text-black w-full">My Settings</Link></DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem className="w-full py-0"><Link href="/signin" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
+            <DropdownItem className="text-black" key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>

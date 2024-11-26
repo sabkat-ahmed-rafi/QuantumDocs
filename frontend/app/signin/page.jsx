@@ -7,26 +7,25 @@ import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 
 
-const Register = () => {
+const SignIn = () => {
 
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    <section>
-    <div className='md:border p-10 lg:mx-44 md:mx-20 lg:my-24 md:my-10 md:flex justify-between md:rounded-[15px] md:shadow-lg md:shadow-purple-600'>
+    <section className='text-black bg-white'>
+    <div className='md:border p-10 lg:mx-60 md:mx-20 lg:my-24 md:my-10 md:flex justify-between md:rounded-[15px] md:shadow-lg md:shadow-purple-600'>
         <div className='w-full flex flex-col justify-between'>
          <div className='space-y-4'>
          <SiGoogledocs size={45} className="text-purple-500 " />
-         <h1 className='text-4xl font-sans'>Create a Quantum Account</h1>
-         <p className='font-semibold font-sans'>Enter your credentials</p>
+         <h1 className='text-4xl font-sans'>Sign in</h1>
+         <p className='font-semibold font-sans'>Use your Quantum Account</p>
          </div>
          <p className='italic'>
-            Already have an account? <Link className='text-purple-500' href="/signin">Login</Link>
+            Don't have any account? <Link className='text-purple-500' href="/register">Create</Link>
          </p>
         </div>
         <div className='w-full space-y-6 mt-14'>
-         <Input variant='bordered' size="lg" type="name" placeholder="Name" />
          <Input variant='bordered' size="lg" type="email" placeholder="Email" />
          <Input 
          variant='bordered' 
@@ -44,7 +43,7 @@ const Register = () => {
           }
            />
          <div className='flex justify-end'>
-         <Button className='bg-purple-500 text-white font-bold justify-end'>Sign up</Button>
+         <Button className='bg-purple-500 text-white font-bold justify-end'>Log in</Button>
          </div>
         </div>
     </div>
@@ -52,4 +51,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default SignIn
