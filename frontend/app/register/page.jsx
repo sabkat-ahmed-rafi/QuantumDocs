@@ -60,6 +60,7 @@ const Register = () => {
           emailRef.current.value = "";
           passwordRef.current.value = "";
           const user = {
+            uid: updatedUser?.uid,
             name: updatedUser?.displayName,
             email: updatedUser?.email,
             password: newUser?.password,
