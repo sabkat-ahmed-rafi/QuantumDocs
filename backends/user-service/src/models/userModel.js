@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
     bio: {
         type: String,
         maxLength: 500,
+        default: ""
     },
     socialLinks: {
         type: Object,
