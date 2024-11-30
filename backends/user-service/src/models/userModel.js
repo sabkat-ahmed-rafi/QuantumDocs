@@ -4,7 +4,7 @@ const checkHashedPass = require('../utils/checkHashedPass');
 
 const userSchema = new mongoose.Schema({
     uid: {
-        type: Number,
+        type: String,
         required: true,
     },
     name: {
