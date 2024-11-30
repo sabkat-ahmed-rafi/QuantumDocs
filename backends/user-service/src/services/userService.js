@@ -11,11 +11,11 @@ exports.createUser = async (userData) => {
 }
 
 //get a user by id
-exports.getUserById = async (userId) => {
-    if(!userId) {
+exports.getUserById = async (userUid) => {
+    if(!userUid) {
         throw new Error("User id is required");
     }
-    const user = User.findById(userId);
+    const user = User.findById(userUid);
 
     if(!user) {
         throw new Error("User not found");
