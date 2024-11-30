@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import auth from "../firebase/firebase.init";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth/web-extension";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, GoogleAuthProvider } from "firebase/auth";
 
 
 // create a user 
@@ -33,7 +32,7 @@ export const updateUser = createAsyncThunk('auth/updateUser',
 
 // Login a user 
 export const loginUser = createAsyncThunk('auth/loginUser', 
-    async (email, password) => {
+    async ({email, password}) => {
         const {user} = await signInWithEmailAndPassword(auth, email, password);
         return {
             uid: user.uid,
@@ -50,13 +49,13 @@ const googleProvider = new GoogleAuthProvider();
 
 export const googleLogin = createAsyncThunk('auth/googleLogin',
     async () => {
-        const {user} = await signInWithPopup(auth, googleProvider);
-        return {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-        }
+            const {user} = await signInWithPopup(auth, googleProvider);
+            return {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+            }
     }
 )
 
@@ -74,6 +73,7 @@ const authSlice = createSlice({
     initialState: {
         user: null,
         loading: false,
+        googleLoading: false
     },
     reducers: {
         setUser: (state, action) => {
@@ -97,9 +97,9 @@ const authSlice = createSlice({
         .addCase(loginUser.fulfilled, (state, action) => { state.user = action.payload; state.loading = false; })
         .addCase(loginUser.rejected, (state) => {state.loading = false})
   
-        .addCase(googleLogin.pending, (state) => {state.loading = true})
-        .addCase(googleLogin.fulfilled, (state, action) => { state.user = action.payload; state.loading = false; })
-        .addCase(googleLogin.rejected, (state) => {state.loading = false})
+        .addCase(googleLogin.pending, (state) => {state.googleLoading = true})
+        .addCase(googleLogin.fulfilled, (state, action) => { state.user = action.payload; state.googleLoading = false; })
+        .addCase(googleLogin.rejected, (state) => {state.googleLoading = false})
 
         .addCase(logout.pending, (state) => {state.loading = true})
         .addCase(logout.fulfilled, (state) => { state.user = null; state.loading = false; })

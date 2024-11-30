@@ -5,12 +5,14 @@ import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
 import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
-import { createUser, updateUser } from '../slices/authSlice'
+import { createUser, googleLogin, updateUser } from '../slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { FaGoogle } from "react-icons/fa";
+
 
 
 
@@ -19,7 +21,7 @@ const Register = () => {
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
     const dispatch = useDispatch();
-    const {loading} = useSelector(state => state.auth);
+    const {loading, googleLoading} = useSelector(state => state.auth);
     const nameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -82,6 +84,28 @@ const Register = () => {
 
     }
 
+
+    const handleGoogleLogin = async () => {
+      try{
+        const user = await dispatch(googleLogin()).unwrap();
+        console.log(user)
+        const saveUser = {
+            uid: user?.uid,
+            name: user?.displayName,
+            email: user?.email,
+            profilePicture: user?.photoURL
+        }
+        if(user.email) {
+          await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, saveUser);
+          router.push("/");
+        }
+      } catch(error) {
+        toast.error("Something went wrong");
+        console.log(error)
+      }
+    }
+
+
   return (
     <section className='text-black bg-white'>
     <div className='md:border p-10 lg:mx-44 md:mx-20 lg:my-24 md:my-10 md:flex justify-between md:rounded-[15px] md:shadow-lg md:shadow-purple-600'>
@@ -115,12 +139,21 @@ const Register = () => {
             </button>
           }
            />
-         <div className='flex justify-end'>
-         <Button type='submit' className='bg-purple-500 text-white font-bold justify-end'>{
+         <div className='flex space-x-4 justify-end'>
+          <Button  onClick={handleGoogleLogin} className='bg-purple-500 text-white font-bold' isDisabled={googleLoading || loading} >
+          {
+          googleLoading ?
+          <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
+          <FaGoogle size={17} />
+          }
+          </Button>
+         <Button isDisabled={googleLoading || loading} type='submit' className='bg-purple-500 text-white font-bold'>
+          {
           loading ?
           <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
           "Sign up"
-          }</Button>
+          }
+          </Button>
          </div>
         </form>
     </div>
