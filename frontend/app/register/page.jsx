@@ -8,6 +8,7 @@ import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 import { createUser, updateUser } from '../slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { CgSpinnerTwoAlt } from "react-icons/cg";
+import { toast } from 'react-toastify';
 
 
 
@@ -25,15 +26,21 @@ const Register = () => {
     const handleCreateUser = async (e) => {
       e.preventDefault();
 
-      if(nameRef.current?.value == "" || emailRef.current?.value == "" || passwordRef.current?.value == "") {
-        return alert("Enter the credentials");
+      if(nameRef.current?.value == "" && emailRef.current?.value == "" && passwordRef.current?.value == "") {
+        return toast.error("Please fill out the required fields")
+      } else if(nameRef.current?.value == "") {
+        return toast.error("Please enter your name");
+      } else if(emailRef.current?.value == "") {
+        return toast.error("Please enter your email");
+      } else if(passwordRef.current?.value == "") {
+        return toast.error("Please enter your password");
       }
       
       const newUser = {
         email: emailRef.current?.value || "",
         password: passwordRef.current?.value || "",
       }
-      
+
       const name = nameRef.current?.value || ""
       
 
@@ -48,7 +55,9 @@ const Register = () => {
         }
 
       } catch(error) {
-          console.error("Error creating user:", error.message);
+         if(error.message = "Firebase: Error (auth/email-already-in-use)"){
+          return toast.error("The Email is already in use")
+         }
       }
 
     }
