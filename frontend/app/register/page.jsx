@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 
 
@@ -58,10 +59,17 @@ const Register = () => {
           nameRef.current.value = "";
           emailRef.current.value = "";
           passwordRef.current.value = "";
-          if(updateUser.name) {
-            router.push("/");
+          const user = {
+            name: updatedUser?.displayName,
+            email: updatedUser?.email,
+            password: newUser?.password,
+            profilePicture: '/images/profilePicture.jpg'
           }
-          console.log(updatedUser);
+          if(updatedUser.email) {
+            await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, user);
+            router.push("/");
+            console.log(updatedUser)
+          }
         }
       } catch(error) {
          if(error.message = "Firebase: Error (auth/email-already-in-use)"){
