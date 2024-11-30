@@ -10,3 +10,14 @@ exports.createUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+
+exports.getUserById = async (req, res) => {
+    try{
+        const uid = req.params.uid;
+        const user = await userService.getUserById(uid);
+        res.status(200).json({ message: "User found", user: user })
+    } catch(error) {
+        res.status(500).json({ error: error.message });
+    }
+}
