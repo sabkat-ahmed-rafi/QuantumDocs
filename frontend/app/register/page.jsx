@@ -25,6 +25,7 @@ const Register = () => {
 
     const handleCreateUser = async (e) => {
       e.preventDefault();
+      const emailRegex = /.+\@.+\..+/;
 
       if(nameRef.current?.value == "" && emailRef.current?.value == "" && passwordRef.current?.value == "") {
         return toast.error("Please fill out the required fields")
@@ -34,6 +35,10 @@ const Register = () => {
         return toast.error("Please enter your email");
       } else if(passwordRef.current?.value == "") {
         return toast.error("Please enter your password");
+      } else if(emailRegex.test(emailRef.current?.value) == false) {
+        return toast.error("Please enter a valid email")
+      } else if(passwordRef.current?.value.length < 8) {
+        return toast.error("Password must be 8 character")
       }
       
       const newUser = {
@@ -53,7 +58,6 @@ const Register = () => {
           passwordRef.current.value = "";
           console.log(updatedUser);
         }
-
       } catch(error) {
          if(error.message = "Firebase: Error (auth/email-already-in-use)"){
           return toast.error("The Email is already in use")
@@ -79,7 +83,7 @@ const Register = () => {
         </div>
         <form onSubmit={handleCreateUser} className='w-full space-y-6 mt-14'>
          <Input ref={nameRef} name='name' variant='bordered' size="lg" type="name" placeholder="Name" />
-         <Input ref={emailRef} name='email' variant='bordered' size="lg" type="email" placeholder="Email" />
+         <Input ref={emailRef} name='email' variant='bordered' size="lg" placeholder="Email" />
          <Input 
          ref={passwordRef}
          name='password'
