@@ -73,7 +73,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         user: null,
-        loading: false
+        loading: false,
     },
     reducers: {
         setUser: (state, action) => {
@@ -87,23 +87,23 @@ const authSlice = createSlice({
         builder
         .addCase(createUser.pending, (state) => {state.loading = true})
         .addCase(createUser.fulfilled, (state, action) => {state.user = action.payload, state.loading = false})
-        .addCase(createUser.rejected, (state, action) => {state.error = action.error.message, state.loading = false})
+        .addCase(createUser.rejected, (state) => {state.loading = false})
 
         .addCase(updateUser.pending, (state) => {state.loading = true})
         .addCase(updateUser.fulfilled, (state, action) => {state.user = action.payload, state.loading = false})
-        .addCase(updateUser.rejected, (state, action) => {state.error = action.error.message, state.loading = false})
+        .addCase(updateUser.rejected, (state) => {state.loading = false})
 
-        .addCase(loginUser.pending, (state) => { state.loading = true; })
+        .addCase(loginUser.pending, (state) => {state.loading = true})
         .addCase(loginUser.fulfilled, (state, action) => { state.user = action.payload; state.loading = false; })
-        .addCase(loginUser.rejected, (state, action) => { state.error = action.error.message; state.loading = false; })
+        .addCase(loginUser.rejected, (state) => {state.loading = false})
   
-        .addCase(googleLogin.pending, (state) => { state.loading = true; })
+        .addCase(googleLogin.pending, (state) => {state.loading = true})
         .addCase(googleLogin.fulfilled, (state, action) => { state.user = action.payload; state.loading = false; })
-        .addCase(googleLogin.rejected, (state, action) => { state.error = action.error.message; state.loading = false; })
+        .addCase(googleLogin.rejected, (state) => {state.loading = false})
 
-        .addCase(logout.pending, (state) => { state.loading = true; })
+        .addCase(logout.pending, (state) => {state.loading = true})
         .addCase(logout.fulfilled, (state) => { state.user = null; state.loading = false; })
-        .addCase(logout.rejected, (state, action) => { state.error = action.error.message; state.loading = false; })
+        .addCase(logout.rejected, (state) => {state.loading = false})
     }
 })
 
