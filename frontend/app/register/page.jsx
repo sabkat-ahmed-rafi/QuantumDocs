@@ -6,7 +6,9 @@ import Link from 'next/link'
 import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 import { createUser, updateUser } from '../slices/authSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { CgSpinnerTwoAlt } from "react-icons/cg";
+
 
 
 const Register = () => {
@@ -14,6 +16,7 @@ const Register = () => {
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
     const dispatch = useDispatch();
+    const {loading} = useSelector(state => state.auth);
     const nameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -30,6 +33,7 @@ const Register = () => {
         email: emailRef.current?.value || "",
         password: passwordRef.current?.value || "",
       }
+      
       const name = nameRef.current?.value || ""
       
 
@@ -83,7 +87,11 @@ const Register = () => {
           }
            />
          <div className='flex justify-end'>
-         <Button type='submit' className='bg-purple-500 text-white font-bold justify-end'>Sign up</Button>
+         <Button type='submit' className='bg-purple-500 text-white font-bold justify-end'>{
+          loading ?
+          <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
+          "Sign up"
+          }</Button>
          </div>
         </form>
     </div>
