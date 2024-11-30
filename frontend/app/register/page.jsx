@@ -9,6 +9,7 @@ import { createUser, updateUser } from '../slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation'
 
 
 
@@ -21,12 +22,14 @@ const Register = () => {
     const nameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+    const router = useRouter();
     
 
     const handleCreateUser = async (e) => {
       e.preventDefault();
+      
+      // Inputs validations 
       const emailRegex = /.+\@.+\..+/;
-
       if(nameRef.current?.value == "" && emailRef.current?.value == "" && passwordRef.current?.value == "") {
         return toast.error("Please fill out the required fields")
       } else if(nameRef.current?.value == "") {
@@ -45,7 +48,6 @@ const Register = () => {
         email: emailRef.current?.value || "",
         password: passwordRef.current?.value || "",
       }
-
       const name = nameRef.current?.value || ""
       
 
@@ -56,6 +58,9 @@ const Register = () => {
           nameRef.current.value = "";
           emailRef.current.value = "";
           passwordRef.current.value = "";
+          if(updateUser.name) {
+            router.push("/");
+          }
           console.log(updatedUser);
         }
       } catch(error) {
