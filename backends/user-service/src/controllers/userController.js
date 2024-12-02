@@ -4,9 +4,9 @@ const userService = require('.././services/userService');
 exports.createUser = async (req, res) => {
     try{
         const userData = req.body;
-        const isExist = userService.getUserByEmail(userData.email)
+        const isExist = await userService.getUserByEmail(userData.email)
         if(isExist) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(201).json({ message: "User already exists" });
         }
         const newUser = await userService.createUser(userData);
         res.status(201).json({ message: "User created successfully", user: newUser });
