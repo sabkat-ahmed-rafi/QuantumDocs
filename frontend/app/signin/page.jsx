@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../slices/authSlice'
 import { useRouter } from 'next/navigation'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
+import { FaGoogle } from 'react-icons/fa'
 
 
 const SignIn = () => {
@@ -91,7 +92,14 @@ const SignIn = () => {
             </button>
           }
            />
-         <div className='flex justify-end'>
+         <div className='flex space-x-4 justify-end'>
+         <Button  onClick={handleGoogleLogin} className='bg-purple-500 text-white font-bold' isDisabled={googleLoading || loading} >
+         {
+         googleLoading ?
+         <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
+         <FaGoogle size={17} />
+          }
+          </Button>
          <Button isDisabled={googleLoading || loading} onClick={handleLogin} className='bg-purple-500 text-white font-bold justify-end'>
           {
           loading ?
