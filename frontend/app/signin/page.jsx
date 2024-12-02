@@ -6,9 +6,10 @@ import Link from 'next/link'
 import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 import { toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../slices/authSlice'
 import { useRouter } from 'next/navigation'
+import { CgSpinnerTwoAlt } from 'react-icons/cg'
 
 
 const SignIn = () => {
@@ -19,6 +20,7 @@ const SignIn = () => {
     const passwordRef = useRef(null);
     const dispatch = useDispatch();
     const router = useRouter();
+    const {loading, googleLoading} = useSelector(state => state.auth)
 
 
 
@@ -47,9 +49,9 @@ const SignIn = () => {
       try{
         const registeredUser = await dispatch(loginUser(user)).unwrap();
         if(registeredUser.email) {
+          router.push("/")
           emailRef.current.value = "";
           passwordRef.current.value = "";
-          router.push("/")
         }
       } catch(error) {
         return toast.error("Something went wrong")
@@ -90,7 +92,13 @@ const SignIn = () => {
           }
            />
          <div className='flex justify-end'>
-         <Button onClick={handleLogin} className='bg-purple-500 text-white font-bold justify-end'>Log in</Button>
+         <Button isDisabled={googleLoading || loading} onClick={handleLogin} className='bg-purple-500 text-white font-bold justify-end'>
+          {
+          loading ?
+          <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
+          "Log in"
+          }
+          </Button>
          </div>
         </div>
     </div>
