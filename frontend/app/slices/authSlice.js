@@ -40,12 +40,18 @@ export const updateUser = createAsyncThunk('auth/updateUser',
 // Login a user 
 export const loginUser = createAsyncThunk('auth/loginUser', 
     async ({email, password}) => {
-        const {user} = await signInWithEmailAndPassword(auth, email, password);
-        return {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
+        try{
+            const {user} = await signInWithEmailAndPassword(auth, email, password);
+            return {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+            }
+        } catch(error) {
+            if(error.message == "Firebase: Error (auth/invalid-credential).") {
+                return toast.error("Invalid credentials")
+            }
         }
     }
 )
