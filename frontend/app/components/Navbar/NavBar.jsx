@@ -1,10 +1,12 @@
 'use client'
 import { logout } from "@/app/slices/authSlice";
 import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { SiGoogledocs } from "react-icons/si";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 
@@ -12,6 +14,21 @@ import { toast } from "react-toastify";
 export default function App() {
 
   const dispatch = useDispatch();
+  const {user: userFromdb} = useSelector(state => state.auth)
+  const [user, setUser] = useState({})
+  console.log(userFromdb?.uid)
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      try{
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/${userFromdb?.uid}`)
+        setUser(result.data.user);
+      }catch(error) {
+        console.log(error)
+      }
+    } 
+    fetchUser();
+  }, [userFromdb])
 
   const handleLogout = async () => {
     try{
@@ -42,7 +59,7 @@ export default function App() {
           }
         />
       </NavbarContent>
-      <NavbarContent as="div" className="items-center" justify="end">
+      <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -50,15 +67,15 @@ export default function App() {
               as="button"
               className="transition-transform"
               color="secondary"
-              name="Jason Hughes"
+              name={user?.name}
               size="md"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src={user?.profilePicture}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2 text-black">
               <p className="font-semibold ">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
             <DropdownItem className="w-full py-0"><Link href="/signin" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
             <DropdownItem onClick={handleLogout} className="text-black" key="logout" color="danger">
