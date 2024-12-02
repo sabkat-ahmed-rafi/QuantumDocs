@@ -1,12 +1,26 @@
 'use client'
+import { logout } from "@/app/slices/authSlice";
 import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import Link from "next/link";
 import { IoSearchOutline } from "react-icons/io5";
 import { SiGoogledocs } from "react-icons/si";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 
 
 export default function App() {
+
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try{
+      await dispatch(logout()).unwrap();
+    } catch(error) {
+      toast.error("Something went wrong")
+    } 
+  }
+
   return (
     <div>
       <Navbar className="light text-black bg-white">
@@ -47,7 +61,7 @@ export default function App() {
               <p className="font-semibold">zoey@example.com</p>
             </DropdownItem>
             <DropdownItem className="w-full py-0"><Link href="/signin" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
-            <DropdownItem className="text-black" key="logout" color="danger">
+            <DropdownItem onClick={handleLogout} className="text-black" key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>
