@@ -10,6 +10,11 @@ exports.createUser = async (userData) => {
     return await user.save();
 }
 
+// Get user by Email 
+exports.getUserByEmail = async (userEmail) => {
+    return User.findOne({email});
+}
+
 //get a user by id
 exports.getUserById = async (userUid) => {
     if(!userUid) {
