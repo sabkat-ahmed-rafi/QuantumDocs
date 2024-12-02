@@ -1,17 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import auth from "../firebase/firebase.init";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, GoogleAuthProvider } from "firebase/auth";
+import { toast } from "react-toastify";
 
 
 // create a user 
 export const createUser = createAsyncThunk('auth/createUser', 
     async ({email, password}) => {
-        const {user} = await createUserWithEmailAndPassword(auth, email, password);
-        return {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
+        try{
+            const {user} = await createUserWithEmailAndPassword(auth, email, password);
+            return {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+            }
+        } catch(error) {
+            if(error.message == "Firebase: Error (auth/email-already-in-use).") {
+                return toast.error("The Email is already in use")
+            }
         }
     }
 )
