@@ -1,16 +1,62 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { SiGoogledocs } from 'react-icons/si'
 import { Button, Input } from '@nextui-org/react'
 import Link from 'next/link'
 import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../slices/authSlice'
+import { useRouter } from 'next/navigation'
 
 
 const SignIn = () => {
 
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+
+
+    const handleLogin = async (e) => {
+      e.preventDefault();
+
+      // Input Validation 
+      const emailRegex = /.+\@.+\..+/;
+      if(emailRef.current?.value == "" && passwordRef.current?.value == "") {
+        return toast.error("Please fill out the required fields")
+      } else if(emailRegex.test(emailRef.current?.value) == false) {
+        return toast.error("Please enter a valid email")
+      } else if(passwordRef.current?.value.length < 8) {
+        return toast.error("Password must be 8 character")
+      } else if(emailRef.current?.value == "") {
+        return toast.error("Please enter your email")
+      } else if(passwordRef.current?.value == "") {
+        return toast.error("Please enter your password")
+      }
+
+      const user = {
+        email: emailRef.current?.value || "",
+        password: passwordRef.current?.value || ""
+      }
+      
+      try{
+        const registeredUser = await dispatch(loginUser(user)).unwrap();
+        if(registeredUser.email) {
+          emailRef.current.value = "";
+          passwordRef.current.value = "";
+          router.push("/")
+        }
+      } catch(error) {
+        return toast.error("Something went wrong")
+      }
+
+    }
+
 
   return (
     <section className='text-black bg-white'>
@@ -26,8 +72,9 @@ const SignIn = () => {
          </p>
         </div>
         <div className='w-full space-y-6 mt-14'>
-         <Input variant='bordered' size="lg" type="email" placeholder="Email" />
+         <Input ref={emailRef} variant='bordered' size="lg" type="email" placeholder="Email" />
          <Input 
+         ref={passwordRef}
          variant='bordered' 
          size="lg" 
          type={isVisible ? "text" : "password"} 
@@ -43,7 +90,7 @@ const SignIn = () => {
           }
            />
          <div className='flex justify-end'>
-         <Button className='bg-purple-500 text-white font-bold justify-end'>Log in</Button>
+         <Button onClick={handleLogin} className='bg-purple-500 text-white font-bold justify-end'>Log in</Button>
          </div>
         </div>
     </div>
