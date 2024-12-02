@@ -12,7 +12,7 @@ exports.createUser = async (userData) => {
 
 // Get user by Email 
 exports.getUserByEmail = async (userEmail) => {
-    return User.findOne({email});
+    return User.findOne({userEmail});
 }
 
 //get a user by id
