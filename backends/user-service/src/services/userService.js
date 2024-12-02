@@ -20,7 +20,7 @@ exports.getUserById = async (userUid) => {
     if(!userUid) {
         throw new Error("User id is required");
     }
-    const user = User.findById(userUid);
+    const user = User.findOne({uid: userUid});
 
     if(!user) {
         throw new Error("User not found");
