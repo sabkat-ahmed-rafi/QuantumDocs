@@ -7,10 +7,11 @@ import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../slices/authSlice'
+import { googleLogin, loginUser } from '../slices/authSlice'
 import { useRouter } from 'next/navigation'
 import { CgSpinnerTwoAlt } from 'react-icons/cg'
 import { FaGoogle } from 'react-icons/fa'
+import axios from 'axios'
 
 
 const SignIn = () => {
@@ -61,6 +62,28 @@ const SignIn = () => {
     }
 
 
+    const handleGoogleLogin = async () => {
+      try{
+        const user = await dispatch(googleLogin()).unwrap();
+        console.log(user)
+        const saveUser = {
+            uid: user?.uid,
+            name: user?.displayName,
+            email: user?.email,
+            profilePicture: user?.photoURL
+        }
+        if(user.email) {
+          console.log("inside clicking!")
+          router.push("/");
+          await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, saveUser);
+        }
+      } catch(error) {
+        toast.error("Something went wrong");
+        console.log(error)
+      }
+    }
+
+
   return (
     <section className='text-black bg-white'>
     <div className='md:border p-10 lg:mx-60 md:mx-20 lg:my-24 md:my-10 md:flex justify-between md:rounded-[15px] md:shadow-lg md:shadow-purple-600'>
@@ -93,7 +116,7 @@ const SignIn = () => {
           }
            />
          <div className='flex space-x-4 justify-end'>
-         <Button  onClick={handleGoogleLogin} className='bg-purple-500 text-white font-bold' isDisabled={googleLoading || loading} >
+         <Button onClick={handleGoogleLogin} className='bg-purple-500 text-white font-bold' isDisabled={googleLoading || loading} >
          {
          googleLoading ?
          <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> :
