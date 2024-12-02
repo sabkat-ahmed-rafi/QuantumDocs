@@ -10,8 +10,8 @@ export const subscribeToAuthState = (dispatch, getToken) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if(currentUser) {
-            const {name, email, displayName, photoURL} = currentUser;
-            dispatch(setUser({name, email, displayName, photoURL}));
+            const {uid, email, displayName, photoURL} = currentUser;
+            dispatch(setUser({uid, email, displayName, photoURL}));
         } else {
             dispatch(setUser(null));
         }
