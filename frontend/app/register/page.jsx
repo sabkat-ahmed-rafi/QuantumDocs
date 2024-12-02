@@ -71,7 +71,6 @@ const Register = () => {
           if(updatedUser.email) {
             await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, user);
             router.push("/");
-            console.log(updatedUser)
           }
         }
       } catch(error) {
@@ -84,7 +83,6 @@ const Register = () => {
     const handleGoogleLogin = async () => {
       try{
         const user = await dispatch(googleLogin()).unwrap();
-        console.log(user)
         const saveUser = {
             uid: user?.uid,
             name: user?.displayName,
@@ -97,7 +95,6 @@ const Register = () => {
         }
       } catch(error) {
         toast.error("Something went wrong");
-        console.log(error)
       }
     }
 
