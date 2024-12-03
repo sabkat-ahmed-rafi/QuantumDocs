@@ -12,11 +12,11 @@ import { toast } from "react-toastify";
 
 
 export default function App() {
-
+  
   const dispatch = useDispatch();
   const {user: userFromdb} = useSelector(state => state.auth)
   const [user, setUser] = useState({})
-  console.log(userFromdb?.uid)
+  console.log(userFromdb)
   
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,7 +37,6 @@ export default function App() {
       toast.error("Something went wrong")
     } 
   }
-
   return (
     <div>
       <Navbar className="light text-black bg-white">

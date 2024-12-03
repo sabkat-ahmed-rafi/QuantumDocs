@@ -1,7 +1,9 @@
 import NavBar from "./components/Navbar/NavBar"
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute"
 
 export default function Home() {
   return (
+    <PrivateRoute>
     <section>
     <nav>
      <NavBar/>
@@ -11,5 +13,6 @@ export default function Home() {
     </main>
     
  </section>
+    </PrivateRoute>
   );
 }
