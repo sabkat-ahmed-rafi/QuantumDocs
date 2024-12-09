@@ -9,12 +9,9 @@ import { persistor } from "@/app/store/store";
 function AppContent({ children }) {
     const dispatch = useDispatch();
 
-    const getToken = async (email) => {
-        console.log(`Fetching token for ${email}`);
-    };
 
     useEffect(() => {
-        const unsubscribe = subscribeToAuthState(dispatch, getToken);
+        const unsubscribe = subscribeToAuthState(dispatch);
 
         return () => {
             if (typeof unsubscribe === "function") {
