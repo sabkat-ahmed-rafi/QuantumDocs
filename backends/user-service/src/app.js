@@ -8,8 +8,8 @@ const jwtRoutes = require('./routes/jwtRoutes')
 const app = express();
 
 // Middlewares 
-app.use(express.json());
 app.use(cookieParser())
+app.use(express.json());
 app.use(cors({
         origin: [config.frontend],
         credentials: true,

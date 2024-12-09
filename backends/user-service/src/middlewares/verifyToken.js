@@ -3,6 +3,7 @@ const config = require('../config/config')
 
 
 module.exports = (req, res, next) => {
+    console.log("cookies: ",req.cookies);
     const token = req.cookies?.token;
     if(!token) {
         return res.status(401).send({ message: "Unauthorized access" });
