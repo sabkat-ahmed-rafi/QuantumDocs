@@ -8,7 +8,11 @@ const app = express();
 
 // Middlewares 
 app.use(express.json());
-app.use(cors({origin: [config.frontend]}));
+app.use(cors({
+        origin: [config.frontend],
+        credentials: true,
+    })
+);
 
 // Routes 
 app.use('/api/users', userRoutes);

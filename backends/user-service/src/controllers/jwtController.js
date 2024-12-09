@@ -1,6 +1,6 @@
 const jwtService = require('../services/jwtService')
 
-exports.setJwt = async (res, req) => { 
+exports.setJwt = async (req, res) => { 
     try{
         const token = jwtService.generateJwtToken(req.body);
         res.cookie("token", token, {
@@ -14,7 +14,7 @@ exports.setJwt = async (res, req) => {
     }
 }
 
-exports.clearJwt = async (res, req) => {
+exports.clearJwt = async (req, res) => {
     try {
         res
           .clearCookie("token", {
@@ -24,6 +24,6 @@ exports.clearJwt = async (res, req) => {
           })
           .send({ success: true });
       } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send("Something wrong can't clear the jwt");
       }
 }
