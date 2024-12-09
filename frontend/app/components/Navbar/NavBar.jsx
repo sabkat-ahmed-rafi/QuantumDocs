@@ -24,7 +24,7 @@ export default function App() {
         const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/${userFromdb?.uid}`)
         setUser(result.data.user);
       }catch(error) {
-        console.log(error)
+        toast.error("Something went wrong")
       }
     } 
     fetchUser();
