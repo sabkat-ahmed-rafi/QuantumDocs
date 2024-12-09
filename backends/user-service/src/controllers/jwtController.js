@@ -2,7 +2,7 @@ const jwtService = require('../services/jwtService')
 
 exports.setJwt = async (res, req) => { 
     try{
-        const token = jwtService.generateJwtToken();
+        const token = jwtService.generateJwtToken(req.body);
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", 
