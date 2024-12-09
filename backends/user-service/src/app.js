@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
 const config = require('./config/config');
+const userRoutes = require('./routes/userRoutes');
+const jwtRoutes = require('./routes/jwtRoutes')
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(cors({origin: [config.frontend]}));
 
 // Routes 
 app.use('/api/users', userRoutes);
-// app.use('/api/jwt');
+app.use('/api', jwtRoutes);
 
 
 module.exports = app;
