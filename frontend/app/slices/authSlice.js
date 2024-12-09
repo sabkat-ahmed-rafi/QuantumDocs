@@ -77,8 +77,12 @@ export const googleLogin = createAsyncThunk('auth/googleLogin',
 // Logout user 
 export const logout = createAsyncThunk('auth/logout',
     async () => {
-        await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/clearJwt`, {withCredentials: true})
-        await signOut(auth);
+        try{
+            await signOut(auth);
+            await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/clearJwt`, {withCredentials: true})
+        } catch(error) {
+            console.log("Something is wrong with the logout function in authslice")
+        }
     }
 )
 
