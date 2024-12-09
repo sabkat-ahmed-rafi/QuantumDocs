@@ -19,6 +19,9 @@ exports.createUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
     try{
         const uid = req.params.uid;
+        if(req.user?.uid !== uid) {
+            return res.status(403).send({ message: "You cannot access another user's data" })
+        }
         const user = await userService.getUserById(uid);
         res.status(200).json({ message: "User found", user: user })
     } catch(error) {
