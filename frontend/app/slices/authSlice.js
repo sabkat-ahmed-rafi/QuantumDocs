@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import auth from "../firebase/firebase.init";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 
 // create a user 
@@ -76,6 +77,7 @@ export const googleLogin = createAsyncThunk('auth/googleLogin',
 // Logout user 
 export const logout = createAsyncThunk('auth/logout',
     async () => {
+        await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/clearJwt`, {withCredentials: true})
         await signOut(auth);
     }
 )
