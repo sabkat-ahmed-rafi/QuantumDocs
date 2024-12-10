@@ -1,13 +1,13 @@
 'use client'
 import { logout } from "@/app/slices/authSlice";
 import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
-import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { SiGoogledocs } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import useAxiosSecure from "@/app/hooks/useAxiosSecure";
 
 
 
@@ -16,19 +16,23 @@ export default function App() {
   const dispatch = useDispatch();
   const {user: userFromdb} = useSelector(state => state.auth)
   const [user, setUser] = useState({})
+  const axiosSecure = useAxiosSecure();
   console.log(userFromdb)
   
   useEffect(() => {
     const fetchUser = async () => {
       try{
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/${userFromdb?.uid}`, { withCredentials: true })
+        const result = await axiosSecure.get(`/api/users/${userFromdb?.uid}`);
         setUser(result.data.user);
       }catch(error) {
-        toast.error("Something went wrong")
+        toast.error("Something went wrong");
       }
     } 
     fetchUser();
   }, [userFromdb])
+
+
+
 
   const handleLogout = async () => {
     try{
@@ -37,6 +41,9 @@ export default function App() {
       toast.error("Something went wrong")
     } 
   }
+
+
+  
   return (
     <div>
       <Navbar className="light text-black bg-white">
