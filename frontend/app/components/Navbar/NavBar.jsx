@@ -11,7 +11,7 @@ import useAxiosSecure from "@/app/hooks/useAxiosSecure";
 
 
 
-export default function App() {
+export default function NavBar() {
   
   const dispatch = useDispatch();
   const {user: userFromdb} = useSelector(state => state.auth)
@@ -23,9 +23,11 @@ export default function App() {
     const fetchUser = async () => {
       try{
         const result = await axiosSecure.get(`/api/users/${userFromdb?.uid}`);
-        setUser(result.data.user);
+        setUser(result?.data?.user);
       }catch(error) {
-        toast.error("Something went wrong");
+        if(error.status != 401) {
+          toast.error("Something went wrong");
+        }
       }
     } 
     fetchUser();
@@ -43,7 +45,7 @@ export default function App() {
   }
 
 
-  
+
   return (
     <div>
       <Navbar className="light text-black bg-white">
