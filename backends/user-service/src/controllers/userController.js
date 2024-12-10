@@ -19,6 +19,7 @@ exports.createUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
     try{
         const uid = req.params.uid;
+        // Stopping users to access other user's data 
         if(req.user?.uid !== uid) {
             return res.status(403).send({ message: "You cannot access another user's data" })
         }
