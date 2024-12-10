@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
         if(err) {
             console.log(err);
             if(err.name = "TokenExpiredError") {
-                return res.status(401).send({ message: "Session expired. Please log in again." });
+                return res.status(401).send({ error: "sessionExpired" });
             }
             return res.status(401).send({ message: "unauthorized access" });
         }
