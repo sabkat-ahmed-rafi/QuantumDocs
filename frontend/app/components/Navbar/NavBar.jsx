@@ -21,7 +21,7 @@ export default function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try{
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/${userFromdb?.uid}`)
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/${userFromdb?.uid}`, { withCredentials: true })
         setUser(result.data.user);
       }catch(error) {
         toast.error("Something went wrong")
