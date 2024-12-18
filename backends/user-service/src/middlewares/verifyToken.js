@@ -10,8 +10,7 @@ module.exports = (req, res, next) => {
     }
     jwt.verify(token, config.jwt_secret, (err, decoded) => {
         if(err) {
-            console.log(err);
-            if(err.name = "TokenExpiredError") {
+            if(err.name == "TokenExpiredError") {
                 return res.status(401).send({ error: "sessionExpired" });
             }
             return res.status(401).send({ message: "unauthorized access" });
