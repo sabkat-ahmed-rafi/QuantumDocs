@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-need to implement jwt functionality.
+* now i need to make the UI of creation of document and the editor UI.
