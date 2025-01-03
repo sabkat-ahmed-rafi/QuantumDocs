@@ -5,5 +5,6 @@ const router = express.Router();
 
 
 router.post('/', verifyToken, documentController.create);
+router.get('/:id', documentController.get);
 
 module.exports = router;
