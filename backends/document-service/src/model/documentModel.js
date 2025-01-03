@@ -8,7 +8,7 @@ const documentSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        default: "",
+        default: "title",
     },
     owner: {
         type: String,
