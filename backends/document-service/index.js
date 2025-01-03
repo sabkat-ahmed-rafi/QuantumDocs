@@ -7,5 +7,5 @@ const PORT = config.port;
 connectDB();
 
 app.listen(PORT, () => {
-    console.log(`Document service is runnign on port ${PORT}`);
+    console.log(`Document service is running on port ${PORT}`);
 })
