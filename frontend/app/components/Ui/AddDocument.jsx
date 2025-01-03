@@ -17,7 +17,7 @@ const AddDocument = () => {
             console.log(response);
 
             const documentId = response?.data?.document?._id;
-            router.push(`/api/document/${documentId}`);
+            router.push(`/document/${documentId}`);
         } catch(error) {
             console.log("Failed to create document:", error);
         }
