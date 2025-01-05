@@ -54,13 +54,24 @@ const Document = () => {
           >
             <div 
             ref={editorRef}
-            className='lg:w-[700px] bg-white border border-gray-300 lg:p-10 ' 
+            className='text-cursor lg:w-[700px] bg-white border border-gray-300 lg:p-10' 
             style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
             >
             </div>
           </div>
         </section>
         </div>
+        <style jsx global>{`
+          body {
+            cursor: url('/arrow.svg') 5 5, auto; 
+          }
+          a, button, span {
+            cursor: url('/pointer.svg') 5 5, auto !important;
+          }
+          .text-cursor, p, input {
+            cursor: url('/textCursor.svg') 15 20, auto !important;
+          }
+        `}</style>
     </>
   )
 }
