@@ -1,11 +1,15 @@
 const app = require('./src/app');
 const config = require('./src/config/config');
 const connectDB = require('./src/utils/dbConnection');
+const { setupWebSocket } = require('./src/config/webSocket');
 
 const PORT = config.port;
 
 connectDB();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Document service is running on port ${PORT}`);
 })
+
+// WebSocket server
+setupWebSocket(server);
