@@ -3,10 +3,10 @@ import { useParams } from 'next/navigation'
 import React, { useEffect, useRef } from 'react'
 import katex from "katex";
 import Quill from 'quill'
-import 'quill/dist/quill.snow.css'
 
-import "katex/dist/katex.min.css";
-window.katex = katex;
+import 'quill/dist/quill.snow.css'
+import "katex/dist/katex.min.css"; 
+window.katex = katex; // katex is used to use the fucntion editing feature.
 
 const Document = () => {
 
@@ -48,9 +48,19 @@ const Document = () => {
 
   return (
     <>
-      <div className='text-black bg-white'>
-          <div ref={editorRef}></div>
-      </div>
+        <div>
+        <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
+          <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'
+          >
+            <div 
+            ref={editorRef}
+            className='lg:w-[700px] bg-white border border-gray-300 lg:p-10 ' 
+            style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
+            >
+            </div>
+          </div>
+        </section>
+        </div>
     </>
   )
 }
