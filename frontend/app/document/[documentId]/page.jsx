@@ -55,6 +55,8 @@ const Document = () => {
       new QuillBinding(ytext, quillRef.current);
 
       return () => {
+        provider.disconnect();
+        ydoc.destroy();
         editorRef.current = null;
       }
     }, [documentId])
