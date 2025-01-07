@@ -24,7 +24,7 @@ const AddDocument = () => {
     }
 
   return (
-    <div onClick={handleCreateDocument} href={"/"} className='border border-slate-200 inline-block py-14 px-10 bg-white rounded-sm hover:border-purple-400'>
+    <div onClick={handleCreateDocument} href={"/"} className='border border-slate-200 inline-block py-14 px-10 bg-white rounded-sm hover:border-purple-400 cursor-pointer'>
        <FaPlus className='text-purple-600' size={60} />
     </div>
   )
