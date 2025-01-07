@@ -17,7 +17,16 @@ exports.getDocumentById = async (documentId) => {
         if(!document) {
             throw new Error("Document not found");
         }
-        return document;
+        const convertedDocument = {
+            id: document._id,
+            state: Uint8Array.from(atob(document.state), (c) => c.charCodeAt(0)),
+            title: document.title,
+            owner: document.owner,
+            sharedPersons: document.sharedPersons,
+            createdAt: document.createdAt,
+            updatedAt: document.updatedAt
+        }
+        return convertedDocument;
     } catch(error) {
         throw new Error(`Error fetching document: ${error.message}`);
     }
