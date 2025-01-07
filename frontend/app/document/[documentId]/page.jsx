@@ -1,8 +1,11 @@
 'use client'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import katex from "katex";
 import Quill from 'quill'
+import { WebsocketProvider } from 'y-websocket';
+import * as Y from 'yjs';
+import { QuillBinding } from 'y-quill';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
@@ -16,6 +19,16 @@ const Document = () => {
 
 
     useEffect(() => {
+
+      const ydoc = new Y.Doc();
+      const ytext = ydoc.getText('quill');
+      const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc); 
+
+      provider.on('status', (event) => {
+        console.log(`WebSocket connection: ${event.status}`);
+      });
+
+
       if (editorRef.current && !quillRef.current) {
         quillRef.current = new Quill(editorRef.current, {
             theme: 'snow',
@@ -36,8 +49,10 @@ const Document = () => {
                 ['clean']  
               ]
             }
-        })
+        });
       }
+
+      new QuillBinding(ytext, quillRef.current);
 
       return () => {
         editorRef.current = null;
@@ -54,7 +69,7 @@ const Document = () => {
           >
             <div 
             ref={editorRef}
-            className='text-cursor lg:w-[700px] bg-white border border-gray-300 lg:p-10' 
+            className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10' 
             style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
             >
             </div>

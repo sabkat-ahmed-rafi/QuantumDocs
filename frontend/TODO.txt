@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-* now i need to make the UI of creation of document and the editor UI.
+* Now i need to connect the editor with the backend through the y-quill and y-socket

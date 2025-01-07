@@ -26,6 +26,7 @@
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "y-quill": "^1.0.0",
+    "y-websocket": "^2.1.0",
     "yjs": "^13.6.21"
   },
   "devDependencies": {
