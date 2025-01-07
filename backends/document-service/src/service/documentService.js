@@ -19,7 +19,7 @@ exports.getDocumentById = async (documentId) => {
         }
         const convertedDocument = {
             id: document._id,
-            state: Uint8Array.from(atob(document.state), (c) => c.charCodeAt(0)),
+            state: document.state ? Array.from(document.state) : [],
             title: document.title,
             owner: document.owner,
             sharedPersons: document.sharedPersons,
