@@ -5,7 +5,7 @@ export const docApiSlice = createApi({
     reducerPath: 'documentApi',
     baseQuery: fetchBaseQuery({baseUrl: process.env.NEXT_PUBLIC_document_service}),
     tagTypes: ['DocumentData'], 
-    endpoints: () => ({
+    endpoints: (builder) => ({
         getAllData: builder.query({
             query: () => "/api/document",
             providesTags: ['DocumentData']
