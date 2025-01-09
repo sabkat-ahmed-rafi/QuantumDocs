@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 
 export const docApiSlice = createApi({
-    reducerPath: 'documentApi',
+    reducerPath: 'docApiSlice',
     baseQuery: fetchBaseQuery({baseUrl: process.env.NEXT_PUBLIC_document_service}),
     tagTypes: ['DocumentData'], 
     endpoints: (builder) => ({
