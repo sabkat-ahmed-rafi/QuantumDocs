@@ -19,7 +19,7 @@ exports.getDocumentById = async (documentId) => {
         }
         const convertedDocument = {
             id: document._id,
-            state: document.state ? Array.from(document.state) : [],
+            state: document.state,
             title: document.title,
             owner: document.owner,
             sharedPersons: document.sharedPersons,

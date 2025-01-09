@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const documentSchema = new mongoose.Schema({
     state: {
         type: Buffer,
-        default: Buffer.from(''),
+        default: Buffer.from('Hello world'),
     },
     title: {
         type: String,
