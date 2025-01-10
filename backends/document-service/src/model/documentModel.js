@@ -14,7 +14,8 @@ const documentSchema = new mongoose.Schema({
                             bold: true,
                             italic: true
                         }
-                    }
+                    },
+                    {insert: '\n'}
                 ]
             };
             return Buffer.from(JSON.stringify(delta)); // Convert to Buffer
