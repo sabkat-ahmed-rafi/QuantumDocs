@@ -11,6 +11,7 @@ import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
+import { useSelector } from 'react-redux';
 window.katex = katex; // katex is used to use the fucntion editing feature.
 
 
@@ -22,10 +23,14 @@ const Document = () => {
     const {documentId} = useParams();
     const editorRef = useRef(null);
     const quillRef = useRef(null);
+    const {user} = useSelector(state => state.auth);
     const {data: document, isLoading} = useGetSingleDataQuery(documentId);
 
     console.log(document?.document?.state);
 
+
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF3383', '#33FFF1'];
+    const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
     useEffect(() => {
 
@@ -66,7 +71,14 @@ const Document = () => {
               ]
             }
           });
+
           new QuillBinding(ytext, quillRef.current, provider.awareness);
+
+          provider.awareness.setLocalStateField('user', {
+            name: `${user?.displayName}`,
+            color: getRandomColor(),
+          });
+
         }
         
 
@@ -102,8 +114,7 @@ const Document = () => {
     <>
         <div>
         <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
-          <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'
-          >
+          <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
             <div 
             ref={editorRef}
             className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10' 
