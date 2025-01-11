@@ -6,60 +6,95 @@ import Quill from 'quill'
 import { WebsocketProvider } from 'y-websocket';
 import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
+import QuillCursors from 'quill-cursors'
+import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
 window.katex = katex; // katex is used to use the fucntion editing feature.
+
+
+Quill.register('modules/cursors', QuillCursors)
+
 
 const Document = () => {
 
     const {documentId} = useParams();
     const editorRef = useRef(null);
     const quillRef = useRef(null);
+    const {data: document, isLoading} = useGetSingleDataQuery(documentId);
+
+    console.log(document?.document?.state);
 
 
     useEffect(() => {
 
+      if (!document || isLoading) return;
+      
       const ydoc = new Y.Doc();
       const ytext = ydoc.getText('quill');
       const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc); 
-
+      
       provider.on('status', (event) => {
         console.log(`WebSocket connection: ${event.status}`);
       });
-
-
+      
+      
+      // editor settings
       if (editorRef.current && !quillRef.current) {
         quillRef.current = new Quill(editorRef.current, {
-            theme: 'snow',
-            modules: {
-              toolbar: [
-                [{'font': []}, {header: [1, 2, 3, 4, 5, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'color': [] }, { 'background': [] }],   
-                [{ 'script': 'sub'}, { 'script': 'super' }],  
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }],   
-                [{ 'list': 'ordered'}, 
-                  { 'list': 'bullet' }, 
-                  { 'list': 'check' },  
-                  { 'align': [] }],
+          theme: 'snow',
+          modules: {
+            history: {
+              userOnly: true,
+            },
+            cursors: true,
+            toolbar: [
+              [{'font': []}, {header: [1, 2, 3, 4, 5, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ 'color': [] }, { 'background': [] }],   
+              [{ 'script': 'sub'}, { 'script': 'super' }],  
+              [{ 'indent': '-1'}, { 'indent': '+1' }],
+              [{ 'direction': 'rtl' }],   
+              [{ 'list': 'ordered'}, 
+                { 'list': 'bullet' }, 
+                { 'list': 'check' },  
+                { 'align': [] }],
                 ['link', 'image', 'video', 'formula'],
                 ['clean']  
               ]
             }
-        });
-      }
+          });
+          new QuillBinding(ytext, quillRef.current, provider.awareness);
+        }
+        
 
-      new QuillBinding(ytext, quillRef.current);
+
+        // if (document?.document?.state) {
+        //   const serverState = new Uint8Array(document.document.state.data);
+        //   const decoded = new TextDecoder().decode(serverState);
+        //   const delta = JSON.parse(decoded);
+        //   console.log(delta)
+        //   if(delta) {
+        //         ytext.applyDelta(delta.ops);
+        //       }
+        //       var currentText = ytext.toDelta()
+        //         if(quillRef.current?.getContents().ops.map(op => op.insert) !== delta.ops.map(op => op.insert)) {
+        //             quillRef.current.setContents(delta); 
+        //             console.log(quillRef.current?.getContents().ops);
+        //             console.log(delta.ops)
+        //         }
+        // }
+        
+    
 
       return () => {
         provider.disconnect();
         ydoc.destroy();
         editorRef.current = null;
       }
-    }, [documentId])
+    }, [documentId, document, isLoading])
 
 
 
