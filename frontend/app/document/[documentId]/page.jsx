@@ -113,7 +113,7 @@ const Document = () => {
   return (
     <>
 
-        <div className="overlayscrollbars-react">
+        <div className="custom-scrollbar">
         <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
           <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
             <div 
@@ -135,6 +135,34 @@ const Document = () => {
           .text-cursor, p, input {
             cursor: url('/textCursor.svg') 15 20, auto !important;
           }
+
+        // Designing the scrollbar
+
+        body {
+          overflow-y: auto;
+          max-height: 100vh;
+          margin: 0;
+        }
+
+        body::-webkit-scrollbar {
+          width: 12px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+          background-color: #a855f7;
+          border-radius: 10px;
+          border: 3px solid #f9fafb;
+          transition: background-color 0.3s;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+          background-color: #840cfc;
+        }
+
+        body::-webkit-scrollbar-track {
+          background-color: #ececec;
+          border-radius: 10px;
+        }
         `}</style>
     </>
   )
