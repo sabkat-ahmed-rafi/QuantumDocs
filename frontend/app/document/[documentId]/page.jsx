@@ -8,10 +8,10 @@ import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
 import QuillCursors from 'quill-cursors'
 import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
+import { useSelector } from 'react-redux';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
-import { useSelector } from 'react-redux';
 window.katex = katex; // katex is used to use the fucntion editing feature.
 
 
@@ -45,7 +45,7 @@ const Document = () => {
       });
       
       
-      // editor settings
+      // editor settings and Quillbinding with Y.js
       if (editorRef.current && !quillRef.current) {
         quillRef.current = new Quill(editorRef.current, {
           theme: 'snow',
@@ -112,12 +112,13 @@ const Document = () => {
 
   return (
     <>
-        <div>
+
+        <div className="overlayscrollbars-react">
         <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
           <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
             <div 
             ref={editorRef}
-            className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10' 
+            className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10 p-7' 
             style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
             >
             </div>
