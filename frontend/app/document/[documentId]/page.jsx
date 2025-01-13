@@ -1,6 +1,6 @@
 'use client'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import katex from "katex";
 import Quill from 'quill'
 import { WebsocketProvider } from 'y-websocket';
@@ -29,8 +29,10 @@ const Document = () => {
     console.log(document?.document?.state);
 
 
-    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF3383', '#33FFF1'];
-    const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
+    const colors = useMemo(() => ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF3383', '#33FFF1'],[]);
+    const getRandomColor = useCallback(() => {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }, [colors])
 
     useEffect(() => {
 
