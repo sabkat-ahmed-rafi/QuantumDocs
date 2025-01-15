@@ -19,4 +19,13 @@ exports.get = async (req, res) => {
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
+};
+
+exports.update = async (req, res) => {
+	try {
+		const updatedData = req.body;
+		console.log(updatedData);
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
 }
