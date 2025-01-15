@@ -26,7 +26,7 @@ export const docApiSlice = createApi({
             query: ({documentId, updatedData}) => ({
                 url: `/api/document/${documentId}`,
                 method: 'PUT',
-                body: updatedData
+                body: {documentId, updatedData}
             }),
             providesTags: ['DocumentData']
         }),
