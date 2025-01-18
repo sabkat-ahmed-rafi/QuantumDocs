@@ -1,6 +1,6 @@
 'use client'
 import { logout } from "@/app/slices/authSlice";
-import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";

@@ -148,7 +148,7 @@ const Document = () => {
           {/* Head of document  */}
           <DocumentHead />
           {/* Main section of Editor */}
-            <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
+            <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
               <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
                 <div 
                 ref={editorRef}

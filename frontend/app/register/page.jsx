@@ -1,7 +1,7 @@
 'use client'
 import React, { useRef, useState } from 'react'
 import { SiGoogledocs } from 'react-icons/si'
-import { Button, Input } from '@nextui-org/react'
+import { Button, Input } from "@heroui/react"
 import Link from 'next/link'
 import {EyeFilledIcon} from "../components/Others/EyeFilledIcon";
 import {EyeSlashFilledIcon} from "../components/Others/EyeSlashFilledIcon";
