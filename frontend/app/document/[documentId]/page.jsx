@@ -31,7 +31,13 @@ const Document = () => {
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
   
-  const colors = useMemo(() => ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF3383', '#33FFF1'], []);
+  const colors = useMemo(() => [
+    '#1F1B24', '#3E2A47', '#512E5F', '#3A1F5C', '#5D2F3A',
+    '#283D3B', '#0D3B3B', '#3B444B', '#202C39', '#1F3C5B',
+    '#5F4B8B', '#2A3F54', '#383D3D', '#4B455D', '#6C4F7D',
+    '#6A3B36', '#4A4040', '#2E1B47', '#403D58', '#3B2C2C'
+  ], []);
+  
 
   //Function to show different color of cursor for different users
   const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
