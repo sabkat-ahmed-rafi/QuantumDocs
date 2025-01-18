@@ -16,7 +16,6 @@
     "framer-motion": "^11.11.17",
     "katex": "^0.16.19",
     "ldrs": "^1.0.2",
-    "lodash.debounce": "^4.0.8",
     "next": "15.0.3",
     "quill": "^2.0.3",
     "quill-cursors": "^4.0.4",
