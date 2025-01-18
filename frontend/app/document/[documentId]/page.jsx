@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import React from 'react'
-import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
+import { useGetSingleDataQuery, useUpdateDataMutation } from '@/app/slices/docApiSlice';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useMemo, useCallback } from 'react';
 import { WebsocketProvider } from 'y-websocket';
@@ -24,28 +24,34 @@ const Document = () => {
   
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
-  const {data: document, isLoading} = useGetSingleDataQuery(documentId);
-
+  const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true});
+  const [updateData] = useUpdateDataMutation();
+  
   const editorRef = useRef(null);
   const quillRef = useRef(null);
+  const shouldObserveRef = useRef(false);
   
   const colors = useMemo(() => ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#FF3383', '#33FFF1'], []);
+
+  //Function to show different color of cursor for different users
   const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
   
   
-  console.log(document?.document?.state);
 
 
   useEffect(() => {
     if (!document || isLoading) return;
 
     window.katex = katex; // katex is used to use the fucntion editing feature.
-    Quill.register('modules/cursors', QuillCursors)
+    Quill.register('modules/cursors', QuillCursors) // To show multiple users cursor.
+
+    if (!editorRef.current || quillRef.current) return;
 
     const ydoc = new Y.Doc();
     const ytext = ydoc.getText('quill');
     const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc);
 
+    // Checking the websocket connection 
     provider.on('status', (event) => {
       console.log(`WebSocket connection: ${event.status}`);
     });
@@ -78,32 +84,47 @@ const Document = () => {
         name: `${user?.displayName}` || "Anonymous",
         color: getRandomColor(),
       });
-    }
 
-     // Showing the data from database 
-     if (document?.document?.state) {
+    }
+     
+    // Showing the data of the document from database 
+    if (document?.document?.state) {
       const serverState = new Uint8Array(document.document.state.data);
       const decoded = new TextDecoder().decode(serverState);
       const delta = JSON.parse(decoded);
 
-      if (delta && delta.ops) { 
-        provider.on('synced', () => {
-          const currentContent = ytext.toDelta();
-    
-            // Check if current content matches the server state
-            console.log("first print")
+      if (delta && delta.ops && quillRef.current) { 
+        provider.on('synced', () => {    
+            shouldObserveRef.current = false;
             ytext.delete(0, ytext.length); // Clear existing content
             ytext.applyDelta(delta.ops); // Apply the server state
-            quillRef.current.setContents(delta.ops) // Again setting content because data not showing after route back
-          console.log("Current Content after Sync:", currentContent);
+            shouldObserveRef.current = true; 
         });
       };
-     };
+    };
 
- 
-    return () => {
+
+    // Document updating logic 
+    quillRef.current.on("text-change", async (delta, oldDelta, source) => {
+        if(shouldObserveRef.current && source === 'user') {
+          console.log(delta, oldDelta)
+          try{
+            const result = await updateData({ documentId, updatedData: delta.ops }).unwrap();
+            console.log(result);
+          } catch(error) {
+            console.log("Updating doc error: ", error);
+          }
+        }
+    });
+
+
+  
+    return async () => {
+      shouldObserveRef.current = false;
+      provider.destroy();
       provider.disconnect();
       ydoc.destroy();
+      quillRef.current = null;
       editorRef.current = null;
     };
   }, [documentId, document, isLoading, getRandomColor]);
