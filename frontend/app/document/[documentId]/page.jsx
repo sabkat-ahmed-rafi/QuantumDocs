@@ -145,6 +145,7 @@ const Document = () => {
     <>
 
         <div className="custom-scrollbar">
+          {/* Head of document  */}
           <DocumentHead />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
