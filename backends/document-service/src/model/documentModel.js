@@ -21,7 +21,7 @@ const documentSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        default: "title",
+        default: "Untitle document",
     },
     owner: {
         type: String,
