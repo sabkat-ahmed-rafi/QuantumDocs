@@ -51,12 +51,10 @@ exports.updateDocument = async (updatedData) => {
         const mergedDelta = oldDelta.compose(newDelta);
         const mergedData = Buffer.from(JSON.stringify({ ops: mergedDelta.ops }));
 
-        console.log(mergedDelta)
-
         const updatedDocument = await Document.findByIdAndUpdate(
             documentId,
             { $set: { state: mergedData } },
-            { new: true } // Ensure the updated document is returned
+            { new: true } // Ensured that the updated document is returned
         );
 
         return updatedDocument;
