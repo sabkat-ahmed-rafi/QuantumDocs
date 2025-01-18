@@ -1,11 +1,18 @@
 import React from 'react'
+import DocumentInfo from './DocumentInfo/DocumentInfo'
+import DocumentFunc from './DocumentFunc/DocumentFunc'
 
 const DocumentHead = () => {
   return (
     <>
-        <div>
-            
-        </div>
+        <section>
+            <div>
+                <DocumentInfo />
+            </div>
+            <div>
+                <DocumentFunc />
+            </div>
+        </section>
     </>
   )
 }

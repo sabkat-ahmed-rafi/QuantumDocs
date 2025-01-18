@@ -15,6 +15,7 @@ import katex from "katex";
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
+import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
 
 
 
@@ -144,17 +145,18 @@ const Document = () => {
     <>
 
         <div className="custom-scrollbar">
+          <DocumentHead />
           {/* Main section of Editor */}
-        <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
-          <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
-            <div 
-            ref={editorRef}
-            className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10 md:p-7 p-4' 
-            style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
-            >
-            </div>
-          </div>
-        </section>
+            <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
+              <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
+                <div 
+                ref={editorRef}
+                className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10 md:p-7 p-4' 
+                style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
+                >
+                </div>
+              </div>
+            </section>
         </div>
 
         {/* Giving custom styles to Cursor and ScrollBar */}
