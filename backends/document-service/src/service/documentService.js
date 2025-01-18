@@ -1,4 +1,5 @@
 const Document = require('../model/documentModel');
+const Delta = require('quill-delta');
 
 exports.createDocument = async (documentData) => {
     if(!documentData) {
@@ -35,26 +36,31 @@ exports.getDocumentById = async (documentId) => {
 exports.updateDocument = async (updatedData) => {
     try {
         const documentId = updatedData?.documentId;
-        const newdata = updatedData?.updatedData;
+        const newData = updatedData?.updatedData;
         const document = await Document.findById(documentId);
         if(!document) {
             throw new Error("Document not found");
         }
+        
         // Decode and parse the existing document state from Buffer
         const previousDelta = JSON.parse(Buffer.from(document.state).toString());
-
-        const updatedOps = previousDelta.ops || [];
-        updatedOps.push(...newdata);
+        const oldDelta = new Delta(previousDelta.ops || []);
+        const newDelta = new Delta(newData)
 
         // Prepare the updated state using Buffer
-        const mergedData = Buffer.from(JSON.stringify({ ops: updatedOps }));
+        const mergedDelta = oldDelta.compose(newDelta);
+        const mergedData = Buffer.from(JSON.stringify({ ops: mergedDelta.ops }));
 
-        await Document.findByIdAndUpdate(
+        console.log(mergedDelta)
+
+        const updatedDocument = await Document.findByIdAndUpdate(
             documentId,
-            { $set: { state: mergedData } }
+            { $set: { state: mergedData } },
+            { new: true } // Ensure the updated document is returned
         );
 
+        return updatedDocument;
     } catch (error) {
-
+        console.log(error)
     }
 }

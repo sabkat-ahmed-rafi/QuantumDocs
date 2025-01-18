@@ -24,7 +24,7 @@ exports.get = async (req, res) => {
 exports.update = async (req, res) => {
 	try {
 		const updatedData = req.body;
-		await documentService.updateDocument(updatedData);
+        await documentService.updateDocument(updatedData);
 		res.status(200).json({ message: "Document updated" });
 	} catch (error) {
 		res.status(500).json({ message: error.message });
