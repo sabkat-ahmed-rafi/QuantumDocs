@@ -32,11 +32,13 @@ const Document = () => {
   const shouldObserveRef = useRef(false);
   
   const colors = useMemo(() => [
-    '#1F1B24', '#3E2A47', '#512E5F', '#3A1F5C', '#5D2F3A',
-    '#283D3B', '#0D3B3B', '#3B444B', '#202C39', '#1F3C5B',
-    '#5F4B8B', '#2A3F54', '#383D3D', '#4B455D', '#6C4F7D',
-    '#6A3B36', '#4A4040', '#2E1B47', '#403D58', '#3B2C2C'
+    '#FF5733', '#FF8C00', '#FFD700', '#ADFF2F', '#32CD32',
+    '#00FA9A', '#00CED1', '#1E90FF', '#4169E1', '#8A2BE2',
+    '#FF1493', '#C71585', '#FF4500', '#FF6347', '#FFDAB9',
+    '#40E0D0', '#7B68EE', '#DA70D6', '#FF69B4', '#FFB6C1'
   ], []);
+  
+  
   
 
   //Function to show different color of cursor for different users
@@ -142,6 +144,7 @@ const Document = () => {
     <>
 
         <div className="custom-scrollbar">
+          {/* Main section of Editor */}
         <section className='text-black bg-[#F9FBFD] py-16 min-h-[1000px]'> 
           <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
             <div 
@@ -154,7 +157,7 @@ const Document = () => {
         </section>
         </div>
 
-        
+        {/* Giving custom styles to Cursor and ScrollBar */}
         <style jsx global>{`
           body {
             cursor: url('/arrow.svg') 5 5, auto; 
