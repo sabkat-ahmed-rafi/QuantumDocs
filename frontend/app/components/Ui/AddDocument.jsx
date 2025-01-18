@@ -13,7 +13,7 @@ const AddDocument = () => {
 
     const handleCreateDocument = async () => {
         try {
-            const response = await axiosSecure.post(`/api/document`, { owner: user?.email });
+            const response = await axiosSecure.post(`/api/document`, { owner:{email: user?.email} });
             console.log(response);
 
             const documentId = response?.data?.document?._id;
