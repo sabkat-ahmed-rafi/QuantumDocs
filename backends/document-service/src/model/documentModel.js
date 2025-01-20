@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
+const defaultDelta = { ops: [{insert: "hello World"}] };
 
 const documentSchema = new mongoose.Schema({
     state: {
         type: Buffer, // Store the Delta as a Buffer
+        default: Buffer.from(JSON.stringify(defaultDelta)),
     },
     title: {
         type: String,
