@@ -133,7 +133,6 @@ const Document = () => {
       provider.destroy();
       provider.disconnect();
       ydoc.destroy();
-      quillRef.current = null;
       editorRef.current = null;
     };
   }, [documentId, document, isLoading, getRandomColor]);
@@ -149,10 +148,10 @@ const Document = () => {
           <DocumentHead />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
-              <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px]'>
+              <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px] editorinput'>
                 <div 
                 ref={editorRef}
-                className='text-cursor caret-purple-600 lg:w-[700px] bg-white border border-gray-300 lg:p-10 md:p-7 p-4' 
+                className='text-cursor caret-purple-600 after:caret-black lg:w-[700px] bg-white border border-gray-300 lg:p-10 md:p-7 p-4 ' 
                 style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
                 >
                 </div>
@@ -162,6 +161,7 @@ const Document = () => {
 
         {/* Giving custom styles to Cursor and ScrollBar */}
         <style jsx global>{`
+        // Designing the cursor
           body {
             cursor: url('/arrow.svg') 5 5, auto; 
           }
@@ -172,8 +172,8 @@ const Document = () => {
             cursor: url('/textCursor.svg') 15 20, auto !important;
           }
 
+          
         // Designing the scrollbar
-
         body {
           overflow-y: auto;
           max-height: 100vh;
