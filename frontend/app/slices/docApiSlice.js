@@ -12,6 +12,9 @@ export const docApiSlice = createApi({
         }),
         getSingleData: builder.query({
             query: (documentId) => `/api/document/${documentId}`,
+            keepUnusedDataFor: 0, // Disable caching
+            refetchOnMountOrArgChange: true, // Ensure fresh data on mount
+            refetchOnFocus: true, // Refetch when the tab gains focus
             providesTags: ['DocumentData']
         }),
         addData: builder.mutation({

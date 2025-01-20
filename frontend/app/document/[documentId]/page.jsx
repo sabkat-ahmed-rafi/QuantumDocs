@@ -25,12 +25,13 @@ const Document = () => {
   
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
-  const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true});
+  const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true, refetchOnFocus: true,});
   const [updateData] = useUpdateDataMutation();
   
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
+  const providerRef = useRef(null)
   
   const colors = useMemo(() => [
     '#FF5733', '#FF8C00', '#FFD700', '#ADFF2F', '#32CD32',
@@ -46,7 +47,6 @@ const Document = () => {
   const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
   
   
-  console.log(document)
 
   useEffect(() => {
     if (!document || isLoading) return;
@@ -59,6 +59,7 @@ const Document = () => {
     const ydoc = new Y.Doc();
     const ytext = ydoc.getText('quill');
     const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc);
+    providerRef.current = provider;
 
     // Checking the websocket connection 
     provider.on('status', (event) => {
@@ -102,7 +103,7 @@ const Document = () => {
       const decoded = new TextDecoder().decode(serverState);
       const delta = JSON.parse(decoded);
 
-      if (delta && delta.ops && quillRef.current) { 
+      if (delta && delta.ops && quillRef.current && provider) { 
         provider.on('synced', () => {    
             shouldObserveRef.current = false;
             ytext.delete(0, ytext.length); // Clear existing content
@@ -130,8 +131,7 @@ const Document = () => {
   
     return async () => {
       shouldObserveRef.current = false;
-      provider.destroy();
-      provider.disconnect();
+      providerRef.current = null;
       ydoc.destroy();
       editorRef.current = null;
     };
