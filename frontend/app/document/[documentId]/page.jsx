@@ -52,9 +52,7 @@ const Document = () => {
     if (!document || isLoading) return;
 
     window.katex = katex; // katex is used to use the fucntion editing feature.
-    if (!Quill.imports['modules/cursors']) {
-      Quill.register('modules/cursors', QuillCursors);
-    }
+    Quill.register('modules/cursors', QuillCursors); // To show multiple users cursor.
 
     if (!editorRef.current || quillRef.current) return;
 
