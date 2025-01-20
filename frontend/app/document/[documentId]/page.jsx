@@ -46,13 +46,15 @@ const Document = () => {
   const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
   
   
-
+  console.log(document)
 
   useEffect(() => {
     if (!document || isLoading) return;
 
     window.katex = katex; // katex is used to use the fucntion editing feature.
-    Quill.register('modules/cursors', QuillCursors) // To show multiple users cursor.
+    if (!Quill.imports['modules/cursors']) {
+      Quill.register('modules/cursors', QuillCursors);
+    }
 
     if (!editorRef.current || quillRef.current) return;
 
