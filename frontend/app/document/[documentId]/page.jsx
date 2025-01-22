@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { useGetSingleDataQuery, useUpdateDataMutation } from '@/app/slices/docApiSlice';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useMemo, useCallback } from 'react';
@@ -28,6 +28,8 @@ const Document = () => {
   const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true, refetchOnFocus: true,});
   const [updateData] = useUpdateDataMutation();
   
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef(null);
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
@@ -45,6 +47,14 @@ const Document = () => {
 
   //Function to show different color of cursor for different users
   const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
+
+  const handleTyping = useCallback(() => {
+    setIsTyping(true);
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 1000);
+  }, []);
   
   
 
@@ -118,6 +128,7 @@ const Document = () => {
     quillRef.current.on("text-change", async (delta, oldDelta, source) => {
         if(shouldObserveRef.current && source === 'user') {
           console.log(delta, oldDelta)
+          handleTyping()
           try{
             const result = await updateData({ documentId, updatedData: delta.ops }).unwrap();
             console.log(result);
@@ -145,7 +156,7 @@ const Document = () => {
 
         <div className="custom-scrollbar">
           {/* Head of document  */}
-          <DocumentHead />
+          <DocumentHead isTyping={isTyping} />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
               <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px] editorinput'>
