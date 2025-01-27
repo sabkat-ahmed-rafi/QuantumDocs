@@ -69,11 +69,12 @@ const Document = () => {
     if (providerRef.current) {
       providerRef.current.destroy();  // ✅ Close previous connection
     }
-
+    
+    if (!editorRef.current || quillRef.current) return;
+    
     window.katex = katex; // katex is used to use the fucntion editing feature.
     Quill.register('modules/cursors', QuillCursors); // To show multiple users cursor.
 
-    if (!editorRef.current || quillRef.current) return;
 
     const ydoc = new Y.Doc();
     const ytext = ydoc.getText('quill');
