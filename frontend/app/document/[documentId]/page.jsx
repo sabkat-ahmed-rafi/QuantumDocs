@@ -11,11 +11,12 @@ import { QuillBinding } from 'y-quill';
 import QuillCursors from 'quill-cursors';
 import Quill from 'quill';
 import katex from "katex";
+import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
+import debounce from 'lodash.debounce';
 
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
-import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
 
 
 
@@ -28,12 +29,14 @@ const Document = () => {
   const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true, refetchOnFocus: true,});
   const [updateData] = useUpdateDataMutation();
   
+  const [hasFlushed, setHasFlushed] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
   const providerRef = useRef(null)
+  const deltaQueue = useRef([]);
   
   
   
@@ -61,6 +64,21 @@ const Document = () => {
     }, 1000);
   }, [isTyping]);
   
+
+  const debouncedFlush = useCallback(debounce(async () => {
+    if(deltaQueue.current.length == 0) return;
+    
+    const combinedOps = deltaQueue.current.flatMap(d => d.ops);
+    deltaQueue.current = [];
+    console.log(combinedOps)
+
+    try {
+      await updateData({ documentId, updatedData: combinedOps }).unwrap();
+    } catch (error) {
+      console.error("Updating doc error: ", error);
+    }
+
+  }, 5000), []);
   
 
   useEffect(() => {
@@ -135,18 +153,14 @@ const Document = () => {
 
 
     // Document updating logic 
-    // quillRef.current.on("text-change", async (delta, oldDelta, source) => {
-    //     if(shouldObserveRef.current && source === 'user') {
-    //       console.log(delta, oldDelta)
-    //       handleTyping()
-    //       try{
-    //         const result = await updateData({ documentId, updatedData: delta.ops }).unwrap();
-    //         console.log(result);
-    //       } catch(error) {
-    //         console.log("Updating doc error: ", error);
-    //       }
-    //     }
-    // });
+    quillRef.current.on("text-change", async (delta, oldDelta, source) => {
+        if(shouldObserveRef.current && source === 'user') {
+          console.log(delta, oldDelta)
+          handleTyping();
+          deltaQueue.current.push(delta);
+          debouncedFlush();
+        }
+    });
 
 
   
@@ -158,6 +172,45 @@ const Document = () => {
       editorRef.current = null;
     };
   }, [documentId, document, isLoading]);
+
+
+
+  // // Flush updates before unmounting
+  // useEffect(() => {
+  //   return () => {
+  //     if (deltaQueue.current.length > 0 && !hasFlushed) {
+  //       const combinedOps = deltaQueue.current.flatMap(d => d.ops);
+  //       deltaQueue.current = [];
+  //       updateData({ documentId, updatedData: combinedOps }).unwrap().catch(error => {
+  //         console.error("Failed to save on unmount:", error);
+  //       });
+  //       setHasFlushed(true); // Mark as flushed
+  //     }
+  //   };
+  // }, [hasFlushed, updateData, documentId]);
+
+  // // Flush updates when user leaves or refreshes
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     if (deltaQueue.current.length > 0 && !hasFlushed) {
+  //       const combinedOps = deltaQueue.current.flatMap(d => d.ops);
+  //       deltaQueue.current = [];
+  //       updateData({ documentId, updatedData: combinedOps }).unwrap().catch(error => {
+  //         console.error("Failed to save before unload:", error);
+  //       });
+
+  //       event.preventDefault();
+  //       event.returnValue = '';
+  //       setHasFlushed(true); // Mark as flushed
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload",handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   }
+  // }, [hasFlushed, updateData, documentId])
 
 
 
