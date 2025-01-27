@@ -66,6 +66,10 @@ const Document = () => {
   useEffect(() => {
     if (!document || isLoading) return;
 
+    if (providerRef.current) {
+      providerRef.current.destroy();  // ✅ Close previous connection
+    }
+
     window.katex = katex; // katex is used to use the fucntion editing feature.
     Quill.register('modules/cursors', QuillCursors); // To show multiple users cursor.
 
@@ -149,6 +153,7 @@ const Document = () => {
       shouldObserveRef.current = false;
       providerRef.current = null;
       ydoc.destroy();
+      providerRef.current?.destroy();
       editorRef.current = null;
     };
   }, [documentId, document, isLoading]);
