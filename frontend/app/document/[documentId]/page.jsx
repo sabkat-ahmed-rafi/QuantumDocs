@@ -1,10 +1,9 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import React, { useState } from 'react'
 import { useGetSingleDataQuery, useUpdateDataMutation } from '@/app/slices/docApiSlice';
 import { useSelector } from 'react-redux';
-import { useEffect, useRef, useMemo, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { WebsocketProvider } from 'y-websocket';
 import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
@@ -13,6 +12,7 @@ import Quill from 'quill';
 import katex from "katex";
 import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
 import debounce from 'lodash.debounce';
+import { Delta } from 'quill';
 
 
 import 'quill/dist/quill.snow.css'
@@ -26,8 +26,9 @@ const Document = () => {
   
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
-  const {data: document, isLoading} = useGetSingleDataQuery(documentId, {refetchOnMountOrArgChange: true, refetchOnFocus: true,});
+  const {data: document, isLoading} = useGetSingleDataQuery(documentId);
   const [updateData] = useUpdateDataMutation();
+  
   
   const [hasFlushed, setHasFlushed] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -54,6 +55,7 @@ const Document = () => {
 
   }, []);
 
+  // Handle loading UI when user typing
   const handleTyping = useCallback(() => {
     if (!isTyping) {
       setIsTyping(true);
@@ -63,22 +65,28 @@ const Document = () => {
       setIsTyping(false);
     }, 1000);
   }, [isTyping]);
-  
 
-  const debouncedFlush = useCallback(debounce(async () => {
+  // Document save logic
+  const saveDocument = async () => {
     if(deltaQueue.current.length == 0) return;
     
-    const combinedOps = deltaQueue.current.flatMap(d => d.ops);
+    // Properly merge deltas
+    let normalizedDelta = new Delta();
+    deltaQueue.current.forEach(delta => {
+      normalizedDelta = normalizedDelta.compose(delta);
+    });
     deltaQueue.current = [];
-    console.log(combinedOps)
 
     try {
-      await updateData({ documentId, updatedData: combinedOps }).unwrap();
+      await updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap();
     } catch (error) {
       console.error("Updating doc error: ", error);
     }
 
-  }, 5000), []);
+  }
+  
+  // Using Debounce to save after 5 seconds of inactivity
+  const debouncedFlush = useCallback(debounce(saveDocument, 5000), []);
   
 
   useEffect(() => {
@@ -160,7 +168,7 @@ const Document = () => {
           deltaQueue.current.push(delta);
           debouncedFlush();
         }
-    });
+      });
 
 
   
@@ -175,42 +183,53 @@ const Document = () => {
 
 
 
-  // // Flush updates before unmounting
-  // useEffect(() => {
-  //   return () => {
-  //     if (deltaQueue.current.length > 0 && !hasFlushed) {
-  //       const combinedOps = deltaQueue.current.flatMap(d => d.ops);
-  //       deltaQueue.current = [];
-  //       updateData({ documentId, updatedData: combinedOps }).unwrap().catch(error => {
-  //         console.error("Failed to save on unmount:", error);
-  //       });
-  //       setHasFlushed(true); // Mark as flushed
-  //     }
-  //   };
-  // }, [hasFlushed, updateData, documentId]);
+  // Flush updates before unmounting
+  useEffect(() => {
+    return () => {
+      if (deltaQueue.current.length > 0 && !hasFlushed) {
+        // Properly merge deltas
+        let normalizedDelta = new Delta();
+        deltaQueue.current.forEach(delta => {
+          normalizedDelta = normalizedDelta.compose(delta);
+        });
+        deltaQueue.current = [];
+        updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
+          console.error("Failed to save on unmount:", error);
+        });
+        setHasFlushed(true); // Mark as flushed
+      }
+    };
+  }, [hasFlushed, updateData]);
 
-  // // Flush updates when user leaves or refreshes
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     if (deltaQueue.current.length > 0 && !hasFlushed) {
-  //       const combinedOps = deltaQueue.current.flatMap(d => d.ops);
-  //       deltaQueue.current = [];
-  //       updateData({ documentId, updatedData: combinedOps }).unwrap().catch(error => {
-  //         console.error("Failed to save before unload:", error);
-  //       });
 
-  //       event.preventDefault();
-  //       event.returnValue = '';
-  //       setHasFlushed(true); // Mark as flushed
-  //     }
-  //   };
 
-  //   window.addEventListener("beforeunload",handleBeforeUnload);
+  // Flush updates when user leaves or refreshes
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (deltaQueue.current.length > 0 && !hasFlushed) {
+        // Properly merge deltas
+        let normalizedDelta = new Delta();
+        deltaQueue.current.forEach(delta => {
+          normalizedDelta = normalizedDelta.compose(delta);
+        });
+        deltaQueue.current = [];
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   }
-  // }, [hasFlushed, updateData, documentId])
+        updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
+          console.error("Failed to save on unmount:", error);
+        });
+
+        event.preventDefault();
+        event.returnValue = '';
+        setHasFlushed(true); // Mark as flushed
+      }
+    };
+
+    window.addEventListener("beforeunload",handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    }
+  }, [hasFlushed, updateData])
 
 
 
