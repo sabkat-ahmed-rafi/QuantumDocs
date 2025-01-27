@@ -59,7 +59,7 @@ const Document = () => {
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
     }, 1000);
-  }, []);
+  }, [isTyping]);
   
   
 
