@@ -35,18 +35,21 @@ const Document = () => {
   const shouldObserveRef = useRef(false);
   const providerRef = useRef(null)
   
-  const colors = useMemo(() => [
-    '#FF5733', '#FF8C00', '#FFD700', '#ADFF2F', '#32CD32',
-    '#00FA9A', '#00CED1', '#1E90FF', '#4169E1', '#8A2BE2',
-    '#FF1493', '#C71585', '#FF4500', '#FF6347', '#FFDAB9',
-    '#40E0D0', '#7B68EE', '#DA70D6', '#FF69B4', '#FFB6C1'
-  ], []);
   
   
   
-
+  
   //Function to show different color of cursor for different users
-  const getRandomColor = useCallback(() => colors[Math.floor(Math.random() * colors.length)], [colors]);
+  const getRandomColor = useCallback(() => {
+    const colors = [
+      '#FF5733', '#FF8C00', '#FFD700', '#ADFF2F', '#32CD32',
+      '#00FA9A', '#00CED1', '#1E90FF', '#4169E1', '#8A2BE2',
+      '#FF1493', '#C71585', '#FF4500', '#FF6347', '#FFDAB9',
+      '#40E0D0', '#7B68EE', '#DA70D6', '#FF69B4', '#FFB6C1'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)]
+
+  }, []);
 
   const handleTyping = useCallback(() => {
     setIsTyping(true);
@@ -146,7 +149,7 @@ const Document = () => {
       ydoc.destroy();
       editorRef.current = null;
     };
-  }, [documentId, document, isLoading, getRandomColor]);
+  }, [documentId, document, isLoading]);
 
 
 
