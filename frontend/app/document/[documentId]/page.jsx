@@ -52,7 +52,9 @@ const Document = () => {
   }, []);
 
   const handleTyping = useCallback(() => {
-    setIsTyping(true);
+    if (!isTyping) {
+      setIsTyping(true);
+    }
     clearTimeout(typingTimeoutRef.current);
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
