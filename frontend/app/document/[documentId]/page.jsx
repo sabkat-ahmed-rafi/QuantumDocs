@@ -67,7 +67,7 @@ const Document = () => {
     if (!document || isLoading) return;
 
     if (providerRef.current) {
-      providerRef.current.destroy();  // ✅ Close previous connection
+      providerRef.current.destroy();  // Close previous connection
     }
     
     if (!editorRef.current || quillRef.current) return;
@@ -135,18 +135,18 @@ const Document = () => {
 
 
     // Document updating logic 
-    quillRef.current.on("text-change", async (delta, oldDelta, source) => {
-        if(shouldObserveRef.current && source === 'user') {
-          console.log(delta, oldDelta)
-          handleTyping()
-          try{
-            const result = await updateData({ documentId, updatedData: delta.ops }).unwrap();
-            console.log(result);
-          } catch(error) {
-            console.log("Updating doc error: ", error);
-          }
-        }
-    });
+    // quillRef.current.on("text-change", async (delta, oldDelta, source) => {
+    //     if(shouldObserveRef.current && source === 'user') {
+    //       console.log(delta, oldDelta)
+    //       handleTyping()
+    //       try{
+    //         const result = await updateData({ documentId, updatedData: delta.ops }).unwrap();
+    //         console.log(result);
+    //       } catch(error) {
+    //         console.log("Updating doc error: ", error);
+    //       }
+    //     }
+    // });
 
 
   
