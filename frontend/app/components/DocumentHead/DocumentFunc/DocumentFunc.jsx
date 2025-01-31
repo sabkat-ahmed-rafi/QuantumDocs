@@ -4,6 +4,7 @@ import { BiWorld } from 'react-icons/bi';
 import { AiFillMessage } from "react-icons/ai";
 import { GiNotebook } from "react-icons/gi";
 import MessageDrawer from "../MessageDrawer/MessageDrawer";
+import NoteDrawer from "../NoteDrawer/NoteDrawer";
 
 
 const DocumentFunc = () => {
@@ -14,11 +15,14 @@ const DocumentFunc = () => {
    //  For Message Drawer 
     const {isOpen: isOpenMessage, onOpen: onOpenMessage, onOpenChange: onOpenMessageChange} = useDisclosure();
 
+   //  For Note Drawer 
+    const {isOpen: isOpenNote, onOpen: onOpenNote, onOpenChange: onOpenNoteChange} = useDisclosure();
+
   return (
     <>
- 
+        {/* Buttons of Modal and Drawer  */}
         <section className='space-x-3'>
-           <Button className='bg-[#C9A9E9]' onPress={onOpenShareModal}>
+           <Button className='bg-[#C9A9E9]' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
            <Button className='bg-[#C9A9E9]' onPress={onOpenMessage}> 
@@ -29,8 +33,10 @@ const DocumentFunc = () => {
            </Button>
         </section>
         
+        {/* Body of Modal and Drawer  */}
         <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal}/>
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} />
+        <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} />
     </>
   )
 }
