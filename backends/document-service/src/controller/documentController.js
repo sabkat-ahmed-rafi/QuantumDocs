@@ -30,3 +30,13 @@ exports.update = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 }
+
+exports.updateTitle = async (req, res) => {
+	try {
+		const newTitle = req.params.newTitle;
+		await documentService.UpdateDocTitle(newTitle);
+		res.status(200).json({ message: "Document title updated" });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+}
