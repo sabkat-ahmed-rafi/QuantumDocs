@@ -31,7 +31,15 @@ export const docApiSlice = createApi({
                 method: 'PUT',
                 body: {documentId, updatedData}
             }),
-            providesTags: ['DocumentData']
+            invalidatesTags: ['DocumentData']
+        }),
+        UpdateTitle: builder.mutation({
+            query: ({newTitle, documentId}) => ({
+                url: `/api/document/${documentId}`,
+                method: 'PATCH',
+                body: {newTitle, documentId}
+            }),
+            invalidatesTags: ['DocumentData']
         }),
         deleteData: builder.mutation({
             query: (documentId) => ({
@@ -48,5 +56,6 @@ export const {
     useGetSingleDataQuery,
     useAddDataMutation,
     useUpdateDataMutation,
+    useUpdateTitleMutation,
     useDeleteDataMutation
 } = docApiSlice;
