@@ -62,3 +62,22 @@ exports.updateDocument = async (updatedData) => {
         console.log(error)
     }
 }
+
+exports.UpdateDocTitle = async (documentId, newDocTitle) => {
+    try {
+        const UpdatedDoc = Document.findByIdAndUpdate(
+            documentId,
+            { title: newDocTitle },
+            { new: true }
+        )
+
+        if (!UpdatedDoc) {
+            console.log("Document not found");
+            return null;
+        }
+
+        return UpdatedDoc;
+    } catch (error) {
+        console.log(error);
+    }
+} 
