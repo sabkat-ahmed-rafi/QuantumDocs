@@ -21,14 +21,14 @@ const DocumentFunc = () => {
   return (
     <>
         {/* Buttons of Modal and Drawer  */}
-        <section className='space-x-3'>
-           <Button className='bg-[#C9A9E9]' onPress={onOpenNote}>
+        <section className='md:space-x-3 space-x-2 flex md:mt-0 mt-2'>
+           <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
-           <Button className='bg-[#C9A9E9]' onPress={onOpenMessage}> 
+           <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
            <AiFillMessage size={20}/>  Messages
             </Button>
-           <Button className='bg-[#C9A9E9]' onPress={onOpenShareModal}>
+           <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenShareModal}>
               <BiWorld size={20} /> Share
            </Button>
         </section>
