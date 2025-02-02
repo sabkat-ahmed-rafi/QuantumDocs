@@ -17,7 +17,7 @@ const DocumentInfo = ({isTyping}) => {
                         <input className='border' type="text" />
                     </form>
                     <FaStar size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200' />
-                    <div className='flex items-center space-x-2'>
+                    <div className='md:flex items-center space-x-2 hidden'>
                         {
                            isTyping ? 
                            <>
