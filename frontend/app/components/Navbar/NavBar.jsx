@@ -77,7 +77,7 @@ export default function NavBar() {
               color="secondary"
               name={user?.name}
               size="md"
-              src={user?.profilePicture}
+              src={user.profilePicture || '/images/profilePicture.jpg'}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
