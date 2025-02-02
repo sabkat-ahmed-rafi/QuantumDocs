@@ -1,5 +1,5 @@
 'use client'
-import useAxiosSecureForDS from '@/app/hooks/useAxiosSecureForDS';
+import { useAddDataMutation } from '@/app/slices/docApiSlice';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 import { FaPlus } from "react-icons/fa6";
@@ -9,14 +9,12 @@ const AddDocument = () => {
 
     const {user} = useSelector(state => state.auth);
     const router = useRouter();
-    const axiosSecure = useAxiosSecureForDS();
+    const [addData] = useAddDataMutation()
 
     const handleCreateDocument = async () => {
         try {
-            const response = await axiosSecure.post(`/api/document`, { owner:{email: user?.email} });
-            console.log(response);
-
-            const documentId = response?.data?.document?._id;
+            const response = await addData( { owner: { email: user?.email } } ).unwrap();
+            const documentId = response?.document?._id;
             router.push(`/document/${documentId}`);
         } catch(error) {
             console.log("Failed to create document:", error);
