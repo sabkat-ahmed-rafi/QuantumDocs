@@ -9,7 +9,7 @@ const documentSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        default: "Untitle document",
+        default: "Untitled document",
     },
     owner: {
         email: {
