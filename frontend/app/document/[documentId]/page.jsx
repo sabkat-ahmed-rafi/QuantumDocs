@@ -239,7 +239,7 @@ const Document = () => {
 
         <div className="custom-scrollbar">
           {/* Head of document  */}
-          <DocumentHead isTyping={isTyping} />
+          <DocumentHead isTyping={isTyping} document={document} />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
               <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px] editorinput'>

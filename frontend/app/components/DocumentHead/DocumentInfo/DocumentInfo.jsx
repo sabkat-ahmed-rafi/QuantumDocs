@@ -1,11 +1,46 @@
+'use client'
+
 import { SiGoogledocs } from 'react-icons/si';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { FaArrowsRotate } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
+import { useUpdateTitleMutation } from '@/app/slices/docApiSlice';
+import { useEffect, useState } from 'react';
 
 
 
-const DocumentInfo = ({isTyping}) => {
+const DocumentInfo = ({isTyping, document}) => {
+
+
+    const [updateTitle] = useUpdateTitleMutation()
+    const [title, setTitle] = useState("");
+ 
+
+    useEffect(() => {
+        if (document?.document?.title) {
+            setTitle(document.document.title);
+        }
+    }, [document]);
+
+
+    const updateDocTitle = async () => {
+        if(title === document?.document?.title) return;
+        try {
+           const result = await updateTitle({documentId: document?.document?.id , newTitle: title}).unwrap();
+           console.log(result);
+        } catch(error) {
+            console.log("problem in updating title", error);
+        }
+    }
+
+    const handleKeyDownUpdate = (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            updateDocTitle();
+            e.target.blur();
+        }
+    }
+
   return (
     <>
 
@@ -13,9 +48,15 @@ const DocumentInfo = ({isTyping}) => {
             <SiGoogledocs size={40} className="text-purple-500" />
             <div className='flex-col space-y-3'>
                 <div className='flex items-center space-x-3'>
-                    <form>
-                        <input className='border' type="text" />
-                    </form>
+                        <input 
+                        name="title"
+                        value={title || ""}  
+                        onChange={(e) => setTitle(e.target.value)}
+                        onBlur={updateDocTitle}
+                        onKeyDown={handleKeyDownUpdate}
+                        className="text-xl px-1 bg-[#F9FBFD] w-[220px] border-2 border-[#F9FBFD] hover:border-black transition-all rounded-md"
+                        type="text"
+                        />
                     <FaStar size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200' />
                     <div className='md:flex items-center space-x-2 hidden'>
                         {
@@ -31,8 +72,8 @@ const DocumentInfo = ({isTyping}) => {
                     </div>
                 </div>
                 <div className='flex font-sans text-sm font-[500]'>
-                    <p className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</p>
-                    <p className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</p>
+                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md '>Download PDF</button>
+                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md '>Download DOCS</button>
                 </div>
             </div>
         </section>

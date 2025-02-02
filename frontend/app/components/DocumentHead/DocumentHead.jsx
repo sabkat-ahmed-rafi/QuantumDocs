@@ -3,12 +3,12 @@ import React from 'react'
 import DocumentInfo from './DocumentInfo/DocumentInfo'
 import DocumentFunc from './DocumentFunc/DocumentFunc'
 
-const DocumentHead = ({isTyping}) => {
+const DocumentHead = ({isTyping, document}) => {
   return (
     <>
         <section className='text-black bg-[#F9FBFD] flex md:flex-row flex-col items-center justify-between py-3 px-5 sticky top-0 z-10 border-b border-slate-300'>
             <div>
-                <DocumentInfo isTyping={isTyping} />
+                <DocumentInfo isTyping={isTyping} document={document} />
             </div>
             <div>
                 <DocumentFunc />
