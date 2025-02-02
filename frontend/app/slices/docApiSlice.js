@@ -35,7 +35,7 @@ export const docApiSlice = createApi({
         }),
         UpdateTitle: builder.mutation({
             query: ({newTitle, documentId}) => ({
-                url: `/api/document/${documentId}`,
+                url: `/api/document/updateTitle/${documentId}`,
                 method: 'PATCH',
                 body: {newTitle, documentId}
             }),
