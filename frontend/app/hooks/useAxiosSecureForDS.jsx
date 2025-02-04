@@ -51,7 +51,7 @@ const useAxiosSecureForDS = () => {
             }
         }
 
-    }, [router]);
+    }, [router, dispatch]);
 
     return axiosSecure;
 }

@@ -51,7 +51,7 @@ const useAxiosSecure = () => {
             }
         }
 
-    }, [router]);
+    }, [router, dispatch]);
 
     return axiosSecure;
 }
