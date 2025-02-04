@@ -1,0 +1,23 @@
+# Ignore sensitive environment variables file
+.env
+
+# Ignore node_modules directory (we’ll install dependencies inside the container)
+node_modules
+
+# Ignore logs
+*.log
+
+# Ignore any temporary files or directories
+*.tmp
+*.swp
+
+# Ignore test directories or test files if they are not needed in production
+test
+tests
+
+# Ignore any build artifacts that are not needed in production
+dist
+build
+
+# Ignore any version control files 
+.git

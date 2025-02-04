@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-* Now i need to connect the editor with the backend through the y-quill and y-socket
+* Now i need to add the loading state when creating doc.
