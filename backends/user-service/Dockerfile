@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5001
 
 # Start the backend service
-CMD ["nodemon", "index.js"]
+CMD ["npm", "start"]
