@@ -37,6 +37,7 @@ const Document = () => {
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
   const providerRef = useRef(null)
+  const ydocRef = useRef(null)
   const deltaQueue = useRef([]);
   
   
@@ -90,19 +91,15 @@ const Document = () => {
   
 
   useEffect(() => {
-    if (!document || isLoading) return;
+    if (!document || isLoading || providerRef.current || !editorRef.current || quillRef.current) return;
 
-    if (providerRef.current) {
-      providerRef.current.destroy();  // Close previous connection
-    }
-    
-    if (!editorRef.current || quillRef.current) return;
     
     window.katex = katex; // katex is used to use the fucntion editing feature.
     Quill.register('modules/cursors', QuillCursors); // To show multiple users cursor.
 
 
     const ydoc = new Y.Doc();
+    ydocRef.current = ydoc;
     const ytext = ydoc.getText('quill');
     const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc);
     providerRef.current = provider;
@@ -171,21 +168,13 @@ const Document = () => {
       });
 
 
-  
-    return async () => {
-      shouldObserveRef.current = false;
-      providerRef.current = null;
-      ydoc.destroy();
-      providerRef.current?.destroy();
-      editorRef.current = null;
-    };
   }, [documentId, document, isLoading]);
 
 
 
   // Flush updates before unmounting
   useEffect(() => {
-    return () => {
+    return async () => {
       if (deltaQueue.current.length > 0 && !hasFlushed) {
         // Properly merge deltas
         let normalizedDelta = new Delta();
@@ -193,11 +182,24 @@ const Document = () => {
           normalizedDelta = normalizedDelta.compose(delta);
         });
         deltaQueue.current = [];
-        updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
+        console.log("hello Brother?")
+        await updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
           console.error("Failed to save on unmount:", error);
         });
         setHasFlushed(true); // Mark as flushed
       }
+      shouldObserveRef.current = false;
+      if(ydocRef.current) {
+        console.log('destroing ydoc man')
+        ydocRef.current.destroy();
+        ydocRef.current = null;
+      }
+      if (providerRef.current) {
+        console.log('destroing provider man')
+        providerRef.current.destroy();
+        providerRef.current = null;
+      };
+      editorRef.current = null;
     };
   }, [hasFlushed, updateData]);
 
