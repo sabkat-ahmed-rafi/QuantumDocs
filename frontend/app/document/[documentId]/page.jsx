@@ -70,8 +70,8 @@ const Document = () => {
   // Document save logic
   const saveDocument = async () => {
     if(deltaQueue.current.length == 0) return;
-    
     // Properly merge deltas
+    console.log(deltaQueue.current);
     let normalizedDelta = new Delta();
     deltaQueue.current.forEach(delta => {
       normalizedDelta = normalizedDelta.compose(delta);
@@ -88,6 +88,23 @@ const Document = () => {
   
   // Using Debounce to save after 5 seconds of inactivity
   const debouncedFlush = useCallback(debounce(saveDocument, 5000), []);
+
+  const yObserver = (event, transaction) => {
+    // if(!shouldObserveRef.current) return
+      // console.log(event.delta)
+     if (!transaction.local) {
+       // Track changes from other users too
+       deltaQueue.current.push(event.delta);
+       deltaQueue.current.pop(event.delta);
+       deltaQueue.current.push(event.delta);
+       debouncedFlush();
+       console.log(event.delta)
+      } else if(transaction.local) {
+        deltaQueue.current.push(event.delta)
+        debouncedFlush();
+        console.log(event.delta)
+     }
+   };
   
 
   useEffect(() => {
@@ -158,15 +175,20 @@ const Document = () => {
 
 
     // Document updating logic 
-    quillRef.current.on("text-change", async (delta, oldDelta, source) => {
-        if(shouldObserveRef.current && source === 'user') {
-          console.log(delta, oldDelta)
-          handleTyping();
-          deltaQueue.current.push(delta);
-          debouncedFlush();
-        }
-      });
+    // quillRef.current.on("text-change", async (delta, oldDelta, source) => {
+    //     if(shouldObserveRef.current && source === 'user') {
+    //       handleTyping();
+    //     }
+    //   });
+      
+      
+    ytext.observe(yObserver)   
 
+
+    
+    return () => {
+      ytext.unobserve(yObserver);
+    };
 
   }, [documentId, document, isLoading]);
 
