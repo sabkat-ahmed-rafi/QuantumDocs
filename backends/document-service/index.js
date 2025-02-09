@@ -1,7 +1,8 @@
 const app = require('./src/app');
 const config = require('./src/config/config');
 const connectDB = require('./src/utils/dbConnection');
-const { setupWebSocket } = require('./src/config/webSocket');
+const { setupYWebSocket } = require('./src/config/yWebSocket');
+const { setupCustomWebSocket } = require('./src/config/customWebSocket');
 
 const PORT = config.port;
 
@@ -12,4 +13,5 @@ const server = app.listen(PORT, () => {
 })
 
 // WebSocket server
-setupWebSocket(server);
+setupCustomWebSocket(server);
+setupYWebSocket(server);
