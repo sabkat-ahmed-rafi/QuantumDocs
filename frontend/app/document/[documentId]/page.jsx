@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import { useGetSingleDataQuery, useUpdateDataMutation } from '@/app/slices/docApiSlice';
+import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { WebsocketProvider } from 'y-websocket';
@@ -26,7 +26,6 @@ const Document = () => {
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
   const {data: document, isLoading} = useGetSingleDataQuery(documentId);
-  const [updateData] = useUpdateDataMutation();
   
   
   const [isTyping, setIsTyping] = useState(false);
