@@ -11,8 +11,7 @@ import QuillCursors from 'quill-cursors';
 import Quill from 'quill';
 import katex from "katex";
 import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
-import debounce from 'lodash.debounce';
-import { Delta } from 'quill';
+
 
 
 import 'quill/dist/quill.snow.css'
@@ -36,6 +35,7 @@ const Document = () => {
   const quillRef = useRef(null);
   const shouldObserveRef = useRef(false);
   const providerRef = useRef(null)
+  const customProviderRef = useRef(null);
   const ydocRef = useRef(null)
   
   
@@ -65,17 +65,17 @@ const Document = () => {
     }, 1000);
   }, [isTyping]);
 
-  // Document save logic
+
   const saveDocument = async (delta) => {
 
-    try {
-      await updateData({ documentId, updatedData: delta }).unwrap();
-    } catch (error) {
-      console.error("Updating doc error: ", error);
-    }
+    const parseData = JSON.stringify(delta)
+    const parseJson = JSON.parse(parseData);
+    const updateMessage = { type: 'update', documentId, data: parseJson };
+      if(customProviderRef.current.readyState == WebSocket.OPEN) {
+        customProviderRef.current.send(JSON.stringify(updateMessage));
+      };
 
-  }
-  
+  };
 
   
 
@@ -90,13 +90,19 @@ const Document = () => {
     const ydoc = new Y.Doc();
     ydocRef.current = ydoc;
     const ytext = ydoc.getText('quill');
-    const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_socket_server}`, documentId, ydoc);
+    const provider = new WebsocketProvider(`${process.env.NEXT_PUBLIC_yjs_socket_server}`, documentId, ydoc);
     providerRef.current = provider;
+    const customProvider = new WebSocket(`${process.env.NEXT_PUBLIC_custom_socket_server}`);
+    customProviderRef.current = customProvider;
 
-    // Checking the websocket connection 
+    // Checking the Y websocket connection 
     provider.on('status', (event) => {
-      console.log(`WebSocket connection: ${event.status}`);
+      console.log(`Y WebSocket connection: ${event.status}`);
     });
+
+    customProvider.onopen = () => {
+      console.log('Custom WebSocket connected');
+    };
 
     // Editor settings and Quillbinding with Y.js
     if (editorRef.current && !quillRef.current) {
@@ -146,21 +152,21 @@ const Document = () => {
     };
 
 
-    // Document updating logic 
+    // Document updating logic for database 
     quillRef.current.on("text-change", async (delta, oldDelta, source) => {
-        if(shouldObserveRef.current && source === 'user') {
-          handleTyping();
-          saveDocument(delta);
-        }
-      });
+      if(shouldObserveRef.current && source === 'user') {
+        handleTyping();
+        saveDocument(delta);
+      };
+    });
       
       
-      
+
   }, [documentId, document, isLoading]);
 
 
 
-  // Flush updates before unmounting
+  // clean up on unmounting
   useEffect(() => {
     return () => {
       shouldObserveRef.current = false;
@@ -170,10 +176,15 @@ const Document = () => {
         ydocRef.current = null;
       }
       if (providerRef.current) {
-        console.log('destroing provider man')
+        console.log('destroing Y provider man')
         providerRef.current.destroy();
         providerRef.current = null;
       };
+      if (customProviderRef.current) {
+        console.log('destroying custom provider man')
+        customProviderRef.current.close();
+        customProviderRef.current = null;
+      }
       editorRef.current = null;
     };
   }, []);
