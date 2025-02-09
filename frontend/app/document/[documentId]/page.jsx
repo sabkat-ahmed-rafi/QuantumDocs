@@ -30,7 +30,6 @@ const Document = () => {
   const [updateData] = useUpdateDataMutation();
   
   
-  const [hasFlushed, setHasFlushed] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
   const editorRef = useRef(null);
@@ -38,7 +37,6 @@ const Document = () => {
   const shouldObserveRef = useRef(false);
   const providerRef = useRef(null)
   const ydocRef = useRef(null)
-  const deltaQueue = useRef([]);
   
   
   
@@ -68,43 +66,17 @@ const Document = () => {
   }, [isTyping]);
 
   // Document save logic
-  const saveDocument = async () => {
-    if(deltaQueue.current.length == 0) return;
-    // Properly merge deltas
-    console.log(deltaQueue.current);
-    let normalizedDelta = new Delta();
-    deltaQueue.current.forEach(delta => {
-      normalizedDelta = normalizedDelta.compose(delta);
-    });
-    deltaQueue.current = [];
+  const saveDocument = async (delta) => {
 
     try {
-      await updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap();
+      await updateData({ documentId, updatedData: delta }).unwrap();
     } catch (error) {
       console.error("Updating doc error: ", error);
     }
 
   }
   
-  // Using Debounce to save after 5 seconds of inactivity
-  const debouncedFlush = useCallback(debounce(saveDocument, 5000), []);
 
-  const yObserver = (event, transaction) => {
-    // if(!shouldObserveRef.current) return
-      // console.log(event.delta)
-     if (!transaction.local) {
-       // Track changes from other users too
-       deltaQueue.current.push(event.delta);
-       deltaQueue.current.pop(event.delta);
-       deltaQueue.current.push(event.delta);
-       debouncedFlush();
-       console.log(event.delta)
-      } else if(transaction.local) {
-        deltaQueue.current.push(event.delta)
-        debouncedFlush();
-        console.log(event.delta)
-     }
-   };
   
 
   useEffect(() => {
@@ -175,41 +147,22 @@ const Document = () => {
 
 
     // Document updating logic 
-    // quillRef.current.on("text-change", async (delta, oldDelta, source) => {
-    //     if(shouldObserveRef.current && source === 'user') {
-    //       handleTyping();
-    //     }
-    //   });
+    quillRef.current.on("text-change", async (delta, oldDelta, source) => {
+        if(shouldObserveRef.current && source === 'user') {
+          handleTyping();
+          saveDocument(delta);
+        }
+      });
       
       
-    ytext.observe(yObserver)   
-
-
-    
-    return () => {
-      ytext.unobserve(yObserver);
-    };
-
+      
   }, [documentId, document, isLoading]);
 
 
 
   // Flush updates before unmounting
   useEffect(() => {
-    return async () => {
-      if (deltaQueue.current.length > 0 && !hasFlushed) {
-        // Properly merge deltas
-        let normalizedDelta = new Delta();
-        deltaQueue.current.forEach(delta => {
-          normalizedDelta = normalizedDelta.compose(delta);
-        });
-        deltaQueue.current = [];
-        console.log("hello Brother?")
-        await updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
-          console.error("Failed to save on unmount:", error);
-        });
-        setHasFlushed(true); // Mark as flushed
-      }
+    return () => {
       shouldObserveRef.current = false;
       if(ydocRef.current) {
         console.log('destroing ydoc man')
@@ -223,37 +176,7 @@ const Document = () => {
       };
       editorRef.current = null;
     };
-  }, [hasFlushed, updateData]);
-
-
-
-  // Flush updates when user leaves or refreshes
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (deltaQueue.current.length > 0 && !hasFlushed) {
-        // Properly merge deltas
-        let normalizedDelta = new Delta();
-        deltaQueue.current.forEach(delta => {
-          normalizedDelta = normalizedDelta.compose(delta);
-        });
-        deltaQueue.current = [];
-
-        updateData({ documentId, updatedData: normalizedDelta.ops }).unwrap().catch(error => {
-          console.error("Failed to save on unmount:", error);
-        });
-
-        event.preventDefault();
-        event.returnValue = '';
-        setHasFlushed(true); // Mark as flushed
-      }
-    };
-
-    window.addEventListener("beforeunload",handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    }
-  }, [hasFlushed, updateData])
+  }, []);
 
 
 
