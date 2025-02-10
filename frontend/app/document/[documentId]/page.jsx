@@ -70,9 +70,9 @@ const Document = () => {
     const parseData = JSON.stringify(delta)
     const parseJson = JSON.parse(parseData);
     const updateMessage = { type: 'update', documentId, data: parseJson };
-      if(customProviderRef.current.readyState == WebSocket.OPEN) {
-        customProviderRef.current.send(JSON.stringify(updateMessage));
-      };
+    if(customProviderRef.current.readyState == WebSocket.OPEN) {
+      customProviderRef.current.send(JSON.stringify(updateMessage));
+    };
 
   };
 
@@ -196,7 +196,11 @@ const Document = () => {
 
         <div className="custom-scrollbar">
           {/* Head of document  */}
-          <DocumentHead isTyping={isTyping} document={document} />
+          <DocumentHead 
+          isTyping={isTyping}
+          document={document}
+          customProviderRef={customProviderRef}
+          />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
               <div className='lg:w-[1000px] mx-auto bg-[#F0F4F9] lg:h-[44px] editorinput'>

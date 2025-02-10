@@ -4,15 +4,13 @@ import { SiGoogledocs } from 'react-icons/si';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { FaArrowsRotate } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
-import { useUpdateTitleMutation } from '@/app/slices/docApiSlice';
-import { useEffect, useState } from 'react';
+    import { useEffect, useState } from 'react';
 
 
 
-const DocumentInfo = ({isTyping, document}) => {
+const DocumentInfo = ({isTyping, document, customProviderRef}) => {
 
 
-    const [updateTitle] = useUpdateTitleMutation()
     const [title, setTitle] = useState("");
  
 
@@ -26,8 +24,10 @@ const DocumentInfo = ({isTyping, document}) => {
     const updateDocTitle = async () => {
         if(title === document?.document?.title) return;
         try {
-           const result = await updateTitle({documentId: document?.document?.id , newTitle: title}).unwrap();
-           console.log(result);
+
+            if(customProviderRef.current.readyState == WebSocket.OPEN) {
+                customProviderRef.current.send(JSON.stringify({type: 'titleUpdate' , documentId:document?.document?.id , newTitle: title}));
+            };
         } catch(error) {
             console.log("problem in updating title", error);
         }

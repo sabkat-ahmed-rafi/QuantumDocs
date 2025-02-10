@@ -25,22 +25,6 @@ export const docApiSlice = createApi({
             }),
             invalidatesTags: ['DocumentData']
         }),
-        updateData: builder.mutation({
-            query: ({documentId, updatedData}) => ({
-                url: `/api/document/${documentId}`,
-                method: 'PUT',
-                body: {documentId, updatedData}
-            }),
-            invalidatesTags: ['DocumentData']
-        }),
-        UpdateTitle: builder.mutation({
-            query: ({newTitle, documentId}) => ({
-                url: `/api/document/updateTitle/${documentId}`,
-                method: 'PATCH',
-                body: {newTitle, documentId}
-            }),
-            invalidatesTags: ['DocumentData']
-        }),
         deleteData: builder.mutation({
             query: (documentId) => ({
                 url: `/api/document/${documentId}`,
