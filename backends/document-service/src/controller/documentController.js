@@ -21,22 +21,3 @@ exports.get = async (req, res) => {
 	}
 };
 
-exports.update = async (req, res) => {
-	try {
-		const updatedData = req.body;
-        await documentService.updateDocument(updatedData);
-		res.status(200).json({ message: "Document updated" });
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-}
-
-exports.updateTitle = async (req, res) => {
-	try {
-		const { newTitle, documentId } = req.body;
-		await documentService.UpdateDocTitle(documentId, newTitle);
-		res.status(200).json({ message: "Document title updated" });
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-}

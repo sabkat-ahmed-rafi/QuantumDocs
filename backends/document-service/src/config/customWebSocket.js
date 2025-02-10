@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const { updateDocument } = require('../service/documentService');
+const { updateDocument, UpdateDocTitle } = require('../service/documentService');
 
 
 const setupCustomWebSocket = (server) => {
@@ -10,6 +10,15 @@ const setupCustomWebSocket = (server) => {
 
         ws.on('message', (message) => {
             const data = JSON.parse(message); 
+
+            if(data && data.type == 'titleUpdate' && data.documentId && data.newTitle) {
+                try {
+                    UpdateDocTitle( data.documentId, data.newTitle );
+                } catch (error) {
+                    console.log("Document Title updating Error: ", error);
+                }
+            };
+
 
             if(data && data.type == 'update' && data.documentId && data.data) {
                 const {documentId, data: delta } = data;
