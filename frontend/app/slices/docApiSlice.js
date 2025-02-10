@@ -30,7 +30,7 @@ export const docApiSlice = createApi({
                 url: `/api/document/${documentId}`,
                 method: 'DELETE'
             }),
-            providesTags: ['DocumentData']
+            invalidatesTags: ['DocumentData']
         }),
     }),
 });
@@ -39,7 +39,5 @@ export const {
     useGetAllDataQuery,
     useGetSingleDataQuery,
     useAddDataMutation,
-    useUpdateDataMutation,
-    useUpdateTitleMutation,
     useDeleteDataMutation
 } = docApiSlice;
