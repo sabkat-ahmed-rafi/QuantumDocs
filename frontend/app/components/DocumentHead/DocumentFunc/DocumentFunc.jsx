@@ -25,8 +25,9 @@ const DocumentFunc = ({activeUsers}) => {
 
   return (
     <>
-        {/* Buttons of Modal and Drawer  */}
+        {/* Buttons of Modal and Drawer */}
         <section className='md:space-x-3 space-x-2 flex md:mt-0 mt-2'>
+         {/* Showing user who are seeing the document */}
            <AvatarGroup isBordered>
                {
                  activeUsers.filter(active => active.uid !== user?.uid).map(activeUser => <Tooltip 
@@ -44,6 +45,7 @@ const DocumentFunc = ({activeUsers}) => {
                      )
                }
            </AvatarGroup>
+           {/* Buttons of Modal and Drawer */}
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
@@ -55,7 +57,7 @@ const DocumentFunc = ({activeUsers}) => {
            </Button>
         </section>
         
-        {/* Body of Modal and Drawer  */}
+        {/* Body of Modal and Drawer */}
         <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal}/>
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} />
         <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} />

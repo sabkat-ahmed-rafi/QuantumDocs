@@ -172,7 +172,7 @@ const Document = () => {
       };
     });
       
-
+    // Updating which users are seeing the document
     if (providerRef.current?.awareness) {
       providerRef.current.awareness.on("change", updateUsers);
       updateUsers();
