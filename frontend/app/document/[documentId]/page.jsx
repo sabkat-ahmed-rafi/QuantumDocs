@@ -194,9 +194,9 @@ const Document = () => {
       }
       if (providerRef.current) {
         console.log('destroing Y provider man')
+        providerRef.current.awareness.off("change", updateUsers);
         providerRef.current.destroy();
         providerRef.current = null;
-        providerRef.current.awareness.off("change", updateUsers);
       };
       if (customProviderRef.current) {
         console.log('destroying custom provider man')
