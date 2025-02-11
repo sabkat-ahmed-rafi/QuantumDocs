@@ -71,6 +71,7 @@ export default function NavBar() {
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
+              referrerPolicy="no-referrer"
               isBordered
               as="button"
               className="transition-transform"
