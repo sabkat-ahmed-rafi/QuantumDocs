@@ -34,7 +34,7 @@ const AddDocument = () => {
     }
 
   return (
-    <div onClick={handleCreateDocument} href={"/"} className='border border-slate-200 inline-block py-14 px-10 bg-white rounded-sm hover:border-purple-400 cursor-pointer'>
+    <div onClick={handleCreateDocument} className='border border-slate-200 inline-block py-14 px-10 bg-white rounded-sm hover:border-purple-400 cursor-pointer'>
       {isLoading ? <l-quantum
           size="60"
           speed="1.75" 
