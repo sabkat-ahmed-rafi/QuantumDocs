@@ -26,6 +26,7 @@ const Document = () => {
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
   const {data: document, isLoading} = useGetSingleDataQuery(documentId);
+  const [activeUsers, setActiveUsers] = useState([]);
   
   
   const [isTyping, setIsTyping] = useState(false);
@@ -76,6 +77,15 @@ const Document = () => {
 
   };
 
+  const updateUsers = () => {
+      const users = Array.from(providerRef.current?.awareness?.states?.values() || [])
+        .map(state => state?.user)
+        .filter(Boolean);
+
+      setActiveUsers(prevUsers => 
+        JSON.stringify(prevUsers) === JSON.stringify(users) ? prevUsers : users
+      );
+  };
   
 
   useEffect(() => {
@@ -99,6 +109,7 @@ const Document = () => {
       console.log(`Y WebSocket connection: ${event.status}`);
     });
 
+    // Checking the Custom websocket connection 
     customProvider.onopen = () => {
       console.log('Custom WebSocket connected');
     };
@@ -128,8 +139,10 @@ const Document = () => {
       new QuillBinding(ytext, quillRef.current, provider.awareness);
 
       provider.awareness.setLocalStateField('user', {
-        name: `${user?.displayName}` || "Anonymous",
+        name: `${user?.displayName || "Anonymous"}`,
         color: getRandomColor(),
+        photo: user?.photoURL || '/images/profilePicture.jpg',
+        uid: user?.uid || Date.now()
       });
 
     }
@@ -159,6 +172,11 @@ const Document = () => {
       };
     });
       
+
+    if (providerRef.current?.awareness) {
+      providerRef.current.awareness.on("change", updateUsers);
+      updateUsers();
+    }
       
 
   }, [documentId, document, isLoading]);
@@ -178,6 +196,7 @@ const Document = () => {
         console.log('destroing Y provider man')
         providerRef.current.destroy();
         providerRef.current = null;
+        providerRef.current.awareness.off("change", updateUsers);
       };
       if (customProviderRef.current) {
         console.log('destroying custom provider man')
@@ -200,6 +219,7 @@ const Document = () => {
           isTyping={isTyping}
           document={document}
           customProviderRef={customProviderRef}
+          activeUsers={activeUsers}
           />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 

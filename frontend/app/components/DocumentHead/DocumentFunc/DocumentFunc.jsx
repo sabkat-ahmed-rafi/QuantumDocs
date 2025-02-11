@@ -1,13 +1,18 @@
-import {Button, useDisclosure} from "@heroui/react";
+'use client'
+
+import {Button, useDisclosure, Avatar, AvatarGroup, Tooltip} from "@heroui/react";
 import ShareModal from '../ShareModal/ShareModal';
 import { BiWorld } from 'react-icons/bi';
 import { AiFillMessage } from "react-icons/ai";
 import { GiNotebook } from "react-icons/gi";
 import MessageDrawer from "../MessageDrawer/MessageDrawer";
 import NoteDrawer from "../NoteDrawer/NoteDrawer";
+import { useSelector } from "react-redux";
 
 
-const DocumentFunc = () => {
+const DocumentFunc = ({activeUsers}) => {
+
+   const {user} = useSelector(state => state.auth);
 
    //  For Share Modal 
     const {isOpen: isOpenShareModal, onOpen: onOpenShareModal, onOpenChange: onOpenChangeShareModal} = useDisclosure();
@@ -22,6 +27,23 @@ const DocumentFunc = () => {
     <>
         {/* Buttons of Modal and Drawer  */}
         <section className='md:space-x-3 space-x-2 flex md:mt-0 mt-2'>
+           <AvatarGroup isBordered>
+               {
+                 activeUsers.filter(active => active.uid !== user?.uid).map(activeUser => <Tooltip 
+                  key={activeUser.uid} 
+                  color="secondary"
+                  content={`${activeUser.name}`}
+                  >
+                  <Avatar
+                     referrerPolicy="no-referrer"
+                     isBordered
+                     color="secondary"
+                     src={`${activeUser.photo}`} 
+                      />
+                  </Tooltip>
+                     )
+               }
+           </AvatarGroup>
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
