@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 
-const DocumentFunc = ({activeUsers}) => {
+const DocumentFunc = ({activeUsers, document}) => {
 
    const {user} = useSelector(state => state.auth);
 
@@ -37,9 +37,9 @@ const DocumentFunc = ({activeUsers}) => {
   return (
     <>
         {/* Buttons of Modal and Drawer */}
-        <section className='md:space-x-3 space-x-2 flex md:mt-0 mt-2'>
+        <section className='md:space-x-3 space-x-1 flex md:mt-0 mt-2'>
          {/* Showing user who are seeing the document */}
-           <AvatarGroup isBordered>
+           <AvatarGroup isBordered className="hidden lg:flex">
                {
                  uniqueActiveUsers.map(activeUser => <Tooltip 
                   key={activeUser.uid} 
@@ -71,7 +71,7 @@ const DocumentFunc = ({activeUsers}) => {
         {/* Body of Modal and Drawer */}
         <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal}/>
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} />
-        <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} />
+        <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document}/>
     </>
   )
 }

@@ -16,6 +16,7 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers }) =>
             </div>
             <div>
                 <DocumentFunc
+                document={document}
                 activeUsers={activeUsers}
                 />
             </div>
