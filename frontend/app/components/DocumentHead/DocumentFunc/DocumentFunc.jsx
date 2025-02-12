@@ -8,11 +8,22 @@ import { GiNotebook } from "react-icons/gi";
 import MessageDrawer from "../MessageDrawer/MessageDrawer";
 import NoteDrawer from "../NoteDrawer/NoteDrawer";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 
 const DocumentFunc = ({activeUsers}) => {
 
    const {user} = useSelector(state => state.auth);
+
+   const uniqueActiveUsers = useMemo(() => {
+      const seenUids = new Set();
+      return activeUsers.filter((active) => {
+         if (active.uid === user?.uid) return false; // removing current user
+         if (seenUids.has(active.uid)) return false; // skip duplicate
+         seenUids.add(active.uid);
+         return true;
+      });
+   }, [activeUsers, user?.uid])
 
    //  For Share Modal 
     const {isOpen: isOpenShareModal, onOpen: onOpenShareModal, onOpenChange: onOpenChangeShareModal} = useDisclosure();
@@ -30,7 +41,7 @@ const DocumentFunc = ({activeUsers}) => {
          {/* Showing user who are seeing the document */}
            <AvatarGroup isBordered>
                {
-                 activeUsers.filter(active => active.uid !== user?.uid).map(activeUser => <Tooltip 
+                 uniqueActiveUsers.map(activeUser => <Tooltip 
                   key={activeUser.uid} 
                   color="secondary"
                   content={`${activeUser.name}`}
