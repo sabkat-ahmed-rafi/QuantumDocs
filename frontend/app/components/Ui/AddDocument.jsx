@@ -25,7 +25,6 @@ const AddDocument = () => {
             const documentId = response?.document?._id;
             setTimeout(() => {
               router.push(`/document/${documentId}`);
-              setIsLoading(false); // Reset loading after navigation
             }, 2000);
         } catch(error) {
             setIsLoading(false); 
