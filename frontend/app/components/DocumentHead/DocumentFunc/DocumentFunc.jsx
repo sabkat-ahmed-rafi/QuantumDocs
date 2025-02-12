@@ -36,8 +36,8 @@ const DocumentFunc = ({activeUsers, document}) => {
 
   return (
     <>
-        {/* Buttons of Modal and Drawer */}
         <section className='md:space-x-3 space-x-1 flex md:mt-0 mt-2'>
+
          {/* Showing user who are seeing the document */}
            <AvatarGroup isBordered className="hidden lg:flex">
                {
@@ -56,6 +56,7 @@ const DocumentFunc = ({activeUsers, document}) => {
                      )
                }
            </AvatarGroup>
+
            {/* Buttons of Modal and Drawer */}
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
@@ -70,7 +71,7 @@ const DocumentFunc = ({activeUsers, document}) => {
         
         {/* Body of Modal and Drawer */}
         <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal}/>
-        <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} />
+        <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} document={document} />
         <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document}/>
     </>
   )
