@@ -70,9 +70,9 @@ const DocumentFunc = ({activeUsers, document}) => {
         </section>
         
         {/* Body of Modal and Drawer */}
-        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal}/>
+        <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document} />
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} document={document} />
-        <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document}/>
+        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal} document={document}/>
     </>
   )
 }

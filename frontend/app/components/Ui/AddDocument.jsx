@@ -21,7 +21,7 @@ const AddDocument = () => {
       if(isLoading) return;
       setIsLoading(true); 
         try {
-            const response = await addData( { owner: { email: user?.email } } ).unwrap();
+            const response = await addData( { owner: { email: user?.email, name: user?.displayName, photo: user?.photoURL } } ).unwrap();
             const documentId = response?.document?._id;
             setTimeout(() => {
               router.push(`/document/${documentId}`);
