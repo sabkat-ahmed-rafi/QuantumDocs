@@ -18,6 +18,9 @@ const documentSchema = new mongoose.Schema({
         },
         photo: {
             type: String,
+        },
+        name: {
+            type: String,
         }
     },
     sharedPersons: [{
