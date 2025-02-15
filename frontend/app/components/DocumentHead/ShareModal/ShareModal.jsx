@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Modal,
   ModalContent,
@@ -11,12 +11,17 @@ import {
 import IsRestricted from '../../UI/IsRestricted';
 import NotRestricted from '../../UI/NotRestricted';
 import PeopleWithAccess from '../../UI/PeopleWithAccess';
+import UserAccessSearch from '../../UI/UserAccessSearch';
 import { MdOutlineContentCopy } from "react-icons/md";
 import 'animate.css';
+import axios from 'axios'; 
 
 
 
 const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document}) => {
+
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
 
   const [peopleWhoHaveAccessRole, peopleWhoHaveAccessRoleSet] = useState("Viewer");
   const [universalAccessRole, setUniversalAccessRole] = useState("Viewer");
@@ -42,8 +47,45 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document}) => {
   const handleDeleteAccess = (e, userUid) => {
     console.log("Deleting this users Access")
   };
+
+  const handleGiveAccess = (id) => {
+    console.log(id);
+    setUsers([]);
+    setSearch("");
+  };
+
   
-console.log(isRestricted)
+  // Handleding searched users 
+  useEffect( () => {
+
+    const controller = new AbortController(); // Create an AbortController
+    const signal = controller.signal;
+
+    if (search === "") {
+      setUsers([]);
+      return;
+    };
+
+    const fetchUser = async () => {
+    try {
+        const result = await axios.get(
+          `${process.env.NEXT_PUBLIC_user_service}/api/users/search?search=${search}`,
+          { signal }
+        )
+        setUsers(result?.data?.users);
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("Request canceled:", error.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+    fetchUser()
+    return () => controller.abort()
+  }, [search])
+
+ 
   
   return (
     <Modal radius='sm' size='lg' isOpen={isOpenShareModal} onOpenChange={onOpenChangeShareModal}>
@@ -54,11 +96,16 @@ console.log(isRestricted)
               <ModalBody className='text-black max-h-[405px]'>
                 <div>
                   <Input 
+                  name='search'
+                  type='search'
                   variant="bordered"
                   radius='sm'
                   label="Add people"
                   className='border-black'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                    />
+                   <UserAccessSearch users={users} handleGiveAccess={handleGiveAccess} />
                 </div>
                 <p className='font-semibold'>People with access</p>
                     <PeopleWithAccess 
