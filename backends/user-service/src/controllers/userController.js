@@ -29,3 +29,15 @@ exports.getUserById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.searchUsers = async (req, res) => {
+    try {
+        const searchText = req.query.search;
+        if(searchText) {
+            const users = await userService.searchUsers(searchText);
+            res.status(200).json({ message: "Users found", users: users });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
