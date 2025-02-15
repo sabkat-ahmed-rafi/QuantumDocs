@@ -27,3 +27,16 @@ exports.getUserById = async (userUid) => {
     }
     return user;
 }
+
+//search user 
+exports.searchUsers = async (searchText) => {
+
+    if (!searchText) {
+        throw new Error("Search text is required");
+    };
+
+    const query = { email: { $regex: `^${searchText}`, $options: "i" } };
+    const users = await User.find(query)
+
+    return users;
+} 
