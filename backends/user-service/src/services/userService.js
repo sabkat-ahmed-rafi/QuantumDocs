@@ -36,7 +36,7 @@ exports.searchUsers = async (searchText) => {
     };
 
     const query = { email: { $regex: `^${searchText}`, $options: "i" } };
-    const users = await User.find(query)
+    const users = await User.find(query).select("name email profilePicture").limit(5);
 
     return users;
 } 
