@@ -4,7 +4,6 @@ import React from 'react'
 const UserAccessSearch = ({users, handleGiveAccess}) => {
 
 
-    console.log(users)
 
   return (
     <section 
