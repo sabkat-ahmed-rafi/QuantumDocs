@@ -28,9 +28,9 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
   const [universalAccessRole, setUniversalAccessRole] = useState("Viewer");
   const [isRestricted, setIsRestricted] = useState(false);
   
-  const handlePeopleWhoHaveAccessRole = (e, userUid) => {
+  const handlePeopleWhoHaveAccessRole = (e, user) => {
     // peopleWhoHaveAccessRoleSet(e.target.value);
-    console.log(e.target.value, userUid)
+    console.log(e.target.value, user)
   };
 
   const handleUniversalRole = (e) => {

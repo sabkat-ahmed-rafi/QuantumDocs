@@ -56,7 +56,7 @@ const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHav
                     <select 
                      className='hover:bg-slate-100 transition-all p-2 rounded-md focus:outline-none cursor-pointer relative focus:translate-y-[-50%]' 
                      defaultValue={peopleWhoHaveAccessRole} 
-                     onChange={(e) => handlePeopleWhoHaveAccessRole(e, userUid)}
+                     onChange={(e) => handlePeopleWhoHaveAccessRole(e, user)}
                     >
                       <option className='bg-white py-2' value="Viewer">Viewer</option>
                       <option className='bg-white' value="Editor">Editor</option>
