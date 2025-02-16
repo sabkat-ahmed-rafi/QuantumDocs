@@ -11,7 +11,7 @@ const UserAccessSearch = ({users, handleGiveAccess}) => {
         {
             users && users.map(user => <User
                 key={user._id}
-                onClick={() => handleGiveAccess(user._id)}
+                onClick={() => handleGiveAccess(user)}
                 avatarProps={{
                   src: `${user.profilePhoto}`,
                 }}

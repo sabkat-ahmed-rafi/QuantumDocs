@@ -48,10 +48,17 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document}) => {
     console.log("Deleting this users Access")
   };
 
-  const handleGiveAccess = (id) => {
-    console.log(id);
+  const handleGiveAccess = async (user) => {
+    console.log(user, document?.document?.id);
+    const documentId = document?.document?.id;
     setUsers([]);
     setSearch("");
+    try {
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess`, {user, documentId})
+      console.log(result)
+    } catch(error) { 
+      console.log(error);
+    }
   };
 
   
