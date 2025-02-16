@@ -25,7 +25,7 @@ const Document = () => {
   
   const {documentId} = useParams();
   const {user} = useSelector(state => state.auth);
-  const {data: document, isLoading} = useGetSingleDataQuery(documentId);
+  const {data: document, isLoading, refetch: documentRefetch} = useGetSingleDataQuery(documentId);
   const [activeUsers, setActiveUsers] = useState([]);
   
   
@@ -220,6 +220,7 @@ const Document = () => {
           document={document}
           customProviderRef={customProviderRef}
           activeUsers={activeUsers}
+          documentRefetch={documentRefetch}
           />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 

@@ -18,7 +18,7 @@ import axios from 'axios';
 
 
 
-const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document}) => {
+const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documentRefetch}) => {
 
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -55,6 +55,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document}) => {
     setSearch("");
     try {
       const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess`, {user, documentId})
+      documentRefetch()
       console.log(result)
     } catch(error) { 
       console.log(error);

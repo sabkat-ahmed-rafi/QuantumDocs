@@ -6,11 +6,9 @@ import { MdDelete } from "react-icons/md";
 
 const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHaveAccessRole, handleDeleteAccess}) => {
     
-    const userUid = "20359jr1q023r9u0239r30r3"
     const [isHovered, setIsHovered] = useState(false);
 
     const toggleHover = () => setIsHovered(!isHovered);
-    console.log(document.document.sharedPersons)
 
   return (
     <>

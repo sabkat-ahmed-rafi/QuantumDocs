@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 
-const DocumentFunc = ({activeUsers, document}) => {
+const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
 
    const {user} = useSelector(state => state.auth);
 
@@ -72,7 +72,7 @@ const DocumentFunc = ({activeUsers, document}) => {
         {/* Body of Modal and Drawer */}
         <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document} />
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} document={document} />
-        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal} document={document}/>
+        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal} document={document} documentRefetch={documentRefetch} />
     </>
   )
 }
