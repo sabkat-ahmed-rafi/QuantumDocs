@@ -1,7 +1,8 @@
 const Document = require('../model/documentModel');
 const Delta = require('quill-delta');
+const config = require('../config/config');
 
-exports.createDocument = async (documentData) => {
+const createDocument = async (documentData) => {
     if(!documentData) {
         throw new Error("Document's data not found");
     }
@@ -9,7 +10,7 @@ exports.createDocument = async (documentData) => {
     return await document.save();
 }
 
-exports.getDocumentById = async (documentId) => {
+const getDocumentById = async (documentId) => {
     if(!documentId) {
         throw new Error("Document id is required")
     }
@@ -25,7 +26,8 @@ exports.getDocumentById = async (documentId) => {
             owner: document.owner,
             sharedPersons: document.sharedPersons,
             createdAt: document.createdAt,
-            updatedAt: document.updatedAt
+            updatedAt: document.updatedAt,
+            accessStatus: document.accessStatus,
         }
         return convertedDocument;
     } catch(error) {
@@ -33,7 +35,8 @@ exports.getDocumentById = async (documentId) => {
     }
 }
 
-exports.updateDocument = async (updatedData) => {
+
+const updateDocument = async (updatedData) => {
     try {
         const documentId = updatedData?.documentId;
         const newData = updatedData?.updatedData;
@@ -63,7 +66,7 @@ exports.updateDocument = async (updatedData) => {
     }
 }
 
-exports.UpdateDocTitle = async (documentId, newDocTitle) => {
+const updateDocTitle = async (documentId, newDocTitle) => {
     try {
         const UpdatedDoc = Document.findByIdAndUpdate(
             documentId,
@@ -81,3 +84,50 @@ exports.UpdateDocTitle = async (documentId, newDocTitle) => {
         console.log(error);
     }
 } 
+
+const giveAccess = async (userId, documentId) => {
+    try {
+        // Fetch user details and document in parallel
+        const [userResponse, document] = await Promise.all([
+            axios.get(`${config.user_service}/api/users/${userId}`, {
+                headers: { "x-internal-service-key": config.internal_service_key }
+            }),
+            getDocumentById(documentId) // Direct function call
+        ]);
+        console.log(userResponse, document)
+
+        if (!document) return { success: false, message: "Document not found" };
+
+        const user = userResponse.data?.user;
+        if (!user) return { success: false, message: "User not found" };
+
+        // Check if user already has access
+        if (document.sharedPersons.some(person => person.email === user.email)) {
+        return { success: false, message: "User already has access" };
+        }
+
+        // Add user to sharedPersons list
+        const updatedDocument = await Document.findByIdAndUpdate(
+            documentId,
+            {
+                $addToSet: { sharedPersons: { email: user.email, name: user.name || "Unknown", role: "Viewer" } }
+            },
+            { new: true }
+        );
+        
+        return { success: true, message: "User granted access", document: updatedDocument };
+    } catch (error) {
+        console.log(error)
+        return { success: false, message: "Error giving access" };
+    }
+}
+
+
+
+module.exports = {
+    createDocument,
+    getDocumentById,
+    updateDocument,
+    updateDocTitle,
+    giveAccess,
+};
