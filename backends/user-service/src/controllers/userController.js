@@ -1,4 +1,5 @@
 const userService = require('.././services/userService');
+const config = require('../config/config')
 
 
 exports.createUser = async (req, res) => {
@@ -19,12 +20,18 @@ exports.createUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
     try{
         const uid = req.params.uid;
+
+        if(req.headers["x-internal-service-key"] === config.internal_service_key) {
+            const user = await userService.getUserById(uid);
+            return res.status(200).json({ message: "User found", user: user });
+        }
+
         // Stopping users to access other user's data 
         if(req.user?.uid !== uid) {
             return res.status(403).send({ message: "You cannot access another user's data" })
         }
         const user = await userService.getUserById(uid);
-        res.status(200).json({ message: "User found", user: user })
+        return res.status(200).json({ message: "User found", user: user })
     } catch(error) {
         res.status(500).json({ error: error.message });
     }
