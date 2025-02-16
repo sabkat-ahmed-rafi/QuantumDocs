@@ -23,8 +23,8 @@ exports.get = async (req, res) => {
 
 exports.giveAccess = async (req, res) => {
 	 try {
-		const {documentId, userUid} = req.body;
-		const sharedAccess = await documentService.giveAccess(documentId, userUid);
+		const {documentId, user} = req.body;
+		const sharedAccess = await documentService.giveAccess(documentId, user);
 		res.status(200).json({ sharedAccess });
 	 } catch(error) {
 		res.status(500).json({ message: error.message })

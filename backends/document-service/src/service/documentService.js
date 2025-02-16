@@ -1,6 +1,7 @@
 const Document = require('../model/documentModel');
 const Delta = require('quill-delta');
 const config = require('../config/config');
+const axios = require('axios');
 
 const createDocument = async (documentData) => {
     if(!documentData) {
@@ -11,6 +12,7 @@ const createDocument = async (documentData) => {
 }
 
 const getDocumentById = async (documentId) => {
+    console.log(documentId)
     if(!documentId) {
         throw new Error("Document id is required")
     }
@@ -85,21 +87,14 @@ const updateDocTitle = async (documentId, newDocTitle) => {
     }
 } 
 
-const giveAccess = async (userId, documentId) => {
+const giveAccess = async (documentId, user) => {
     try {
-        // Fetch user details and document in parallel
-        const [userResponse, document] = await Promise.all([
-            axios.get(`${config.user_service}/api/users/${userId}`, {
-                headers: { "x-internal-service-key": config.internal_service_key }
-            }),
-            getDocumentById(documentId) // Direct function call
-        ]);
-        console.log(userResponse, document)
+        const document = await getDocumentById(documentId)
+        console.log( documentId)
 
-        if (!document) return { success: false, message: "Document not found" };
+        if (!document) return { success: false, message: "Access Denied" };
 
-        const user = userResponse.data?.user;
-        if (!user) return { success: false, message: "User not found" };
+        if (!user) return { success: false, message: "Access Denied" };
 
         // Check if user already has access
         if (document.sharedPersons.some(person => person.email === user.email)) {
@@ -110,7 +105,7 @@ const giveAccess = async (userId, documentId) => {
         const updatedDocument = await Document.findByIdAndUpdate(
             documentId,
             {
-                $addToSet: { sharedPersons: { email: user.email, name: user.name || "Unknown", role: "Viewer" } }
+                $addToSet: { sharedPersons: { email: user.email, name: user.name || "Unknown", photo: user.profilePicture } }
             },
             { new: true }
         );
@@ -118,7 +113,7 @@ const giveAccess = async (userId, documentId) => {
         return { success: true, message: "User granted access", document: updatedDocument };
     } catch (error) {
         console.log(error)
-        return { success: false, message: "Error giving access" };
+        return { success: false, message: "Access Denied" };
     }
 }
 
