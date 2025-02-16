@@ -30,8 +30,26 @@ const documentSchema = new mongoose.Schema({
         },
         photo: {
             type: String,
+        },
+        name: {
+            type: String,
+        },
+        role: {
+            type: String,
+            default: "Viewer"
         }
-    }]
+    }],
+    accessStatus: {
+        isRestricted: {
+            type: Boolean,
+            default: false
+        },
+        role: {
+            type: String,
+            default: "Viewer"
+        }
+        
+    }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Document', documentSchema);
