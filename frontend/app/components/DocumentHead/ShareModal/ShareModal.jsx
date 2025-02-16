@@ -15,6 +15,7 @@ import UserAccessSearch from '../../UI/UserAccessSearch';
 import { MdOutlineContentCopy } from "react-icons/md";
 import 'animate.css';
 import axios from 'axios'; 
+import { toast } from 'react-toastify';
 
 
 
@@ -49,16 +50,23 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
   };
 
   const handleGiveAccess = async (user) => {
-    console.log(user, document?.document?.id);
     const documentId = document?.document?.id;
-    setUsers([]);
-    setSearch("");
+
     try {
       const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess`, {user, documentId})
-      documentRefetch()
-      console.log(result)
+      if(result.data.sharedAccess.message == 'User already has access') {
+        toast.error(result.data.sharedAccess.message);
+      } else if(result.data.sharedAccess.message == 'Access Denied') {
+        toast.error(result.data.sharedAccess.message);
+      } else if(result.data.sharedAccess.message == 'User granted access') {
+        toast.success(result.data.sharedAccess.message);
+        setUsers([]);
+        setSearch("");
+        documentRefetch();
+      }
     } catch(error) { 
       console.log(error);
+      toast.error('Something went wrong');
     }
   };
 

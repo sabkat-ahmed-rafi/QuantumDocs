@@ -27,8 +27,8 @@ const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHav
                   {/* Other User */}
                 {
                  document && document?.document?.sharedPersons?.map(user => <div
-                 key={user._id}
-                    onClick={toggleHover} // Works for both touch and desktop
+                    key={user._id}
+                    onClick={toggleHover} 
                     onTouchStart={toggleHover}                
                     className='flex justify-between items-center py-2 rounded-md transition-all'>
                     <section className='flex justify-center items-center space-x-2 relative overflow-hidden'>
