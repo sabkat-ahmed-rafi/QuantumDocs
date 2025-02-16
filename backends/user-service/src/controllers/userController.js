@@ -21,11 +21,6 @@ exports.getUserById = async (req, res) => {
     try{
         const uid = req.params.uid;
 
-        if(req.headers["x-internal-service-key"] === config.internal_service_key) {
-            const user = await userService.getUserById(uid);
-            return res.status(200).json({ message: "User found", user: user });
-        }
-
         // Stopping users to access other user's data 
         if(req.user?.uid !== uid) {
             return res.status(403).send({ message: "You cannot access another user's data" })

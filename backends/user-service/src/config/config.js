@@ -5,5 +5,4 @@ module.exports = {
     mongodb_uri: process.env.MONGODB_URI || "",
     frontend: process.env.FRONTEND,
     jwt_secret: process.env.JWT_SECRET,
-    internal_service_key: process.env.INTERNAL_SERVICE_KEY
 };
