@@ -56,8 +56,14 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     }
   };
 
-  const handleDeleteAccess = (e, userUid) => {
-    console.log("Deleting this users Access")
+  const handleDeleteAccess = async (userEmail) => {
+    const documentId = document?.document?.id;
+    console.log(documentId, userEmail)
+    try {
+      const result = await axios.delete(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess/deleteAccess`, {documentId, userEmail})
+    } catch (error) {
+      toast.error('Something went wrong');
+    }
   };
 
   const handleGiveAccess = async (user) => {

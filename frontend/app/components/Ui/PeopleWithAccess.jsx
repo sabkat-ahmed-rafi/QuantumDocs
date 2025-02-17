@@ -38,11 +38,8 @@ const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDelete
                       onTouchStart={() => toggleClick(user._id)}
                     >
                     {
-                        clickedUserId === user._id && <button
-                        
-                        onClick={(e) =>{
-                            handleDeleteAccess(e, user._id)}
-                            }
+                        clickedUserId === user._id && <button                
+                        onClick={() => handleDeleteAccess(user.email)}
                         className='animate__animated animate__fadeInRight hover:bg-slate-200 p-2 rounded-full cursor-pointer transition-all'
                         >
                          <MdDelete className='text-lg' />
