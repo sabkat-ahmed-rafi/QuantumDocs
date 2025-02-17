@@ -29,7 +29,7 @@ const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDelete
                 </div>
                   {/* Other User */}
                 {
-                 document && document?.document?.sharedPersons?.map(user => <div
+                 document && [...document?.document?.sharedPersons]?.reverse()?.map(user => <div
                     key={user._id}    
                     className='flex justify-between items-center py-2 rounded-md transition-all'>
                     <section 
