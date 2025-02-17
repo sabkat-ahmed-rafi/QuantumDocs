@@ -116,9 +116,7 @@ const giveAccess = async (documentId, user) => {
     }
 }
 
-const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
-    console.log(documentId, userEmail, newRole)
-    
+const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {    
     try {
         
         const document = await getDocumentById(documentId)
@@ -144,6 +142,24 @@ const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
     
 }
 
+const removeAccess = async (documentId, userEmail) => {
+    try {
+        const result = await Document.updateOne(
+            { _id: documentId },
+            { $pull: { sharedPersons: { email: userEmail } } }
+        );
+
+        if (result.modifiedCount > 0) {
+            return { success: true, message: "User access removed successfully" };
+        } else {
+            return { success: false, message: "User not found or no changes made" };
+        }
+    } catch (error) {
+        return { success: false, message: "Something went wrong" };
+    }
+};
+
+
 
 module.exports = {
     createDocument,
@@ -151,5 +167,6 @@ module.exports = {
     updateDocument,
     updateDocTitle,
     giveAccess,
-    giveRoleToAccessibleUser
+    giveRoleToAccessibleUser,
+    removeAccess
 };
