@@ -150,9 +150,9 @@ const removeAccess = async (documentId, userEmail) => {
         );
 
         if (result.modifiedCount > 0) {
-            return { success: true, message: "User access removed successfully" };
+            return { success: true, message: "User access removed" };
         } else {
-            return { success: false, message: "User not found or no changes made" };
+            return { success: false, message: "Something went wrong" };
         }
     } catch (error) {
         return { success: false, message: "Something went wrong" };
