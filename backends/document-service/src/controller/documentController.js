@@ -40,3 +40,13 @@ exports.giveRoleToAccessibleUser  = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
+
+exports.removeAccess = async (req, res) => {
+	try {
+		const {documentId, userEmail} = req.body;
+		const removedRole = await documentService.removeAccess(documentId, userEmail);
+		res.status(200).json({ removedRole });
+	} catch (error) {
+		res.status(500).json({ message: error.message })
+	}
+}
