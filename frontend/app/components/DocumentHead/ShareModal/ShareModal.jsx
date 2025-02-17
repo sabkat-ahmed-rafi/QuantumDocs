@@ -60,7 +60,14 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     const documentId = document?.document?.id;
     console.log(documentId, userEmail)
     try {
-      const result = await axios.delete(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess/removeAccess`, {documentId, userEmail})
+      const result = await axios.delete(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess/removeAccess`, {data: { documentId, userEmail }})
+      console.log(result);
+      if(result.data.removedRole.success == false) {
+       toast.error(result.data.removedRole.message);
+      } else if(result.data.removedRole.success == true) {
+      documentRefetch();
+      toast.success(result.data.removedRole.message);
+      }
     } catch (error) {
       toast.error('Something went wrong');
     }
