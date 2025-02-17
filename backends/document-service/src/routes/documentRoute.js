@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', documentController.create);
 router.patch('/giveAccess', documentController.giveAccess);
-router.patch('/giveAccessRole', documentController.giveRoleToAccessibleUser);
+router.patch('/giveAccess/giveAccessRole', documentController.giveRoleToAccessibleUser);
 router.get('/:id', documentController.get);
 
 module.exports = router;
