@@ -30,3 +30,13 @@ exports.giveAccess = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	 }
 }
+
+exports.giveRoleToAccessibleUser  = async (req, res) => {
+	try {
+		const {documentId, newRole, userEmail} = req.body;
+		const giveRole = await documentService.giveRoleToAccessibleUser(documentId, userEmail, newRole);
+		res.status(500).json({ giveRole });
+	} catch (error) {
+		res.status(500).json({ message: error.message })
+	}
+}
