@@ -62,6 +62,11 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
 
   const handleGiveAccess = async (user) => {
     const documentId = document?.document?.id;
+    const ownerEmail = document?.document?.owner?.email;
+
+    if(ownerEmail === user?.email) {
+      return toast.error(`This user is the document owner`);
+    }
 
     try {
       const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess`, {user, documentId})
