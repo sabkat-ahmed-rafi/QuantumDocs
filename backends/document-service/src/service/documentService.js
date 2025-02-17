@@ -117,11 +117,11 @@ const giveAccess = async (documentId, user) => {
 }
 
 const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
-    const document = await getDocumentById(documentId)
     console.log(documentId, userEmail, newRole)
-
+    
     try {
-
+        
+        const document = await getDocumentById(documentId)
         if (!document) return { success: false, message: "Something went wrong" };
 
         // Update the role of the user in sharedPersons
