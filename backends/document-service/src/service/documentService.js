@@ -132,7 +132,7 @@ const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
         );
 
         if (!updatedDocument) {
-            return { success: false, message: "Failed to update user role" };
+            return { success: false, message: "Something went wrong" };
         }
 
         return { success: true, message: "User role updated successfully", document: updatedDocument };
