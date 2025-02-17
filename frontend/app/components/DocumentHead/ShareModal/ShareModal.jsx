@@ -24,13 +24,24 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
-  const [peopleWhoHaveAccessRole, peopleWhoHaveAccessRoleSet] = useState("Viewer");
   const [universalAccessRole, setUniversalAccessRole] = useState("Viewer");
   const [isRestricted, setIsRestricted] = useState(false);
   
-  const handlePeopleWhoHaveAccessRole = (e, user) => {
-    // peopleWhoHaveAccessRoleSet(e.target.value);
-    console.log(e.target.value, user)
+  const handlePeopleWhoHaveAccessRole = async (e, userEmail) => {
+    const newRole = e.target.value;
+    const documentId = document?.document?.id;
+    console.log(newRole, userEmail, documentId);
+    try {
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess/giveAccessRole`, {newRole, userEmail, documentId})
+      if(result.data.giveRole.message === "User role updated successfully") {
+        toast.success(`User role updated to ${newRole}`);
+        documentRefetch();
+      } else if(result.data.giveRole.message == "Something went wrong") {
+        toast.error(result.data.giveRole.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   const handleUniversalRole = (e) => {
@@ -126,7 +137,6 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
                 <p className='font-semibold'>People with access</p>
                     <PeopleWithAccess 
                     document={document} 
-                    peopleWhoHaveAccessRole={peopleWhoHaveAccessRole}
                     handlePeopleWhoHaveAccessRole={handlePeopleWhoHaveAccessRole}
                     handleDeleteAccess={handleDeleteAccess}
                     />

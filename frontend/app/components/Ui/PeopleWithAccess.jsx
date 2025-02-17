@@ -4,15 +4,18 @@ import { MdDelete } from "react-icons/md";
 
 
 
-const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHaveAccessRole, handleDeleteAccess}) => {
+const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDeleteAccess}) => {
     
-    const [isHovered, setIsHovered] = useState(false);
+    const [clickedUserId, setClickedUserId] = useState(null);
 
-    const toggleHover = () => setIsHovered(!isHovered);
+    const toggleClick = (userId) => {
+      setClickedUserId(prevId => (prevId === userId ? null : userId));
+    };
+
 
   return (
     <>
-            <section className=' overflow-y-auto'>
+            <section className='overflow-y-auto scrollbar-hide'>
                   {/* Owner */}
                 <div className='flex justify-between items-center hover:bg-slate-100 py-2 hover:px-2 transition-all rounded-md'>
                 <User
@@ -20,23 +23,24 @@ const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHav
                     src: `${document?.document?.owner?.photo}`,
                   }}
                   description={`${document?.document?.owner?.email}`}
-                  name={`${document?.document?.owner?.name} (you)`}
+                  name={`${document?.document?.owner?.name}`}
                   />      
                   <p className='text-slate-400 text-sm'>Owner</p>       
                 </div>
                   {/* Other User */}
                 {
                  document && document?.document?.sharedPersons?.map(user => <div
-                    key={user._id}
-                    onClick={toggleHover} 
-                    onTouchStart={toggleHover}                
+                    key={user._id}    
                     className='flex justify-between items-center py-2 rounded-md transition-all'>
-                    <section className='flex justify-center items-center space-x-2 relative overflow-hidden'>
+                    <section 
+                      className='flex justify-center items-center space-x-2 relative'
+                      onClick={() => toggleClick(user._id)} 
+                      onTouchStart={() => toggleClick(user._id)}
+                    >
                     {
-                        isHovered && <button
+                        clickedUserId === user._id && <button
                         
                         onClick={(e) =>{
-                            e.stopPropagation();
                             handleDeleteAccess(e, user._id)}
                             }
                         className='animate__animated animate__fadeInRight hover:bg-slate-200 p-2 rounded-full cursor-pointer transition-all'
@@ -55,8 +59,8 @@ const PeopleWithAccess = ({document, peopleWhoHaveAccessRole, handlePeopleWhoHav
                     </section>      
                     <select 
                      className='hover:bg-slate-100 transition-all p-2 rounded-md focus:outline-none cursor-pointer relative focus:translate-y-[-50%]' 
-                     defaultValue={peopleWhoHaveAccessRole} 
-                     onChange={(e) => handlePeopleWhoHaveAccessRole(e, user)}
+                     value={user.role} 
+                     onChange={(e) => handlePeopleWhoHaveAccessRole(e, user.email)}
                     >
                       <option className='bg-white py-2' value="Viewer">Viewer</option>
                       <option className='bg-white' value="Editor">Editor</option>
