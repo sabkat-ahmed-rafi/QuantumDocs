@@ -90,7 +90,6 @@ const updateDocTitle = async (documentId, newDocTitle) => {
 const giveAccess = async (documentId, user) => {
     try {
         const document = await getDocumentById(documentId)
-        console.log( documentId)
 
         if (!document) return { success: false, message: "Access Denied" };
 
@@ -117,6 +116,33 @@ const giveAccess = async (documentId, user) => {
     }
 }
 
+const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
+    const document = await getDocumentById(documentId)
+    console.log(documentId, userEmail, newRole)
+
+    try {
+
+        if (!document) return { success: false, message: "Something went wrong" };
+
+        // Update the role of the user in sharedPersons
+        const updatedDocument = await Document.findOneAndUpdate(
+            { _id: documentId, "sharedPersons.email": userEmail },
+            { $set: { "sharedPersons.$.role": newRole } },
+            { new: true }
+        );
+
+        if (!updatedDocument) {
+            return { success: false, message: "Failed to update user role" };
+        }
+
+        return { success: true, message: "User role updated successfully", document: updatedDocument };
+
+    } catch (error) {
+        return { success: false, message: "Internal server error" };
+    }
+
+    
+}
 
 
 module.exports = {
@@ -125,4 +151,5 @@ module.exports = {
     updateDocument,
     updateDocTitle,
     giveAccess,
+    giveRoleToAccessibleUser
 };
