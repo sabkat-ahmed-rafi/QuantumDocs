@@ -48,11 +48,22 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     setUniversalAccessRole(e.target.value);
   };
 
-  const handleIsRestricted = (e) => {
+  const handleIsRestricted = async (e) => {
+    let newValue = e.target.value;
     if(e.target.value == "Restricted") {
-      setIsRestricted(true);
+      newValue = true;
     } else if(e.target.value == "Anyone with the link") {
-      setIsRestricted(false);
+      newValue = false;
+    }
+    const documentId = document?.document?.id;
+    try {
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/accessStatus/changeAccess`, { documentId, newValue })
+      if (result.data.changeStatus.success == true) {
+        documentRefetch();
+      }
+    } catch (error) {
+      toast.error('Something went wrong');
+      console.log(error);
     }
   };
 
@@ -160,16 +171,15 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
                     />
                 <p className='font-semibold'>General access</p>
                 {
-                  isRestricted ? 
+                  document?.document?.accessStatus?.isRestricted ? 
                   <IsRestricted 
-                   isRestricted={isRestricted}
                    handleIsRestricted={handleIsRestricted}
+                   document={document}
                    /> : 
                   <NotRestricted 
-                  isRestricted={isRestricted}
-                  universalAccessRole={universalAccessRole}
                   handleIsRestricted={handleIsRestricted}
                   handleUniversalRole={handleUniversalRole}
+                  document={document}
                   /> 
                 }
               </ModalBody>
