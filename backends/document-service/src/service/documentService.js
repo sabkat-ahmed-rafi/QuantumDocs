@@ -7,7 +7,7 @@ const createDocument = async (documentData) => {
     }
     const document = new Document(documentData);
     return await document.save();
-}
+};
 
 const getDocumentById = async (documentId) => {
     console.log(documentId)
@@ -33,7 +33,7 @@ const getDocumentById = async (documentId) => {
     } catch(error) {
         throw new Error(`Error fetching document: ${error.message}`);
     }
-}
+};
 
 
 const updateDocument = async (updatedData) => {
@@ -64,7 +64,7 @@ const updateDocument = async (updatedData) => {
     } catch (error) {
         console.log(error)
     }
-}
+};
 
 const updateDocTitle = async (documentId, newDocTitle) => {
     try {
@@ -83,7 +83,7 @@ const updateDocTitle = async (documentId, newDocTitle) => {
     } catch (error) {
         console.log(error);
     }
-} 
+}; 
 
 const giveAccess = async (documentId, user) => {
     try {
@@ -112,7 +112,7 @@ const giveAccess = async (documentId, user) => {
         console.log(error)
         return { success: false, message: "Access Denied" };
     }
-}
+};
 
 const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {    
     try {
@@ -138,7 +138,7 @@ const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {
     }
 
     
-}
+};
 
 const removeAccess = async (documentId, userEmail) => {
     try {
@@ -177,7 +177,29 @@ const changeDocumentStatus = async (documentId, newValue) => {
     } catch {
         return { success: false, message: "Internal server error" };
     }
-} 
+};
+
+const changeDocumentRole = async (documentId, newRole) => {
+    try {
+        const document = await getDocumentById(documentId);
+        if (!document) return { success: false, message: "Something went wrong" };
+
+        const updatedDocument = await Document.findOneAndUpdate(
+            { _id: documentId },
+            { $set: { "accessStatus.role": newRole } },
+            { new: true }
+        );
+
+        if (!updatedDocument) {
+            return { success: false, message: "Something went wrong" };
+        }
+
+        return { success: true, message: "Document access role updated", document: updatedDocument };
+
+    } catch {
+        return { success: false, message: "Internal server error" };
+    }
+}
 
 module.exports = {
     createDocument,
@@ -187,5 +209,6 @@ module.exports = {
     giveAccess,
     giveRoleToAccessibleUser,
     removeAccess,
-    changeDocumentStatus
+    changeDocumentStatus,
+    changeDocumentRole
 };
