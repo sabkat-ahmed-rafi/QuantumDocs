@@ -60,3 +60,13 @@ exports.changeDocumentStatus = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 }
+
+exports.changeDocumentRole = async (req, res) => {
+	try {
+		const {documentId, newRole} = req.body;
+		const changeRole = await documentService.changeDocumentRole(documentId, newRole);
+		res.status(200).json({ changeRole });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+}
