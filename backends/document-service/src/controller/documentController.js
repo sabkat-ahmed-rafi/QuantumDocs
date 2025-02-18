@@ -50,3 +50,13 @@ exports.removeAccess = async (req, res) => {
 		res.status(500).json({ message: error.message })
 	}
 }
+
+exports.changeDocumentStatus = async (req, res) => {
+	try {
+		const {documentId, newValue} = req.body;
+		const changeStatus = await documentService.changeDocumentStatus(documentId, newValue);
+		res.status(200).json({ changeStatus });
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+}
