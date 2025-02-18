@@ -24,8 +24,6 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
-  const [universalAccessRole, setUniversalAccessRole] = useState("Viewer");
-  const [isRestricted, setIsRestricted] = useState(false);
   
   const handlePeopleWhoHaveAccessRole = async (e, userEmail) => {
     const newRole = e.target.value;
@@ -44,8 +42,18 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     }
   };
 
-  const handleUniversalRole = (e) => {
-    setUniversalAccessRole(e.target.value);
+  const handleUniversalRole = async (e) => {
+    const newRole = e.target.value;
+    const documentId = document.document.id;
+    try {
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/accessStatus/changeRole`, { documentId, newRole });
+      if (result.data.changeRole.success == true) {
+        documentRefetch();
+        toast.success(`User role updated to ${newRole}`);
+      }
+    } catch (error) {
+      toast.error('Something went wrong');
+    }
   };
 
   const handleIsRestricted = async (e) => {
@@ -63,7 +71,6 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
       }
     } catch (error) {
       toast.error('Something went wrong');
-      console.log(error);
     }
   };
 

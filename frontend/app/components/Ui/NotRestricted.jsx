@@ -2,7 +2,7 @@ import React from 'react'
 import { FaGlobeAmericas } from "react-icons/fa";
 
 
-const NotRestricted = ({handleIsRestricted, handleUniversalRole}) => {
+const NotRestricted = ({handleIsRestricted, handleUniversalRole, document}) => {
   return (
     <>
         <div className='flex justify-between items-center py-2 rounded-md'>
