@@ -164,7 +164,7 @@ const changeDocumentStatus = async (documentId, newValue) => {
 
         const updatedDocumentStatus = await Document.findOneAndUpdate(
             { _id: documentId },
-            { $set: { "accessStatus.$.isRestricted": newValue } },
+            { $set: { "accessStatus.isRestricted": newValue } },
             { new: true }
         );
 
