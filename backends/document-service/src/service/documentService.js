@@ -1,7 +1,5 @@
 const Document = require('../model/documentModel');
 const Delta = require('quill-delta');
-const config = require('../config/config');
-const axios = require('axios');
 
 const createDocument = async (documentData) => {
     if(!documentData) {
@@ -119,7 +117,7 @@ const giveAccess = async (documentId, user) => {
 const giveRoleToAccessibleUser = async (documentId, userEmail, newRole) => {    
     try {
         
-        const document = await getDocumentById(documentId)
+        const document = await getDocumentById(documentId);
         if (!document) return { success: false, message: "Something went wrong" };
 
         // Update the role of the user in sharedPersons
@@ -159,7 +157,27 @@ const removeAccess = async (documentId, userEmail) => {
     }
 };
 
+const changeDocumentStatus = async (documentId, newValue) => {
+    try {
+        const document = await getDocumentById(documentId);
+        if (!document) return { success: false, message: "Something went wrong" };
 
+        const updatedDocumentStatus = await Document.findOneAndUpdate(
+            { _id: documentId },
+            { $set: { "accessStatus.$.isRestricted": newValue } },
+            { new: true }
+        );
+
+        if (!updatedDocumentStatus) {
+            return { success: false, message: "Something went wrong" };
+        }
+
+        return { success: true, message: "Document access status updated", document: updatedDocumentStatus };
+
+    } catch {
+        return { success: false, message: "Internal server error" };
+    }
+} 
 
 module.exports = {
     createDocument,
@@ -168,5 +186,6 @@ module.exports = {
     updateDocTitle,
     giveAccess,
     giveRoleToAccessibleUser,
-    removeAccess
+    removeAccess,
+    changeDocumentStatus
 };
