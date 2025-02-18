@@ -23,6 +23,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
 
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [copied, setCopied] = useState(false);
 
   
   const handlePeopleWhoHaveAccessRole = async (e, userEmail) => {
@@ -117,6 +118,16 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     }
   };
 
+  const handleCopyDocumentLink = async () => {
+    try {
+      const documentLink = `${process.env.NEXT_PUBLIC_frontend}/document/${document?.document?.id}`;
+      await navigator.clipboard.writeText(documentLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1000);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }
   
   // Handleding searched users 
   useEffect( () => {
@@ -191,8 +202,8 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
                 }
               </ModalBody>
               <ModalFooter className='flex justify-between'>
-                <Button radius='full' variant="bordered" className='text-black animate__animated animate__bounceIn'>
-                  <MdOutlineContentCopy /> Copy link
+                <Button isDisabled={copied} onPress={handleCopyDocumentLink} radius='full' variant="bordered" className='text-black animate__animated animate__bounceIn'>
+                {copied ? <p className='text-green-500' >✔</p> : <MdOutlineContentCopy />} Copy link
                 </Button>
                 <Button radius='full' color="secondary" onPress={onClose}>
                   Done
