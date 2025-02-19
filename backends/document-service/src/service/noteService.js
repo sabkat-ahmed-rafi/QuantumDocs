@@ -20,16 +20,25 @@ const addNote = async (documentId, value, name) => {
     }
 };
 
-const deleteNote = async (noteId) => {
-    if (!noteId) {
+const deleteNote = async (noteId, documentId) => {
+    try {
+        if (!noteId) {
+            return { success: false, message: "Something went wrong" };
+        }
+        const result = await Notes.findOneAndUpdate(
+            { documentId },
+            { $pull: { notes: { _id: noteId } } }, 
+            { new: true }
+        );
+    
+        if (result) {
+            return { success: true, message: "Note deleted successfully" };
+        } else {
+            return { success: false, message: "Note not found or already deleted" };
+        }
+    } catch (error) {
         return { success: false, message: "Something went wrong" };
     }
-    const deletedNote = await Notes.findByIdAndDelete(noteId);
-
-    if (!deletedNote) {
-        return { success: false, message: "Something went wrong" };
-    }
-    return { success: true, message: "note deleted successfully" };
 };
 
 const getNotes = async (documentId) => {

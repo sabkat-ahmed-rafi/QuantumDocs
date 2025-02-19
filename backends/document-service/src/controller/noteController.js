@@ -25,9 +25,9 @@ exports.getNotes = async (req, res) => {
 
 exports.deleteNote = async (req, res) => {
     try {
-        const documentId = req.params;
-        console.log(documentId);
-        const deleteNote = await noteService.deleteNote(documentId);
+        const { id: noteId } = req.params;
+        const documentId = req.body.documentId;
+        const deleteNote = await noteService.deleteNote(noteId, documentId);
         res.status(200).json({ deleteNote });
     } catch (error) {
         res.status(500).json({ message: error.message });
