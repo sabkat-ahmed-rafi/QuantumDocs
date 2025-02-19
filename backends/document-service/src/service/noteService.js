@@ -32,7 +32,27 @@ const deleteNote = async (noteId) => {
     return { success: true, message: "note deleted successfully" };
 };
 
+const getNotes = async (documentId) => {
+    try {
+        if (!documentId) {
+            return { success: false, message: "Something went wrong" };
+        };
+    
+        const notes = await Notes.find(documentId);
+    
+        if(!notes) {
+            return { success: false, message: "Something went wrong" };
+        };
+
+        return { success: true, message: "Note Found" };
+
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+}
+
 module.exports = {
     addNote,
-    deleteNote
+    deleteNote, 
+    getNotes
 }
