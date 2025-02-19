@@ -6,15 +6,15 @@ const noteSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    notes: [{
-        note: {
+    note: {
+        value: {
             type: String,
             required: true
         },
         name: {
             type: String,
         }
-    }]
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Notes', noteSchema);
