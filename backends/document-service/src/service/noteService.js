@@ -38,13 +38,13 @@ const getNotes = async (documentId) => {
             return { success: false, message: "Something went wrong" };
         };
     
-        const notes = await Notes.find(documentId);
+        const notes = await Notes.findOne({ documentId });
     
         if(!notes) {
             return { success: false, message: "Something went wrong" };
         };
 
-        return { success: true, message: "Note Found" };
+        return { success: true, message: "Note Found", notes };
 
     } catch (error) {
         return { success: false, message: error.message };

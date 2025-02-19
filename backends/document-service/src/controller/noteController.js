@@ -15,9 +15,7 @@ exports.addNote = async (req, res) => {
 
 exports.getNotes = async (req, res) => {
     try {
-        const documentId = req.params.body;
-        console.log(documentId)
-
+        const { id: documentId } = req.params;
         const getNote = await noteService.getNotes(documentId);
         res.status(200).json({ getNote });
     } catch (error) {
@@ -27,7 +25,8 @@ exports.getNotes = async (req, res) => {
 
 exports.deleteNote = async (req, res) => {
     try {
-        const documentId = req.params.body;
+        const documentId = req.params;
+        console.log(documentId);
         const deleteNote = await noteService.deleteNote(documentId);
         res.status(200).json({ deleteNote });
     } catch (error) {

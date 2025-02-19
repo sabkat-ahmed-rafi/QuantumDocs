@@ -10,7 +10,6 @@ const createDocument = async (documentData) => {
 };
 
 const getDocumentById = async (documentId) => {
-    console.log(documentId)
     if(!documentId) {
         throw new Error("Document id is required")
     }
