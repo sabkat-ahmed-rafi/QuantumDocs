@@ -14,23 +14,24 @@ import axios from 'axios';
 
 const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 
-  const [clicked, setClicked] = useState(false);
+  const [clickedUserId, setClickedUserId] = useState(null);
   const [notes, setNotes] = useState([])
-  const noteRef = useRef(null);
+  const [noteValue, setNoteValue] = useState('');
  
-  const toggleClick = () => {
-    setClicked(!clicked);
+  const toggleClick = (userId) => {
+    setClickedUserId(prevId => (prevId === userId ? null : userId));
   }
 
   const handleAddNewNote = async () => {
     const documentId = document?.document?.id;
-    const value = noteRef.current?.value
+    const value = noteValue;
     const name = user?.displayName
     const noteData = {documentId, value, name};
     try {
       const result = await axios.post(`${process.env.NEXT_PUBLIC_document_service}/api/note`, { noteData });
       if(result.data.addNote.success) {
         fetchNotes();
+        setNoteValue('');
       }
     } catch (error) {
       toast.error('Something went wrong');
@@ -44,10 +45,17 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
       const result = await axios.get(`${process.env.NEXT_PUBLIC_document_service}/api/note/${documentId}`);
       setNotes(result?.data?.getNote?.notes?.notes);
     } catch (error) {
-      console.error("Error fetching notes:", error);
       toast.error('Something went wrong');
     }
   };
+
+  const handleDelete = async (noteId) => {
+    try {
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_document_service}/api/note/${noteId}`);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }
 
   useEffect(() => {
     fetchNotes();
@@ -70,25 +78,33 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Notes</DrawerHeader>
               <hr />
               <DrawerBody className='text-black'>
-                <div className='text-center mb-1'>
-                  <p onClick={() => toggleClick()} className='bg-purple-500 text-white p-2 rounded-lg font-semibold'>
-                    Click the close button or action button to close the drawer. Clicking outside or pressing the escape key won&apos;t close it.
-                  </p>
-                  <p className='text-sm text-slate-500'>Noted by sabkat ahmed rafi</p>
-                  <p className='text-sm text-slate-400'>12:30 - 30 september</p>
-                  {
-                    clicked && <button                
-                    className='animate__animated animate__fadeInDown hover:bg-slate-200 p-2 rounded-full cursor-pointer transition-all'
-                    >
-                      <MdDelete className='text-lg' />
-                    </button>
-                  }
-                </div>
+                {
+                  notes.map(note => <div 
+                    key={note._id}
+                    className='text-center mb-1'>
+                    <p onClick={() => toggleClick(note._id)} className='bg-purple-500 text-white p-2 rounded-lg font-semibold'>
+                      {note.value}
+                    </p>
+                    <p className='text-sm text-slate-500'>Noted by {note.name}</p>
+                    <p className='text-sm text-slate-400'>12:30 - 30 september</p>
+                    {
+                      clickedUserId === note._id && <button 
+                      onClick={() => handleDelete(note._id)}               
+                      className='animate__animated animate__fadeInDown hover:bg-slate-200 p-2 rounded-full cursor-pointer transition-all'
+                      >
+                        <MdDelete className='text-lg' />
+                      </button>
+                    }
+                  </div>)
+                }
               </DrawerBody>
               <hr />
               <DrawerFooter className='flex-col'>
                 <div className='mb-2'>
-                  <Textarea ref={noteRef} className='text-black' variant="bordered" size='sm' label="Note" type="text" />
+                  <Textarea   
+                   value={noteValue} 
+                   onChange={(e) => setNoteValue(e.target.value)} 
+                   className='text-black' variant="bordered" size='sm' label="Note" type="text" />
                 </div>
                 <div className='flex justify-end space-x-3'>
                   <Button color="secondary" variant="light" onPress={onClose}>
