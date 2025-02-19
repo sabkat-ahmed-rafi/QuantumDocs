@@ -1,8 +1,8 @@
 const Notes = require('../model/noteModel');
 
-const addNote = async ({ documentId, value, name }) => {
+const addNote = async (documentId, value, name) => {
     if (!documentId || !value) {
-        throw new Error("Document ID and note value are required");
+        return { success: false, message: "Something went wrong" };
     }
 
     try {
@@ -14,21 +14,22 @@ const addNote = async ({ documentId, value, name }) => {
             { upsert: true, new: true } 
         );
 
-        return note;
+        return { success: true, message: "note created successfully", note };
     } catch (error) {
-        throw new Error(`Error adding note: ${error.message}`);
+        return { success: false, message: "Something went wrong" };
     }
 };
 
 const deleteNote = async (noteId) => {
     if (!noteId) {
-        throw new Error("Note ID is required");
+        return { success: false, message: "Something went wrong" };
     }
     const deletedNote = await Notes.findByIdAndDelete(noteId);
+
     if (!deletedNote) {
-        throw new Error("Note not found");
+        return { success: false, message: "Something went wrong" };
     }
-    return deletedNote;
+    return { success: true, message: "note deleted successfully" };
 };
 
 module.exports = {
