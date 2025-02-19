@@ -13,6 +13,10 @@ const noteSchema = new mongoose.Schema({
         },
         name: {
             type: String,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now()
         }
     }]
 }, { timestamps: true });
