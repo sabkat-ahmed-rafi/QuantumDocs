@@ -6,7 +6,7 @@ const noteSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    note: {
+    notes: [{
         value: {
             type: String,
             required: true
@@ -14,7 +14,7 @@ const noteSchema = new mongoose.Schema({
         name: {
             type: String,
         }
-    }
+    }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Notes', noteSchema);

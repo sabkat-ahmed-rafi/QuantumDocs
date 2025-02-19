@@ -1,11 +1,23 @@
 const Notes = require('../model/noteModel');
 
-const addNote = async (noteData) => {
-    if(!noteData) {
-        throw new Error("Document's data not found");
+const addNote = async ({ documentId, value, name }) => {
+    if (!documentId || !value) {
+        throw new Error("Document ID and note value are required");
     }
-    const note = new Notes(noteData);
-    return await note.save();
+
+    try {
+        const note = await Notes.findOneAndUpdate(
+            { documentId }, 
+            { 
+                $push: { notes: { value, name } } 
+            },
+            { upsert: true, new: true } 
+        );
+
+        return note;
+    } catch (error) {
+        throw new Error(`Error adding note: ${error.message}`);
+    }
 };
 
 const deleteNote = async (noteId) => {
