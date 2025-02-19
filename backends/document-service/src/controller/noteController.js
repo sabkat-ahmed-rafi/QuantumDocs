@@ -12,3 +12,25 @@ exports.addNote = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+exports.getNotes = async (req, res) => {
+    try {
+        const documentId = req.params.body;
+        console.log(documentId)
+
+        const getNote = await noteService.getNotes(documentId);
+        res.status(200).json({ getNote });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+exports.deleteNote = async (req, res) => {
+    try {
+        const documentId = req.params.body;
+        const deleteNote = await noteService.deleteNote(documentId);
+        res.status(200).json({ deleteNote });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
