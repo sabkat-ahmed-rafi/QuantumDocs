@@ -8,6 +8,18 @@ const addNote = async (noteData) => {
     return await note.save();
 };
 
+const deleteNote = async (noteId) => {
+    if (!noteId) {
+        throw new Error("Note ID is required");
+    }
+    const deletedNote = await Notes.findByIdAndDelete(noteId);
+    if (!deletedNote) {
+        throw new Error("Note not found");
+    }
+    return deletedNote;
+};
+
 module.exports = {
-    addNote
+    addNote,
+    deleteNote
 }
