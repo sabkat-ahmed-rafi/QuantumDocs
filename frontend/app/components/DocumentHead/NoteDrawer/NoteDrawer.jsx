@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 
+
 const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 
   const [clickedUserId, setClickedUserId] = useState(null);
@@ -24,10 +25,14 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
   }
 
   const handleAddNewNote = async () => {
+    
+    if (!noteValue.trim()) return;
+
     const documentId = document?.document?.id;
-    const value = noteValue;
+    const value = noteValue.trim();
     const name = user?.displayName
     const noteData = {documentId, value, name};
+
     try {
       const result = await axios.post(`${process.env.NEXT_PUBLIC_document_service}/api/note`, { noteData });
       if(result.data.addNote.success) {
@@ -79,8 +84,6 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
   useEffect(() => {
     fetchNotes();
   }, [document])
-
-  console.log(notes);
 
   return (
     <>
