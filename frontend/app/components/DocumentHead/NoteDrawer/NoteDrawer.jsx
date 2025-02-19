@@ -12,6 +12,7 @@ import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+
 const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 
   const [clickedUserId, setClickedUserId] = useState(null);
@@ -51,11 +52,29 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 
   const handleDelete = async (noteId) => {
     try {
-      const result = await axios.get(`${process.env.NEXT_PUBLIC_document_service}/api/note/${noteId}`);
+      const result = await axios.delete(`${process.env.NEXT_PUBLIC_document_service}/api/note/${noteId}`, {data: { documentId: document?.document?.id}});
+      if(result.data.deleteNote.success) {
+        fetchNotes();
+      }
     } catch (error) {
       toast.error("Something went wrong");
     }
   }
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    
+    const time = date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    const day = date.getDate();
+    const month = date.toLocaleString('en-GB', { month: 'long' });
+
+    return `${time} - ${day} ${month}`;
+};
 
   useEffect(() => {
     fetchNotes();
@@ -86,7 +105,7 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
                       {note.value}
                     </p>
                     <p className='text-sm text-slate-500'>Noted by {note.name}</p>
-                    <p className='text-sm text-slate-400'>12:30 - 30 september</p>
+                    <p className='text-sm text-slate-400'>{formatDate(note.createdAt)}</p>
                     {
                       clickedUserId === note._id && <button 
                       onClick={() => handleDelete(note._id)}               
