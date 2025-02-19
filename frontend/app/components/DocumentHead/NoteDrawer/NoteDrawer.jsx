@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -15,6 +15,7 @@ import axios from 'axios';
 const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 
   const [clicked, setClicked] = useState(false);
+  const [notes, setNotes] = useState([])
   const noteRef = useRef(null);
  
   const toggleClick = () => {
@@ -29,13 +30,30 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
     try {
       const result = await axios.post(`${process.env.NEXT_PUBLIC_document_service}/api/note`, { noteData });
       if(result.data.addNote.success) {
-        console.log('I need to fetch data here.')
+        fetchNotes();
       }
     } catch (error) {
       toast.error('Something went wrong');
       console.log(error)
     }
   }
+
+  const fetchNotes = async () => {
+    const documentId = document?.document?.id;
+    try {
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_document_service}/api/note/${documentId}`);
+      setNotes(result?.data?.getNote?.notes?.notes);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+      toast.error('Something went wrong');
+    }
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, [document])
+
+  console.log(notes);
 
   return (
     <>
