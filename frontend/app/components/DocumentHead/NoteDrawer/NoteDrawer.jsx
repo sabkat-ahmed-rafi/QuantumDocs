@@ -19,6 +19,7 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
   const [clickedUserId, setClickedUserId] = useState(null);
   const [notes, setNotes] = useState([])
   const [noteValue, setNoteValue] = useState('');
+  const notesContainerRef = useRef(null);
  
   const toggleClick = (userId) => {
     setClickedUserId(prevId => (prevId === userId ? null : userId));
@@ -80,13 +81,19 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
     const month = date.toLocaleString('en-GB', { month: 'long' });
 
     return `${time} - ${day} ${month}`;
-};
+  };
 
   useEffect(() => {
     if (document?.document?.id) {
       fetchNotes();
     }
   }, [document?.document?.id])
+
+  useEffect(() => {
+    if (notesContainerRef.current) {
+      notesContainerRef.current.scrollTop = notesContainerRef.current.scrollHeight;
+    }
+  }, [notes]);
 
   return (
     <>
@@ -102,7 +109,7 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
             <>
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Notes</DrawerHeader>
               <hr />
-              <DrawerBody className='text-black'>
+              <DrawerBody ref={notesContainerRef} className='text-black'>
                 {
                   notes.map(note => <div 
                     key={note._id}
