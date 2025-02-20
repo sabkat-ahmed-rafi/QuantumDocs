@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -45,15 +45,16 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
     }
   }
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     const documentId = document?.document?.id;
+    if (!documentId) return;
     try {
       const result = await axios.get(`${process.env.NEXT_PUBLIC_document_service}/api/note/${documentId}`);
-      setNotes(result?.data?.getNote?.notes?.notes);
+      setNotes(result?.data?.getNote?.notes?.notes || []);
     } catch (error) {
       toast.error('Something went wrong');
     }
-  };
+  }, [document?.document?.id])
 
   const handleDelete = async (noteId) => {
     try {
@@ -82,8 +83,10 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
 };
 
   useEffect(() => {
-    fetchNotes();
-  }, [document])
+    if (document?.document?.id) {
+      fetchNotes();
+    }
+  }, [document?.document?.id])
 
   return (
     <>
