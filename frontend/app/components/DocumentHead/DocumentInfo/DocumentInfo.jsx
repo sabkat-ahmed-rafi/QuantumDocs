@@ -46,21 +46,20 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
 
     const handleDownloadDOCX = async () => {
         if(!quillRef.current) return;
+
+        const paragraphStyles = {
+            block_quote: {
+                paragraph: { spacing: { line: 300 }, indent: { left: 400 } },
+                run: { italics: true, highlight: "lightGray", color: "666666" } 
+            },
+            code_block: {
+                paragraph: { spacing: { line: 280 }, indent: { left: 400 } },
+                run: { font: "Courier New", size: 22, highlight: "black", color: "white"}
+            },
+        }
         
         const delta = quillRef.current.getContents();
-        const wordBlob = await quillToWord.generateWord(delta, { exportAs: "blob",
-            
-            paragraphStyles: {
-                block_quote: {
-                    paragraph: { spacing: { line: 300 }, indent: { left: 400 } },
-                    run: { italics: true, highlight: "lightGray", color: "666666" } 
-                },
-                code_block: {
-                    paragraph: { spacing: { line: 280 }, indent: { left: 400 } },
-                    run: { font: "Courier New", size: 22, highlight: "black", color: "white"}
-                },
-            }
-         })
+        const wordBlob = await quillToWord.generateWord(delta, { exportAs: "blob", paragraphStyles });
        
         saveAs(wordBlob, "document.docx");
     }
