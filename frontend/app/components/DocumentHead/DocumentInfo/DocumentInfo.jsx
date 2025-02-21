@@ -6,8 +6,8 @@ import { FaArrowsRotate } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Document, Packer, Paragraph, TextRun } from "docx";
-import { saveAs } from "file-saver";
+import { saveAs } from 'file-saver';
+import * as quillToWord from 'quill-to-word';
 
 
 
@@ -44,22 +44,13 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
         }
     }
 
-    const handleDownloadPDF = async (content) => {
-        const doc = new Document({
-            sections: [
-                {
-                    properties: {}, 
-                    children: [
-                        new Paragraph({
-                            children: [new TextRun(content)],
-                        })
-                    ]
-                }
-            ]
-        });
-
-        const blob = await Packer.toBlob(doc);
-        saveAs(blob, "document.docx");
+    const handleDownloadDOCX = async () => {
+        if(!quillRef.current) return;
+        
+        const delta = quillRef.current.getContents();
+        const wordBlob = await quillToWord.generateWord(delta, { exportAs: "blob" })
+       
+        saveAs(wordBlob, "document.docx");
     }
 
   return (
@@ -94,9 +85,9 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
                 </div>
                 <div className='flex font-sans text-sm font-[500]'>
                     <button
-                     onClick={() => handleDownloadPDF(quillRef.current.getText())}
-                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
-                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</button>
+                     onClick={handleDownloadDOCX}
+                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</button>
+                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
                 </div>
             </div>
         </section>
