@@ -110,6 +110,7 @@ const NoteDrawer = ({isOpenNote, onOpenNoteChange, document, user}) => {
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Notes</DrawerHeader>
               <hr />
               <DrawerBody ref={notesContainerRef} className='text-black'>
+                {notes.length == 0 &&  <h1 className='h-screen flex items-center justify-center text-xl font-mono font-bold text-slate-400'>No Notes</h1>}
                 {
                   notes.map(note => <div 
                     key={note._id}
