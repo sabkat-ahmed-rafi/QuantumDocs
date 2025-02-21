@@ -18,7 +18,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef}) => {
         if (document?.document?.title) {
             setTitle(document.document.title);
         }
-    }, [document]);
+    }, [document?.document?.title]);
 
 
     const updateDocTitle = async () => {
