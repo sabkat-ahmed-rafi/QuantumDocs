@@ -5,6 +5,7 @@ import { IoCloudUploadOutline } from 'react-icons/io5';
 import { FaArrowsRotate } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
     import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 
 
@@ -29,7 +30,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef}) => {
                 customProviderRef.current.send(JSON.stringify({type: 'titleUpdate' , documentId:document?.document?.id , newTitle: title}));
             };
         } catch(error) {
-            console.log("problem in updating title", error);
+            toast.error("Something went wrong")
         }
     }
 
