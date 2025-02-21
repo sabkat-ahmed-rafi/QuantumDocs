@@ -6,10 +6,12 @@ import { FaArrowsRotate } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
 
 
 
-const DocumentInfo = ({isTyping, document, customProviderRef}) => {
+const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
 
 
     const [title, setTitle] = useState("");
@@ -40,6 +42,24 @@ const DocumentInfo = ({isTyping, document, customProviderRef}) => {
             updateDocTitle();
             e.target.blur();
         }
+    }
+
+    const handleDownloadPDF = async (content) => {
+        const doc = new Document({
+            sections: [
+                {
+                    properties: {}, 
+                    children: [
+                        new Paragraph({
+                            children: [new TextRun(content)],
+                        })
+                    ]
+                }
+            ]
+        });
+
+        const blob = await Packer.toBlob(doc);
+        saveAs(blob, "document.docx");
     }
 
   return (
@@ -73,8 +93,10 @@ const DocumentInfo = ({isTyping, document, customProviderRef}) => {
                     </div>
                 </div>
                 <div className='flex font-sans text-sm font-[500]'>
-                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md '>Download PDF</button>
-                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md '>Download DOCS</button>
+                    <button
+                     onClick={() => handleDownloadPDF(quillRef.current.getText())}
+                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
+                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</button>
                 </div>
             </div>
         </section>

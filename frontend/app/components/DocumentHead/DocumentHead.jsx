@@ -3,7 +3,7 @@ import React from 'react'
 import DocumentInfo from './DocumentInfo/DocumentInfo'
 import DocumentFunc from './DocumentFunc/DocumentFunc'
 
-const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch }) => {
+const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef }) => {
   return (
     <>
         <section className='text-black bg-[#F9FBFD] flex md:flex-row flex-col items-center justify-between py-3 px-5 sticky top-0 z-10 border-b border-slate-300'>
@@ -12,6 +12,7 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, docu
                 isTyping={isTyping} 
                 document={document} 
                 customProviderRef={customProviderRef}
+                quillRef={quillRef}
                  />
             </div>
             <div>
