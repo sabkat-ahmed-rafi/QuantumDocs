@@ -153,7 +153,7 @@ const Document = () => {
       const decoded = new TextDecoder().decode(serverState);
       const delta = JSON.parse(decoded);
 
-      if (delta && delta.ops && quillRef.current && provider) { 
+      if (delta && delta.ops && quillRef.current && provider && activeUsers.length > 1) { 
         provider.on('synced', () => {    
             shouldObserveRef.current = false;
             ytext.delete(0, ytext.length); // Clear existing content
