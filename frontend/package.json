@@ -18,6 +18,8 @@
     "file-saver": "^2.0.5",
     "firebase": "^11.0.2",
     "framer-motion": "^11.11.17",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.0",
     "katex": "^0.16.19",
     "ldrs": "^1.0.2",
     "lodash.debounce": "^4.0.8",

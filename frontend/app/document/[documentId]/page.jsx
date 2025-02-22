@@ -229,7 +229,7 @@ const Document = () => {
                 <div 
                 ref={editorRef}
                 className='text-cursor caret-purple-600 after:caret-black lg:w-[700px] bg-white border border-gray-300 lg:p-10 md:p-7 p-4 ' 
-                style={{marginLeft: "auto", marginRight: "auto", height: "850px"}}
+                style={{marginLeft: "auto", marginRight: "auto", height: "1000px"}}
                 >
                 </div>
               </div>

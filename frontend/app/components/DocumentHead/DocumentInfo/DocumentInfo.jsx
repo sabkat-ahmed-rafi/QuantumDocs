@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { saveAs } from 'file-saver';
 import * as quillToWord from 'quill-to-word';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 
 
@@ -64,6 +66,22 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
         saveAs(wordBlob, "document.docx");
     }
 
+    const handleDownloadPDF = async () => {
+        if(!quillRef.current) return;
+
+        const quillEditor = quillRef.current.container;
+        const canvas = await html2canvas(quillEditor, {scale: 3});
+        const imgData = canvas.toDataURL("image/png", 1.0);
+
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight, undefined, "FAST");
+        pdf.save("document.pdf");
+
+    }
+
   return (
     <>
 
@@ -98,7 +116,9 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
                     <button
                      onClick={handleDownloadDOCX}
                      className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</button>
-                    <button className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
+                    <button 
+                     onClick={handleDownloadPDF}
+                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
                 </div>
             </div>
         </section>
