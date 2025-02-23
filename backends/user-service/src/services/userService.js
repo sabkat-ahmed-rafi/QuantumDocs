@@ -42,7 +42,7 @@ const searchUsers = async (searchText) => {
     return users;
 } 
 
-const addToFavourite = async (userEmail, documentId) => {
+const addToFavourite = async (documentId, userEmail) => {
     try {
         await userFavDocModel.findOneAndUpdate(
             { email: userEmail }, 
@@ -55,7 +55,7 @@ const addToFavourite = async (userEmail, documentId) => {
     }
 }
 
-const removeFavourite = async (userEmail, documentId) => {
+const removeFavourite = async (documentId, userEmail) => {
     try {
         await userFavDocModel.findOneAndUpdate(
             { email: userEmail },
@@ -67,6 +67,17 @@ const removeFavourite = async (userEmail, documentId) => {
     }
 }
 
+const getFavourite = async (documentId, userEmail) => {
+    try {
+        const user = await userFavDocModel.findOne(
+            { email: userEmail, favouriteDocuments: documentId },
+            { favouriteDocuments: { $eleMatch: { $eq: documentId } } }
+        );
+        return { success: true, data: user.favouriteDocuments[0] };
+    } catch (error) {
+        return { success: false, message: "Something went wrong" };
+    }
+}
 
 module.exports = {
     createUser,
@@ -74,5 +85,6 @@ module.exports = {
     getUserById,
     searchUsers,
     addToFavourite,
-    removeFavourite
+    removeFavourite,
+    getFavourite
 }
