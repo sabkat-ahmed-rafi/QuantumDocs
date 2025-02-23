@@ -22,6 +22,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
     const [title, setTitle] = useState("");
     const { user } = useSelector(state => state.auth);
     const [isFavourite, setIsFavourite] = useState();
+    const [loading, setLoading] = useState(false);
  
 
     useEffect(() => {
@@ -97,6 +98,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
     const handleAddToFavourite = async () => {
         const documentId = document?.document?.id;
         const userEmail = user?.email;
+        setLoading(true)
         try {
             const result = await axios.patch(
                 `${process.env.NEXT_PUBLIC_user_service}/api/users/addToFavourite`, 
@@ -104,15 +106,18 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
             )
             if(result.data.add.success) {
                 getFavourite();
+                setLoading(false)
             }
         } catch (error) {
             toast.error("Something went wrong");
+            setLoading(false)
         }
     }
 
     const handleRemoveFavourite = async () => {
         const documentId = document?.document?.id;
         const userEmail = user?.email;
+        setLoading(true)
         try {
             const result = await axios.delete(
                 `${process.env.NEXT_PUBLIC_user_service}/api/users/removeFavourite`, 
@@ -120,9 +125,11 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
             )
             if(result.data.remove.success) {
                 getFavourite();
+                setLoading(false)
             }
         } catch (error) {
             toast.error("Something went wrong");
+            setLoading(false)
         }
     }
 
@@ -159,8 +166,8 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
                         type="text"
                     />
                     {
-                        isFavourite ? <FaStar onClick={handleRemoveFavourite} size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer' />  :
-                        <FaRegStar onClick={handleAddToFavourite} size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer' />
+                        isFavourite ? <FaStar onClick={handleRemoveFavourite} size={30} className={`text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer ${loading ? "invisible":"flex"} transition-all`} />  :
+                        <FaRegStar onClick={handleAddToFavourite} size={30} className={`text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer ${loading ? "invisible":"flex"} transition-all`} />
                     }
                     <div className='md:flex items-center space-x-2 hidden'>
                         {
