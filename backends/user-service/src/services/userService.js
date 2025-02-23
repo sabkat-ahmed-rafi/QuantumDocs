@@ -82,8 +82,6 @@ const getFavourite = async (documentId, userEmail) => {
 
         if(documentId == user.favouriteDocuments[0]) {
             return { success: true, message: "The doc is in favourite list" };
-        } else if(user == null) {
-            return { success: true, message: "The doc is not in favourite list" };
         }
         
     } catch (error) {
