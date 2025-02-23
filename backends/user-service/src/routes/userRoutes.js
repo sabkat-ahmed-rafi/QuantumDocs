@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/', userController.createUser);
 router.get('/search', userController.searchUsers);
+router.post('/addToFavourite', userController.addToFavourite);
 router.get('/:uid', verifyToken, userController.getUserById);
 
 
