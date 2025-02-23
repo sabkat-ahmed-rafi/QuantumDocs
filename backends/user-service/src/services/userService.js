@@ -1,7 +1,8 @@
 const User = require('.././models/userModel');
+const userFavDocModel = require('../models/userFavDocModel');
 
 // Create a user 
-exports.createUser = async (userData) => {
+const createUser = async (userData) => {
     if(!userData) {
         throw new Error("User data not found")
     }
@@ -11,12 +12,12 @@ exports.createUser = async (userData) => {
 }
 
 // Get user by Email 
-exports.getUserByEmail = async (userEmail) => {
+const getUserByEmail = async (userEmail) => {
     return await User.findOne({email: userEmail});
 }
 
 //get a user by id
-exports.getUserById = async (userUid) => {
+const getUserById = async (userUid) => {
     if(!userUid) {
         throw new Error("User id is required");
     }
@@ -29,7 +30,7 @@ exports.getUserById = async (userUid) => {
 }
 
 //search user 
-exports.searchUsers = async (searchText) => {
+const searchUsers = async (searchText) => {
 
     if (!searchText) {
         throw new Error("Search text is required");
@@ -40,3 +41,25 @@ exports.searchUsers = async (searchText) => {
 
     return users;
 } 
+
+const addToFavourite = async (userEmail, documentId) => {
+    try {
+        await userFavDocModel.findOneAndUpdate(
+            { email: userEmail }, 
+            { $addToSet: { favouriteDocuments: documentId } },
+            { upsert: true }
+        );
+        return { success: true, message: "Added to favourite" };
+    } catch (error) {
+        return { success: false, message: "Something went wrong" }; 
+    }
+}
+
+
+module.exports = {
+    createUser,
+    getUserByEmail,
+    getUserById,
+    searchUsers,
+    addToFavourite
+}
