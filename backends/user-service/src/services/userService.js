@@ -71,8 +71,9 @@ const getFavourite = async (documentId, userEmail) => {
     try {
         const user = await userFavDocModel.findOne(
             { email: userEmail, favouriteDocuments: documentId },
-            { favouriteDocuments: { $eleMatch: { $eq: documentId } } }
+            { favouriteDocuments: { $elemMatch: { $eq: documentId } } }
         );
+        
         return { success: true, data: user.favouriteDocuments[0] };
     } catch (error) {
         return { success: false, message: "Something went wrong" };
