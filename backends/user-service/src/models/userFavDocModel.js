@@ -7,9 +7,10 @@ const userFavDocSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
-    favouriteDocuments: [{
-        documentId: String,
-    }]
+    favouriteDocuments: {
+        type: [String],
+        default: []
+    }
 });
 
 
