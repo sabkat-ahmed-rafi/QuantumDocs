@@ -43,3 +43,15 @@ exports.searchUsers = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.addToFavourite = async (req, res) => {
+    try {
+        const {documentId, userEmail} = req.body;
+        if(userEmail) {
+            const result = await userService.addToFavourite(documentId, userEmail);
+            res.status(200).json({result});
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
