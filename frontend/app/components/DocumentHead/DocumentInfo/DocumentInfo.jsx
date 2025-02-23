@@ -10,6 +10,9 @@ import { saveAs } from 'file-saver';
 import * as quillToWord from 'quill-to-word';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { FaRegStar } from "react-icons/fa6";
 
 
 
@@ -17,6 +20,8 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
 
 
     const [title, setTitle] = useState("");
+    const { user } = useSelector(state => state.auth);
+    const [isFavourite, setIsFavourite] = useState();
  
 
     useEffect(() => {
@@ -24,6 +29,13 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
             setTitle(document.document.title);
         }
     }, [document?.document?.title]);
+
+
+    useEffect(() => {
+        if (document?.document?.id && user?.uid) {
+            getFavourite();
+        }
+    }, [document?.document?.id, user?.uid])
 
 
     const updateDocTitle = async () => {
@@ -82,6 +94,54 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
 
     }
 
+    const handleAddToFavourite = async () => {
+        const documentId = document?.document?.id;
+        const userEmail = user?.email;
+        try {
+            const result = await axios.patch(
+                `${process.env.NEXT_PUBLIC_user_service}/api/users/addToFavourite`, 
+                { documentId, userEmail }
+            )
+            if(result.data.add.success) {
+                getFavourite();
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+
+    const handleRemoveFavourite = async () => {
+        const documentId = document?.document?.id;
+        const userEmail = user?.email;
+        try {
+            const result = await axios.delete(
+                `${process.env.NEXT_PUBLIC_user_service}/api/users/removeFavourite`, 
+                { data: { documentId, userEmail } }
+            )
+            if(result.data.remove.success) {
+                getFavourite();
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+
+    const getFavourite = async () => {
+        const documentId = document?.document?.id;
+        const userEmail = user?.email;
+        try {
+            const result = await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/users/getFavourite`, { params: { documentId, userEmail } } );
+            if(result.data.get.success) {
+                setIsFavourite(true);
+            } else {
+                setIsFavourite(false);
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    }
+
+
   return (
     <>
 
@@ -89,7 +149,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
             <SiGoogledocs size={40} className="text-purple-500" />
             <div className='flex-col space-y-3'>
                 <div className='flex items-center space-x-3'>
-                        <input 
+                    <input 
                         name="title"
                         value={title || ""}  
                         onChange={(e) => setTitle(e.target.value)}
@@ -97,17 +157,21 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
                         onKeyDown={handleKeyDownUpdate}
                         className="text-xl px-1 bg-[#F9FBFD] w-[220px] border-2 border-[#F9FBFD] hover:border-black transition-all rounded-md"
                         type="text"
-                        />
-                    <FaStar size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200' />
+                    />
+                    {
+                        isFavourite ? <FaStar onClick={handleRemoveFavourite} size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer' />  :
+                        <FaRegStar onClick={handleAddToFavourite} size={30} className='text-purple-700 p-1 rounded-full hover:bg-slate-200 cursor-pointer' />
+                    }
                     <div className='md:flex items-center space-x-2 hidden'>
                         {
                            isTyping ? 
                            <>
-                           <FaArrowsRotate className='animate-spin' /><p className='ml-1 text-sm font-semibold'>Saving...</p>
+                             <FaArrowsRotate className='animate-spin' />
+                             <p className='ml-1 text-sm font-semibold'>Saving...</p>
                            </> : 
                            <>
-                           <IoCloudUploadOutline size={25} className='text-sm font-semibold' />
-                           <p className='ml-1 text-sm font-semibold'>Saved</p>
+                             <IoCloudUploadOutline size={25} className='text-sm font-semibold' />
+                             <p className='ml-1 text-sm font-semibold'>Saved</p>
                            </> 
                         }
                     </div>
