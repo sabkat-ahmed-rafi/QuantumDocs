@@ -55,11 +55,24 @@ const addToFavourite = async (userEmail, documentId) => {
     }
 }
 
+const removeFavourite = async (userEmail, documentId) => {
+    try {
+        await userFavDocModel.findOneAndUpdate(
+            { email: userEmail },
+            { $pull: { favouriteDocuments: documentId } }
+        )
+        return { success: true, message: "Removed from favourite" };
+    } catch (error) {
+        return { success: false, message: "Something went wrong" };
+    }
+}
+
 
 module.exports = {
     createUser,
     getUserByEmail,
     getUserById,
     searchUsers,
-    addToFavourite
+    addToFavourite,
+    removeFavourite
 }
