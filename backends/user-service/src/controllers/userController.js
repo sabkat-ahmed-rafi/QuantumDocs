@@ -70,7 +70,8 @@ exports.removeFavourite = async (req, res) => {
 
 exports.getFavourite = async (req, res) => {
     try {
-        const {documentId, userEmail} = req.body;
+        const {documentId, userEmail} = req.query;
+        
         if(userEmail) {
             const result = await userService.getFavourite(documentId, userEmail);
             res.status(200).json({result});
