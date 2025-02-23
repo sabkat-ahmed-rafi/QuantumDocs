@@ -73,8 +73,11 @@ const getFavourite = async (documentId, userEmail) => {
             { email: userEmail, favouriteDocuments: documentId },
             { favouriteDocuments: { $elemMatch: { $eq: documentId } } }
         );
+
+        if(documentId == user.favouriteDocuments[0]) {
+            return { success: true, data: user.favouriteDocuments[0] };
+        }
         
-        return { success: true, data: user.favouriteDocuments[0] };
     } catch (error) {
         return { success: false, message: "Something went wrong" };
     }
