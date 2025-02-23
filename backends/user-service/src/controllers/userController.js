@@ -48,8 +48,8 @@ exports.addToFavourite = async (req, res) => {
     try {
         const {documentId, userEmail} = req.body;
         if(userEmail) {
-            const result = await userService.addToFavourite(documentId, userEmail);
-            res.status(200).json({result});
+            const add = await userService.addToFavourite(documentId, userEmail);
+            res.status(200).json({add});
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -60,8 +60,8 @@ exports.removeFavourite = async (req, res) => {
     try {
         const {documentId, userEmail} = req.body;
         if(userEmail) {
-            const result = await userService.removeFavourite(documentId, userEmail);
-            res.status(200).json({result});
+            const remove = await userService.removeFavourite(documentId, userEmail);
+            res.status(200).json({remove});
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -73,8 +73,8 @@ exports.getFavourite = async (req, res) => {
         const {documentId, userEmail} = req.query;
         
         if(userEmail) {
-            const result = await userService.getFavourite(documentId, userEmail);
-            res.status(200).json({result});
+            const get = await userService.getFavourite(documentId, userEmail);
+            res.status(200).json({get});
         }
     } catch (error) {
         res.status(500).json({ error: error.message });

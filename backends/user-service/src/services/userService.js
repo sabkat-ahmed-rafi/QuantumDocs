@@ -44,12 +44,14 @@ const searchUsers = async (searchText) => {
 
 const addToFavourite = async (documentId, userEmail) => {
     try {
-        await userFavDocModel.findOneAndUpdate(
+        const addedDoc = await userFavDocModel.findOneAndUpdate(
             { email: userEmail }, 
             { $addToSet: { favouriteDocuments: documentId } },
-            { upsert: true }
+            { upsert: true, new: true }
         );
-        return { success: true, message: "Added to favourite" };
+        if(documentId == addedDoc.favouriteDocuments[0]) {
+            return { success: true, message: "Added to favourite" };
+        }
     } catch (error) {
         return { success: false, message: "Something went wrong" }; 
     }
@@ -57,11 +59,14 @@ const addToFavourite = async (documentId, userEmail) => {
 
 const removeFavourite = async (documentId, userEmail) => {
     try {
-        await userFavDocModel.findOneAndUpdate(
+        const removedUser =  await userFavDocModel.findOneAndUpdate(
             { email: userEmail },
-            { $pull: { favouriteDocuments: documentId } }
+            { $pull: { favouriteDocuments: documentId } },
+            { new: true }
         )
-        return { success: true, message: "Removed from favourite" };
+        if(removedUser.favouriteDocuments.length == 0) {
+            return { success: true, message: "Removed from favourite" };
+        }
     } catch (error) {
         return { success: false, message: "Something went wrong" };
     }
@@ -71,7 +76,8 @@ const getFavourite = async (documentId, userEmail) => {
     try {
         const user = await userFavDocModel.findOne(
             { email: userEmail, favouriteDocuments: documentId },
-            { favouriteDocuments: { $elemMatch: { $eq: documentId } } }
+            { favouriteDocuments: { $elemMatch: { $eq: documentId } } },
+            { new: true }
         );
 
         if(documentId == user.favouriteDocuments[0]) {
