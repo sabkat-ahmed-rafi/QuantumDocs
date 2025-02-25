@@ -1,6 +1,7 @@
 import { Create } from "./components/CreateDocument/Create";
 import NavBar from "./components/Navbar/NavBar"
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute"
+import FilterHeader from "./components/UI/FilterHeader";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         </nav>
         <main>
           <Create />
+          <FilterHeader />
         </main>
     
       </section>
