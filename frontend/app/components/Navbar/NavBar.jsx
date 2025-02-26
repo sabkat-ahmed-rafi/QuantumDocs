@@ -18,6 +18,7 @@ export default function NavBar() {
   const {user: userFromdb} = useSelector(state => state.auth)
   const [user, setUser] = useState({})
   const axiosSecure = useAxiosSecure();
+  const [search, setSearch] = useState("");
   console.log(userFromdb)
   
   useEffect(() => {
@@ -63,11 +64,13 @@ export default function NavBar() {
           placeholder="Search"
           fullWidth
           className=" focus:bg-white max-w-[800px] lg:w-[720px] md:w-[400px]"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           startContent={
             <IoSearchOutline color="black" className="text-2xl text-default-400  pointer-events-none flex-shrink-0 animate-pulse" />
           }
         />
-        <DocumentSearch />
+        <DocumentSearch search={search} setSearch={setSearch} />
       </NavbarContent>
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
