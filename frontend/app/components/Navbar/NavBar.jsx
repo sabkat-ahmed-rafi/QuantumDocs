@@ -8,6 +8,7 @@ import { SiGoogledocs } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import useAxiosSecure from "@/app/hooks/useAxiosSecure";
+import DocumentSearch from "../UI/DocumentSearch";
 
 
 
@@ -55,7 +56,7 @@ export default function NavBar() {
       </NavbarContent>
       
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-      <Input
+        <Input
           size="lg"
           radius="full"
           type="Search"
@@ -66,6 +67,7 @@ export default function NavBar() {
             <IoSearchOutline color="black" className="text-2xl text-default-400  pointer-events-none flex-shrink-0 animate-pulse" />
           }
         />
+        <DocumentSearch />
       </NavbarContent>
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
