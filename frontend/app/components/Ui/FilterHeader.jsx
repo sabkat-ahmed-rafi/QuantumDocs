@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { MdOutlineGridView } from "react-icons/md";
 import { TfiViewListAlt } from "react-icons/tfi";
 
@@ -8,9 +8,32 @@ import { TfiViewListAlt } from "react-icons/tfi";
 
 const FilterHeader = ({handleOwnedDocs}) => {
     const isGrid = true;
+    const [isSticky, setIsSticky] = useState(false);
+    const headerRef = useRef(null);
+
+    const observerCallback = useCallback(([entry]) => {
+      setIsSticky(!entry.isIntersecting);
+    }, []);
+  
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(observerCallback, { root: null, threshold: 1.0 });
+      if(headerRef.current) observer.observe(headerRef.current);
+      
+
+      return () => {
+        if(headerRef.current) {
+          observer.unobserve(headerRef.current);
+        }
+      };
+    }, [observerCallback])
+
   return (
     <>
-      <section className='text-black bg-white flex items-center p-5 border justify-between md:px-[170px]'>
+      <div ref={headerRef}></div>
+      <section className={`text-black bg-white flex items-center p-5 justify-between md:px-[170px] 
+        z-10 sticky top-[62px] transition-shadow duration-300 
+        ${isSticky ? 'shadow-lg' : 'shadow-none'}`}>
         <h1 className='font-semibold font-sans'>Recent documents</h1>
         <div className='flex items-center md:space-x-10'>
           <select 

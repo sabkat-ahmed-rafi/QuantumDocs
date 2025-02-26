@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/images/favicon.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black`}
       >
         <Providers>
           <RootLayoutClient>{children}</RootLayoutClient>
