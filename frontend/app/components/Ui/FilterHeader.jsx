@@ -13,7 +13,7 @@ const FilterHeader = () => {
         <div className='flex items-center space-x-10'>
           <select 
           className='hover:bg-slate-100 transition-all p-2 rounded-md focus:outline-none cursor-pointer' 
-          value="Owned by me"
+          defaultValue="Owned by me"
           >
            <option className='bg-white py-2' value="Owned by me">Owned by me</option>
            <option className='bg-white' value="Owned by anyone">Owned by anyone</option>

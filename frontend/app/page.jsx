@@ -1,7 +1,7 @@
 import { Create } from "./components/CreateDocument/Create";
 import NavBar from "./components/Navbar/NavBar"
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute"
-import FilterHeader from "./components/UI/FilterHeader";
+import DocsContainer from "./components/UI/DocsContainer";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
         </nav>
         <main>
           <Create />
-          <FilterHeader />
+          <DocsContainer />
         </main>
     
       </section>
