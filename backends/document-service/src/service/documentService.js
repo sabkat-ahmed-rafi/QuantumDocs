@@ -207,7 +207,7 @@ const searchDocument = async (searchText) => {
         };
         
         const query = { title: { $regex: `^${searchText}`, $options: "i" } };
-        const documents = await Document.find(query).select("name email profilePicture").limit(5);
+        const documents = await Document.find(query).select("title owner.name createdAt").limit(5);
     
         return { success: true, message: "Documents found", documents };
     } catch (error) {
