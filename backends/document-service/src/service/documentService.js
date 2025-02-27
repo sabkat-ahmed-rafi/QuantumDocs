@@ -208,13 +208,19 @@ const changeDocumentRole = async (documentId, newRole) => {
     }
 }
 
-const searchDocument = async (searchText) => {
+const searchDocument = async (search, userEmail) => {
     try {
-        if (!searchText) {
+        if (!search) {
             return { success: false, message: "Internal server error" };
         };
         
-        const query = { title: { $regex: `^${searchText}`, $options: "i" } };
+        const query = { 
+            $or: [
+                { "owner.email": userEmail },
+                { "sharedPersons.email": userEmail }
+            ],
+            title: { $regex: `^${search}`, $options: "i" }
+         };
         const documents = await Document.find(query).select("title owner.name createdAt").limit(5);
     
         return { success: true, message: "Documents found", documents };
