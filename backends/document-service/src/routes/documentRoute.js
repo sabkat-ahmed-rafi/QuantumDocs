@@ -10,6 +10,7 @@ router.delete('/giveAccess/removeAccess', documentController.removeAccess);
 router.patch('/accessStatus/changeAccess', documentController.changeDocumentStatus);
 router.patch('/accessStatus/changeRole', documentController.changeDocumentRole);
 router.get('/search', documentController.searchDocument);
+router.get('/getAllDocuments', documentController.getAllDocuments);
 router.get('/:id', documentController.get);
 
 module.exports = router;
