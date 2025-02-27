@@ -70,3 +70,15 @@ exports.changeDocumentRole = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 }
+
+exports.searchDocument = async (req, res) => {
+    try {
+        const searchText = req.query.search;
+        if(searchText) {
+            const documents = await documentService.searchDocument(searchText);
+            res.status(200).json({ documents });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
