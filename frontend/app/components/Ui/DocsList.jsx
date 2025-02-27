@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DocsList = () => {
+const DocsList = ({ documents }) => {
   return (
     <>
       <section className='bg-white text-black z-50 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-[40px] gap-9 md:gap-9 lg:gap-10 xl:px-[170px] md:px-[50px] pb-[100px]'>

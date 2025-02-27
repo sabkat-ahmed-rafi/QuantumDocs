@@ -6,8 +6,7 @@ import { TfiViewListAlt } from "react-icons/tfi";
 
 
 
-const FilterHeader = ({handleOwnedDocs}) => {
-    const isGrid = true;
+const FilterHeader = ({setOwnershipFilter, isGrid}) => {
     const [isSticky, setIsSticky] = useState(false);
     const headerRef = useRef(null);
 
@@ -17,10 +16,10 @@ const FilterHeader = ({handleOwnedDocs}) => {
   
 
     useEffect(() => {
+      // setting observer to see if its time to show the shadow or not 
       const observer = new IntersectionObserver(observerCallback, { root: null, threshold: 1.0 });
       if(headerRef.current) observer.observe(headerRef.current);
       
-
       return () => {
         if(headerRef.current) {
           observer.unobserve(headerRef.current);
@@ -39,10 +38,10 @@ const FilterHeader = ({handleOwnedDocs}) => {
           <select 
           className='hover:bg-slate-100 transition-all p-2 rounded-md focus:outline-none cursor-pointer' 
           defaultValue="Owned by me"
-          onChange={handleOwnedDocs}
+          onChange={(e) => setOwnershipFilter(e.target.value)}
           >
-           <option className='bg-white py-2' value="Owned by me">Owned by me</option>
-           <option className='bg-white' value="Owned by anyone">Owned by anyone</option>
+           <option className='bg-white py-2' value="me">Owned by me</option>
+           <option className='bg-white' value="anyone">Owned by anyone</option>
           </select>
           {
             isGrid ?
@@ -50,7 +49,7 @@ const FilterHeader = ({handleOwnedDocs}) => {
                 <MdOutlineGridView size={27} className='text-slate-600' /> 
               </p> : 
               <p className='hover:bg-slate-100 p-2 rounded-full cursor-pointer'>
-                <TfiViewListAlt  size={27} className='text-slate-600' /> 
+                <TfiViewListAlt  size={23} className='text-slate-600' /> 
               </p>       
           }
         </div>
