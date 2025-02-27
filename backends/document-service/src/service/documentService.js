@@ -200,6 +200,21 @@ const changeDocumentRole = async (documentId, newRole) => {
     }
 }
 
+const searchDocument = async (searchText) => {
+    try {
+        if (!searchText) {
+            return { success: false, message: "Internal server error" };
+        };
+        
+        const query = { title: { $regex: `^${searchText}`, $options: "i" } };
+        const documents = await Document.find(query).select("name email profilePicture").limit(5);
+    
+        return { success: true, message: "Documents found", documents };
+    } catch (error) {
+        return { success: false, message: "Internal server error" };
+    }
+} 
+
 module.exports = {
     createDocument,
     getDocumentById,
