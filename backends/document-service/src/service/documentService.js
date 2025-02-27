@@ -9,6 +9,15 @@ const createDocument = async (documentData) => {
     return await document.save();
 };
 
+const getAllDocument = async () => {
+    try {
+        const documents = await Document.find();
+        return { success: true, message: "Message found", documents };
+    } catch (error) {
+        return { success: false, message: "Something went wrong" }
+    }
+};
+
 const getDocumentById = async (documentId) => {
     if(!documentId) {
         throw new Error("Document id is required")
@@ -33,7 +42,6 @@ const getDocumentById = async (documentId) => {
         throw new Error(`Error fetching document: ${error.message}`);
     }
 };
-
 
 const updateDocument = async (updatedData) => {
     try {
@@ -225,5 +233,6 @@ module.exports = {
     removeAccess,
     changeDocumentStatus,
     changeDocumentRole,
-    searchDocument
+    searchDocument,
+    getAllDocument
 };
