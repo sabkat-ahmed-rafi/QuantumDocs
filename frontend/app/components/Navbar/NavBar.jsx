@@ -70,7 +70,7 @@ export default function NavBar() {
             <IoSearchOutline color="black" className="text-2xl text-default-400  pointer-events-none flex-shrink-0 animate-pulse" />
           }
         />
-        <DocumentSearch search={search} setSearch={setSearch} />
+        <DocumentSearch search={search} />
       </NavbarContent>
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
