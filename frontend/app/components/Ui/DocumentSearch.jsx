@@ -8,6 +8,23 @@ const DocumentSearch = ({search, userFromdb}) => {
 
       const [documents, setDocuments] = useState([]);
 
+      const fetchDocument = async (signal, userEmail) => {
+        try {
+            const result = await axios.get(
+              `${process.env.NEXT_PUBLIC_document_service}/api/document/search?search=${search}&userEmail=${userEmail}`,
+              { signal }
+            )
+            setDocuments(result?.data?.documents?.documents);
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+      };
+
+      const formatDate = (isoDate) => {
+        return new Date(isoDate).toLocaleDateString("en-GB");
+      };
+
+
       // Handleding searched documents
       useEffect( () => {
     
@@ -20,25 +37,13 @@ const DocumentSearch = ({search, userFromdb}) => {
           return;
         };
     
-        const fetchDocument = async () => {
-        try {
-            const result = await axios.get(
-              `${process.env.NEXT_PUBLIC_document_service}/api/document/search?search=${search}&userEmail=${userEmail}`,
-              { signal }
-            )
-            setDocuments(result?.data?.documents?.documents);
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
-      };
-      fetchDocument()
+        fetchDocument(signal, userEmail)
+
         return () => controller.abort()
       }, [search])
 
 
-      const formatDate = (isoDate) => {
-        return new Date(isoDate).toLocaleDateString("en-GB");
-      };
+
 
   return (
     <>
