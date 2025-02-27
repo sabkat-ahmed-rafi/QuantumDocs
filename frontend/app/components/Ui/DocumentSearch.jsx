@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { SiGoogledocs } from 'react-icons/si';
 import { toast } from 'react-toastify';
 
-const DocumentSearch = ({search}) => {
+const DocumentSearch = ({search, userFromdb}) => {
 
       const [documents, setDocuments] = useState([]);
 
@@ -13,6 +13,7 @@ const DocumentSearch = ({search}) => {
     
         const controller = new AbortController(); 
         const signal = controller.signal;
+        const userEmail = userFromdb?.email;
     
         if (search === "") {
             setDocuments([]);
@@ -22,7 +23,7 @@ const DocumentSearch = ({search}) => {
         const fetchDocument = async () => {
         try {
             const result = await axios.get(
-              `${process.env.NEXT_PUBLIC_document_service}/api/document/search?search=${search}`,
+              `${process.env.NEXT_PUBLIC_document_service}/api/document/search?search=${search}&userEmail=${userEmail}`,
               { signal }
             )
             setDocuments(result?.data?.documents?.documents);
