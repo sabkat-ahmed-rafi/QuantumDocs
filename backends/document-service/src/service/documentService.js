@@ -224,5 +224,6 @@ module.exports = {
     giveRoleToAccessibleUser,
     removeAccess,
     changeDocumentStatus,
-    changeDocumentRole
+    changeDocumentRole,
+    searchDocument
 };
