@@ -74,7 +74,7 @@ exports.changeDocumentRole = async (req, res) => {
 exports.searchDocument = async (req, res) => {
     try {
         const {search, userEmail} = req.query;
-        if(searchText) {
+        if(search && userEmail) {
             const documents = await documentService.searchDocument(search, userEmail);
             res.status(200).json({ documents });
         }
