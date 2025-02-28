@@ -9,9 +9,23 @@ const createDocument = async (documentData) => {
     return await document.save();
 };
 
-const getAllDocument = async () => {
+const getAllDocument = async (userEmail, ownershipFilter) => {
+
+    let query;
+
+    if(ownershipFilter === "me") {
+        query = { "owner.email": userEmail };
+    } else if(ownershipFilter === "anyone") {
+        query = {
+            $or: [
+                query = { "owner.email": userEmail },
+                { sharedPersons: { $elemMatch: { email: userEmail } } }                
+            ]
+        };
+    }
+    
     try {
-        const documents = await Document.find();
+        const documents = await Document.find(query);
         return { success: true, message: "Message found", documents };
     } catch (error) {
         return { success: false, message: "Something went wrong" }
