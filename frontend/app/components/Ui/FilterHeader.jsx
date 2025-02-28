@@ -6,7 +6,7 @@ import { TfiViewListAlt } from "react-icons/tfi";
 
 
 
-const FilterHeader = ({setOwnershipFilter, isGrid}) => {
+const FilterHeader = ({setOwnershipFilter, ownershipFilter, isGrid}) => {
     const [isSticky, setIsSticky] = useState(false);
     const headerRef = useRef(null);
 
@@ -37,7 +37,7 @@ const FilterHeader = ({setOwnershipFilter, isGrid}) => {
         <div className='flex items-center md:space-x-10'>
           <select 
           className='hover:bg-slate-100 transition-all p-2 rounded-md focus:outline-none cursor-pointer' 
-          defaultValue="Owned by me"
+          defaultValue={ownershipFilter}
           onChange={(e) => setOwnershipFilter(e.target.value)}
           >
            <option className='bg-white py-2' value="me">Owned by me</option>
