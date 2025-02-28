@@ -25,7 +25,7 @@ const AddDocument = () => {
             const documentId = response?.document?._id;
             setTimeout(() => {
               router.push(`/document/${documentId}`);
-            }, 2000);
+            }, 800);
         } catch(error) {
             setIsLoading(false); 
             console.log("Failed to create document:", error);
