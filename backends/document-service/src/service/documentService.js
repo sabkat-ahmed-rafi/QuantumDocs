@@ -26,7 +26,7 @@ const getAllDocument = async (userEmail, ownershipFilter) => {
     
     try {
         const documents = await Document.find(query);
-        return { success: true, message: "Message found", documents };
+        return { success: true, message: "Documents found", documents };
     } catch (error) {
         return { success: false, message: "Something went wrong" }
     }
