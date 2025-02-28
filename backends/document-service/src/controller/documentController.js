@@ -84,8 +84,9 @@ exports.searchDocument = async (req, res) => {
 }
 
 exports.getAllDocuments = async (req, res) => {
+	const {userEmail, ownershipFilter} = req.query;
     try {
-        const documents = await documentService.getAllDocument();
+        const documents = await documentService.getAllDocument(userEmail, ownershipFilter);
         res.status(200).json({ documents });
     } catch (error) {
         res.status(500).json({ error: error.message });
