@@ -20,6 +20,7 @@ const DocsContainer = () => {
         `${process.env.NEXT_PUBLIC_document_service}/api/document/getAllDocuments`,
         { params: { userEmail: user?.email, ownershipFilter } }
       )
+      setDocuments(result.data.documents.documents)
       console.log(result);
     } catch (error) {
       toast.error("Something went wrong");
