@@ -1,6 +1,7 @@
 import React from 'react'
 import DocListRaw from './DocListRaw';
 import DocListColumn from './DocListColumn';
+import { toast } from 'react-toastify';
 
 // Keeping formatDate function outside of the component so it won't recreated on every render 
 const formatDate = (isoDate) => {
