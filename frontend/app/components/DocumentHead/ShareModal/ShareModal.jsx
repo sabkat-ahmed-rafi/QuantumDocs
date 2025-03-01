@@ -101,7 +101,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     }
 
     try {
-      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess`, {user, documentId})
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/access`, {user, documentId})
       if(result.data.sharedAccess.message == 'User already has access') {
         toast.error(result.data.sharedAccess.message);
       } else if(result.data.sharedAccess.message == 'Access Denied') {
