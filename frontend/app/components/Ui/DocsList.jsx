@@ -17,7 +17,7 @@ const DocsList = ({ documents, isGrid, deleteDocument }) => {
 
   const handleCopyDocumentLink = useCallback(async (documentId) => {
     try {
-      const documentLink = `${process.env.NEXT_PUBLIC_FRONTEND}/document/${documentId}`;
+      const documentLink = `${process.env.NEXT_PUBLIC_frontend}/document/${documentId}`;
       await navigator.clipboard.writeText(documentLink);
     } catch (error) {
       toast.error("Something went wrong");
