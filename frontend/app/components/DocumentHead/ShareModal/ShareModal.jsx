@@ -31,7 +31,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     const documentId = document?.document?.id;
     console.log(newRole, userEmail, documentId);
     try {
-      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/giveAccess/giveAccessRole`, {newRole, userEmail, documentId})
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/access/role`, {newRole, userEmail, documentId})
       if(result.data.giveRole.message === "User role updated successfully") {
         toast.success(`User role updated to ${newRole}`);
         documentRefetch();
