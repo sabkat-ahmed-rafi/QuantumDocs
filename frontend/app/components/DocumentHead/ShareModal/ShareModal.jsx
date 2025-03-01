@@ -47,7 +47,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     const newRole = e.target.value;
     const documentId = document.document.id;
     try {
-      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/accessStatus/changeRole`, { documentId, newRole });
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/status/role`, { documentId, newRole });
       if (result.data.changeRole.success == true) {
         documentRefetch();
         toast.success(`User role updated to ${newRole}`);
@@ -66,7 +66,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
     }
     const documentId = document?.document?.id;
     try {
-      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/accessStatus/changeAccess`, { documentId, newValue })
+      const result = await axios.patch(`${process.env.NEXT_PUBLIC_document_service}/api/document/status/visibility`, { documentId, newValue })
       if (result.data.changeStatus.success == true) {
         documentRefetch();
       }

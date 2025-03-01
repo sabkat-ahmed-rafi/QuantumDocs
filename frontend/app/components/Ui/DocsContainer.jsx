@@ -20,7 +20,7 @@ const DocsContainer = () => {
   const getAllDocuments = async () => {
     try {
       const result = await axios.get(
-        `${process.env.NEXT_PUBLIC_document_service}/api/document/getAllDocuments`,
+        `${process.env.NEXT_PUBLIC_document_service}/api/document`,
         { params: { userEmail: user?.email, ownershipFilter } }
       )
       setDocuments(result.data.documents.documents)
