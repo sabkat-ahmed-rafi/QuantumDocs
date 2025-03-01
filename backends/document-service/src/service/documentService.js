@@ -246,7 +246,9 @@ const searchDocument = async (search, userEmail) => {
 const deleteDocument = async (documentId) => {
     try {
         const result = await Document.findByIdAndDelete(documentId);
-        return { success: true, message: "Document deleted successfully", result }
+        if(result._id == documentId) {  
+          return { success: true, message: "Document deleted successfully" }
+        }
     } catch (error) {
         return { success: false, message: error.message }
     }
