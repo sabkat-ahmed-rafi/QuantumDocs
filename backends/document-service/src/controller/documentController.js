@@ -92,3 +92,13 @@ exports.getAllDocuments = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.deleteDocument = async (req, res) => {
+	const documentId = req.params.documentId;
+    try {
+        const deleteResult = await documentService.deleteDocument(documentId);
+        res.status(200).json({ deleteResult });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
