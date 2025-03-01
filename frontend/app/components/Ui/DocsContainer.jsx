@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import NoDocs from './NoDocs'
+import { useDeleteDataMutation } from '@/app/slices/docApiSlice'
 
 const DocsContainer = () => {
 
@@ -14,6 +15,7 @@ const DocsContainer = () => {
   const [ownershipFilter, setOwnershipFilter] = useState("anyone")
   const [documents, setDocuments] = useState([]);
   const {user} = useSelector(state => state.auth);
+  const [ deleteData, { isLoading: isDeleting } ] = useDeleteDataMutation()
 
   const getAllDocuments = async () => {
     try {
@@ -31,6 +33,15 @@ const DocsContainer = () => {
   useEffect(() => {
     getAllDocuments()
   }, [user?.email, ownershipFilter])
+
+  const deleteDocument = async (documentId) => {
+    try {
+      const result = await deleteData(documentId).unwrap();
+      console.log(deleteDocument);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }
 
   return (
     <>
