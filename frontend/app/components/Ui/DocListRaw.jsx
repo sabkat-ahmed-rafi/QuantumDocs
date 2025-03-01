@@ -12,11 +12,11 @@ const DocListRaw = ({ documents, formatDate, deleteDocument }) => {
           documents.map((document) => (
             <div
             key={document._id} 
-            className="flex flex-col rounded-sm shadow-md w-60 sm:w-56 h-72"
+            className="flex flex-col rounded-sm shadow-sm w-60 sm:w-56 h-72 border"
             >
               <Link
               href={`/document/${document._id}`}
-              className="h-64 rounded-t dark:bg-gray-300 animate-pulse" 
+              className="h-64 dark:bg-gray-300" 
               >
                 {/* <img src='/'/> */}
               </Link>
