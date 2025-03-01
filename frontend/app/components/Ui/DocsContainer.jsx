@@ -10,7 +10,7 @@ import NoDocs from './NoDocs'
 
 const DocsContainer = () => {
 
-  const [isGrid, setIsGrid] = useState(false);
+  const [isGrid, setIsGrid] = useState(true);
   const [ownershipFilter, setOwnershipFilter] = useState("anyone")
   const [documents, setDocuments] = useState([]);
   const {user} = useSelector(state => state.auth);
@@ -34,9 +34,9 @@ const DocsContainer = () => {
 
   return (
     <>
-      <FilterHeader setOwnershipFilter={setOwnershipFilter} ownershipFilter={ownershipFilter} isGrid={isGrid} />
+      <FilterHeader setOwnershipFilter={setOwnershipFilter} ownershipFilter={ownershipFilter} setIsGrid={setIsGrid} isGrid={isGrid} />
       {
-        documents.length == 0 ? <NoDocs /> : <DocsList documents={documents} />
+        documents.length == 0 ? <NoDocs /> : <DocsList documents={documents} isGrid={isGrid} />
       }
     </>
   )

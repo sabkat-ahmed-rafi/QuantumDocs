@@ -6,7 +6,7 @@ import { TfiViewListAlt } from "react-icons/tfi";
 
 
 
-const FilterHeader = ({setOwnershipFilter, ownershipFilter, isGrid}) => {
+const FilterHeader = ({setOwnershipFilter, ownershipFilter, setIsGrid, isGrid}) => {
     const [isSticky, setIsSticky] = useState(false);
     const headerRef = useRef(null);
 
@@ -45,11 +45,11 @@ const FilterHeader = ({setOwnershipFilter, ownershipFilter, isGrid}) => {
           </select>
           {
             isGrid ?
-              <p className='hover:bg-slate-100 p-2 rounded-full cursor-pointer'>
-                <MdOutlineGridView size={27} className='text-slate-600' /> 
+              <p onClick={() => setIsGrid(!isGrid)} className='hover:bg-slate-100 p-2 rounded-full cursor-pointer'>
+                <TfiViewListAlt  size={23}  className='text-slate-600' /> 
               </p> : 
-              <p className='hover:bg-slate-100 p-2 rounded-full cursor-pointer'>
-                <TfiViewListAlt  size={23} className='text-slate-600' /> 
+              <p onClick={() => setIsGrid(!isGrid)} className='hover:bg-slate-100 p-2 rounded-full cursor-pointer'>
+                <MdOutlineGridView size={27} className='text-slate-600' /> 
               </p>       
           }
         </div>

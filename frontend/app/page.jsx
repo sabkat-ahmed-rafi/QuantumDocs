@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <PrivateRoute>
       <section className="h-screen overflow-y-auto scrollbar-hide">
-        <nav className="sticky top-0 z-10">
+        <nav className="sticky top-0 z-[100]">
           <NavBar />
         </nav>
         <main>
