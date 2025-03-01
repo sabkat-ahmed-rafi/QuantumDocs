@@ -4,7 +4,7 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@heroui/rea
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Link from 'next/link';
 
-const DocListColumn = ({ documents, formatDate }) => {
+const DocListColumn = ({ documents, formatDate, deleteDocument }) => {
   return (
     <>
        <section className='bg-white text-black z-50 flex flex-col px-[40px]  xl:px-[170px] md:px-[50px] pb-[100px]'>
@@ -29,7 +29,7 @@ const DocListColumn = ({ documents, formatDate }) => {
                       {/* <DropdownItem key="new"></DropdownItem> */}
                       <DropdownItem key="copy" className='font-sans'>Copy link</DropdownItem>
                       <DropdownItem key="edit" className='font-sans'>Open in new tab</DropdownItem>
-                      <DropdownItem key="delete" className="text-danger font-sans" color="danger">
+                      <DropdownItem onPress={() => deleteDocument(document._id)} key="delete" className="text-danger font-sans" color="danger">
                         Remove
                       </DropdownItem>
                     </DropdownMenu>

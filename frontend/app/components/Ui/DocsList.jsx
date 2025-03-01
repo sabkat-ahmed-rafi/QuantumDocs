@@ -2,7 +2,7 @@ import React from 'react'
 import DocListRaw from './DocListRaw';
 import DocListColumn from './DocListColumn';
 
-const DocsList = ({ documents, isGrid }) => {
+const DocsList = ({ documents, isGrid, deleteDocument }) => {
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -17,8 +17,8 @@ const DocsList = ({ documents, isGrid }) => {
     <>
       {
         isGrid ? 
-        <DocListRaw documents={documents} formatDate={formatDate} /> : 
-        <DocListColumn documents={documents} formatDate={formatDate} />
+        <DocListRaw deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} /> : 
+        <DocListColumn deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} />
       }
     </>
   )

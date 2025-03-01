@@ -24,7 +24,6 @@ const DocsContainer = () => {
         { params: { userEmail: user?.email, ownershipFilter } }
       )
       setDocuments(result.data.documents.documents)
-      console.log(result);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -37,7 +36,7 @@ const DocsContainer = () => {
   const deleteDocument = async (documentId) => {
     try {
       const result = await deleteData(documentId).unwrap();
-      console.log(deleteDocument);
+      console.log(result)
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -47,7 +46,7 @@ const DocsContainer = () => {
     <>
       <FilterHeader setOwnershipFilter={setOwnershipFilter} ownershipFilter={ownershipFilter} setIsGrid={setIsGrid} isGrid={isGrid} />
       {
-        documents.length == 0 ? <NoDocs /> : <DocsList documents={documents} isGrid={isGrid} />
+        documents.length == 0 ? <NoDocs /> : <DocsList documents={documents} isGrid={isGrid} deleteDocument={deleteDocument} />
       }
     </>
   )
