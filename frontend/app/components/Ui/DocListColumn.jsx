@@ -8,7 +8,7 @@ const DocListColumn = ({ documents, formatDate, deleteDocument, handleCopyDocume
 
   return (
     <>
-       <section className='bg-white text-black z-50 flex flex-col px-[40px]  xl:px-[170px] md:px-[50px] pb-[100px]'>
+       <section className='bg-white text-black z-50 flex flex-col px-[40px]  xl:px-[170px] md:px-[50px] pb-[60px]'>
         {
           documents.map((document) => (
             <div
