@@ -15,7 +15,7 @@ const DocsContainer = () => {
   const [ownershipFilter, setOwnershipFilter] = useState("anyone")
   const [documents, setDocuments] = useState([]);
   const {user} = useSelector(state => state.auth);
-  const [ deleteData, { isLoading: isDeleting } ] = useDeleteDataMutation()
+  const [ deleteData ] = useDeleteDataMutation()
 
   const getAllDocuments = async () => {
     try {
@@ -36,7 +36,9 @@ const DocsContainer = () => {
   const deleteDocument = async (documentId) => {
     try {
       const result = await deleteData(documentId).unwrap();
-      console.log(result)
+      if(result.deleteResult.success) {
+        getAllDocuments();
+      };
     } catch (error) {
       toast.error("Something went wrong");
     }
