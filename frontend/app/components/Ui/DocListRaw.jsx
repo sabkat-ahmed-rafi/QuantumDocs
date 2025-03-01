@@ -4,7 +4,7 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@heroui/rea
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Link from 'next/link';
 
-const DocListRaw = ({ documents, formatDate, deleteDocument }) => {
+const DocListRaw = ({ documents, formatDate, deleteDocument, handleCopyDocumentLink }) => {
   return (
     <>
       <section className='bg-white text-black z-50 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-[40px] gap-9 md:gap-9 lg:gap-10 xl:px-[170px] md:px-[50px] pb-[100px]'>
@@ -33,8 +33,12 @@ const DocListRaw = ({ documents, formatDate, deleteDocument }) => {
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Static Actions">
                       {/* <DropdownItem key="new"></DropdownItem> */}
-                      <DropdownItem key="copy" className='font-sans'>Copy link</DropdownItem>
-                      <DropdownItem key="edit" className='font-sans'>Open in new tab</DropdownItem>
+                      <DropdownItem onPress={() => handleCopyDocumentLink(document._id)} key="copy" className='font-sans'>Copy link</DropdownItem>
+                      <DropdownItem key="edit" className='font-sans block p-0'>
+                        <a target='_blank' href={`${process.env.NEXT_PUBLIC_frontend}/document/${document._id}`} className='w-full block px-2 py-[5px]' >
+                        Open in new tab
+                        </a>
+                      </DropdownItem>
                       <DropdownItem onPress={() => deleteDocument(document._id)} key="delete" className="text-danger font-sans" color="danger">
                         Remove
                       </DropdownItem>

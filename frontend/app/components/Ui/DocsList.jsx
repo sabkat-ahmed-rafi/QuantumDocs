@@ -13,12 +13,21 @@ const DocsList = ({ documents, isGrid, deleteDocument }) => {
     });
   }
 
+  const handleCopyDocumentLink = async (documentId) => {
+    try {
+      const documentLink = `${process.env.NEXT_PUBLIC_frontend}/document/${documentId}`;
+      await navigator.clipboard.writeText(documentLink);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }
+
   return (
     <>
       {
         isGrid ? 
-        <DocListRaw deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} /> : 
-        <DocListColumn deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} />
+        <DocListRaw handleCopyDocumentLink={handleCopyDocumentLink} deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} /> : 
+        <DocListColumn handleCopyDocumentLink={handleCopyDocumentLink} deleteDocument={deleteDocument} documents={documents} formatDate={formatDate} />
       }
     </>
   )
