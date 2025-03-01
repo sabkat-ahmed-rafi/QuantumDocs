@@ -7,7 +7,11 @@ export const docApiSlice = createApi({
     tagTypes: ['DocumentData'], 
     endpoints: (builder) => ({
         getAllData: builder.query({
-            query: () => "/api/document",
+            query: ({ userEmail, ownershipFilter }) => ({
+                url: "/api/document/getAllDocuments",
+                params: { userEmail, ownershipFilter }
+            }),
+
             providesTags: ['DocumentData']
         }),
         getSingleData: builder.query({
