@@ -243,6 +243,14 @@ const searchDocument = async (search, userEmail) => {
     }
 } 
 
+const deleteDocument = async (documentId) => {
+    try {
+        const result = await Document.findByIdAndDelete(documentId);
+    } catch (error) {
+        return { success: true, message: error.message }
+    }
+}
+
 module.exports = {
     createDocument,
     getDocumentById,
@@ -254,5 +262,6 @@ module.exports = {
     changeDocumentStatus,
     changeDocumentRole,
     searchDocument,
-    getAllDocument
+    getAllDocument,
+    deleteDocument
 };
