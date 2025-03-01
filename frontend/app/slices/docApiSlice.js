@@ -6,14 +6,6 @@ export const docApiSlice = createApi({
     baseQuery: fetchBaseQuery({baseUrl: process.env.NEXT_PUBLIC_document_service}),
     tagTypes: ['DocumentData'], 
     endpoints: (builder) => ({
-        getAllData: builder.query({
-            query: ({ userEmail, ownershipFilter }) => ({
-                url: "/api/document/getAllDocuments",
-                params: { userEmail, ownershipFilter }
-            }),
-
-            providesTags: ['DocumentData']
-        }),
         getSingleData: builder.query({
             query: (documentId) => `/api/document/${documentId}`,
             keepUnusedDataFor: 0, // Disable caching
@@ -40,7 +32,6 @@ export const docApiSlice = createApi({
 });
 
 export const {
-    useGetAllDataQuery,
     useGetSingleDataQuery,
     useAddDataMutation,
     useDeleteDataMutation
