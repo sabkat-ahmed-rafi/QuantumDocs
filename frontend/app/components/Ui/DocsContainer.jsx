@@ -6,6 +6,7 @@ import DocsList from './DocsList'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
+import NoDocs from './NoDocs'
 
 const DocsContainer = () => {
 
@@ -34,7 +35,9 @@ const DocsContainer = () => {
   return (
     <>
       <FilterHeader setOwnershipFilter={setOwnershipFilter} ownershipFilter={ownershipFilter} isGrid={isGrid} />
-      <DocsList documents={documents} />
+      {
+        documents.length == 0 ? <NoDocs /> : <DocsList documents={documents} />
+      }
     </>
   )
 }
