@@ -66,11 +66,13 @@ const Document = () => {
   }, [isTyping]);
 
 
-  const saveDocument = async (delta) => {
+  const saveDocument = async (oldDelta, delta) => {
 
-    const parseData = JSON.stringify(delta)
-    const parseJson = JSON.parse(parseData);
-    const updateMessage = { type: 'update', documentId, data: parseJson };
+    const parseDataNewDelta = JSON.stringify(delta);
+    const parseOldDelta = JSON.stringify(oldDelta);
+    const parseJsonNewDelta = JSON.parse(parseDataNewDelta);
+    const parseJsonOldDelta = JSON.parse(parseOldDelta);
+    const updateMessage = { type: 'update', documentId, data: {parseJsonOldDelta, parseJsonNewDelta} };
     if(customProviderRef.current.readyState == WebSocket.OPEN) {
       customProviderRef.current.send(JSON.stringify(updateMessage));
     };
@@ -168,7 +170,7 @@ const Document = () => {
     quillRef.current.on("text-change", async (delta, oldDelta, source) => {
       if(shouldObserveRef.current && source === 'user') {
         handleTyping();
-        saveDocument(delta);
+        saveDocument(oldDelta, delta);
       };
     });
       
