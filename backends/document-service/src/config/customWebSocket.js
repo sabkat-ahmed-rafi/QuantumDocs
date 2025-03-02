@@ -21,8 +21,10 @@ const setupCustomWebSocket = (server) => {
 
 
             if(data && data.type == 'update' && data.documentId && data.data) {
-                const {documentId, data: delta } = data;
-                const updatedData = {documentId, updatedData: delta};
+                const oldData = data.data.parseJsonOldDelta;
+                const newData = data.data.parseJsonNewDelta;
+                const { documentId } = data;
+                const updatedData = { documentId, oldData, newData };
                 try {
                     updateDocument(updatedData);
                 } catch (error) {

@@ -60,16 +60,22 @@ const getDocumentById = async (documentId) => {
 const updateDocument = async (updatedData) => {
     try {
         const documentId = updatedData?.documentId;
-        const newData = updatedData?.updatedData;
-        const document = await Document.findById(documentId);
-        if(!document) {
-            throw new Error("Document not found");
-        }
+        const oldData = updatedData?.oldData;
+        const newData = updatedData?.newData;
         
-        // Decode and parse the existing document state from Buffer
-        const previousDelta = JSON.parse(Buffer.from(document.state).toString());
-        const oldDelta = new Delta(previousDelta.ops || []);
-        const newDelta = new Delta(newData)
+        
+        // parsing them into quill Deltas
+        const oldDelta = new Delta(oldData);
+        const newDelta = new Delta(newData);
+
+        // removing two /n which are added by quilljs 
+        if (oldDelta.ops.length > 0) {
+            let lastOp = oldDelta.ops[oldDelta.ops.length - 1];
+            if (typeof lastOp.insert === "string") {
+                lastOp.insert = lastOp.insert.replace(/\n$/, "");
+                lastOp.insert = lastOp.insert.replace(/\n$/, "");
+            }
+        }
 
         // Prepare the updated state using Buffer
         const mergedDelta = oldDelta.compose(newDelta);
@@ -78,7 +84,6 @@ const updateDocument = async (updatedData) => {
         const updatedDocument = await Document.findByIdAndUpdate(
             documentId,
             { $set: { state: mergedData } },
-            { new: true } // Ensured that the updated document is returned
         );
 
         return updatedDocument;
