@@ -49,6 +49,9 @@ const documentSchema = new mongoose.Schema({
             default: "Viewer"
         }
         
+    },
+    preview: {
+        type: String,
     }
 }, { timestamps: true })
 
