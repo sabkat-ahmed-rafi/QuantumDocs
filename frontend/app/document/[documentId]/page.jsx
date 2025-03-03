@@ -93,7 +93,7 @@ const Document = () => {
       toast.error("Something went wrong")
     }
   };
-  const debouncedThumbnailSave = debounce(saveLatestThumbnail, 3000);
+  const debouncedThumbnailSave = debounce(saveLatestThumbnail, 1000);
 
   const updateUsers = () => {
       const users = Array.from(providerRef.current?.awareness?.states?.values() || [])
