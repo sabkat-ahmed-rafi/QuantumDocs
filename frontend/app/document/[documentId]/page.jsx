@@ -16,6 +16,8 @@ import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
+import html2canvas from 'html2canvas';
+import { toast } from 'react-toastify';
 
 
 
@@ -37,6 +39,7 @@ const Document = () => {
   const providerRef = useRef(null)
   const customProviderRef = useRef(null);
   const ydocRef = useRef(null)
+  const [test, setTest] = useState(null);
   
   
   
@@ -76,7 +79,9 @@ const Document = () => {
     if(customProviderRef.current.readyState == WebSocket.OPEN) {
       customProviderRef.current.send(JSON.stringify(updateMessage));
     };
-
+    const thumbnail = await generateThumbnail();
+    console.log(thumbnail)
+    setTest(thumbnail)
   };
 
   const updateUsers = () => {
@@ -88,6 +93,44 @@ const Document = () => {
         JSON.stringify(prevUsers) === JSON.stringify(users) ? prevUsers : users
       );
   };
+
+  const generateThumbnail = async () => {
+    if(!quillRef.current) return;
+
+    const quilEditor = quillRef.current.container;
+
+    if (!window.document.body.contains(quilEditor)) return;
+
+    const canvas = await html2canvas(quilEditor, { scale: 0.5, useCORS: true  });
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if(!blob) {
+            reject("Rejected creating preview image");
+            return 
+          }
+          const file = new File([blod], "thumbnail.jpg", { type: "image/jpeg" });
+          return file;
+        }
+      );
+    });
+    
+  };
+
+  const uploadCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", process.env.NEXT_PUBLIC_cloudinary_upload_preset);
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_cloudinary_cloud_name}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+    } catch (error) {
+      toast.error("Somthing went wrong while uploading image");
+    }
+  }
   
 
   useEffect(() => {
@@ -205,6 +248,7 @@ const Document = () => {
         customProviderRef.current.close();
         customProviderRef.current = null;
       }
+      quillRef.current = null;
       editorRef.current = null;
     };
   }, []);
@@ -236,6 +280,7 @@ const Document = () => {
                 </div>
               </div>
             </section>
+        <img className='py-[100px] ' src={test} alt="" />
         </div>
 
         {/* Giving custom styles to Cursor and ScrollBar */}
