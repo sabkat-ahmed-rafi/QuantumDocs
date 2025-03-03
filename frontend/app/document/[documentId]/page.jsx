@@ -18,6 +18,7 @@ import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
 import generateThumbnail from '@/app/utils/generateThumbnail';
 import { toast } from 'react-toastify';
+import debounce from 'lodash.debounce';
 
 
 
@@ -39,7 +40,6 @@ const Document = () => {
   const providerRef = useRef(null)
   const customProviderRef = useRef(null);
   const ydocRef = useRef(null)
-  const [test, setTest] = useState(null);
   
   
   
@@ -88,11 +88,12 @@ const Document = () => {
       if(customProviderRef.current.readyState == WebSocket.OPEN) {
         customProviderRef.current.send(JSON.stringify(thumbnailUpdateMessage));
       }
-
+      console.log('Saving Document');
     } catch (error) {  
       toast.error("Something went wrong")
     }
-  }
+  };
+  const debouncedThumbnailSave = debounce(saveLatestThumbnail, 3000);
 
   const updateUsers = () => {
       const users = Array.from(providerRef.current?.awareness?.states?.values() || [])
@@ -190,6 +191,7 @@ const Document = () => {
       if(shouldObserveRef.current && source === 'user') {
         handleTyping();
         saveDocument(oldDelta, delta);
+        debouncedThumbnailSave()
       };
     });
       
