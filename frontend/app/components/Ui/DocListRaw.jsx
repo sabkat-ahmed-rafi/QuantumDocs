@@ -12,15 +12,15 @@ const DocListRaw = ({ documents, formatDate, deleteDocument, handleCopyDocumentL
           documents.map((document) => (
             <div
             key={document._id} 
-            className="flex flex-col rounded-sm shadow-sm w-60 sm:w-56 h-72 border"
+            className="flex flex-col rounded-sm shadow-sm w-60 sm:w-56 h-72 border hover:border-purple-600 "
             >
               <Link
               href={`/document/${document._id}`}
-              className="h-64 dark:bg-gray-300" 
+              className="h-[70%] dark:bg-gray-300" 
               >
-                {/* <img src='/'/> */}
+                <img className='h-full w-full object-cover object-top' src={document.preview}/>
               </Link>
-              <div className="flex-1 py-8 space-y-2 px-4 dark:bg-gray-50">
+              <div className="flex-1 py-4 px-4 dark:bg-gray-50 h-[30%] border">
                 <h1 className=" font-semibold font-sans">{document.title}</h1>
                 <div className="flex items-center justify-between">
                   <div className='flex space-x-3 items-center'>
