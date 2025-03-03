@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const { updateDocument, updateDocTitle } = require('../service/documentService');
+const { updateDocument, updateDocTitle, updateThumbnail } = require('../service/documentService');
 
 
 const setupCustomWebSocket = (server) => {
@@ -10,6 +10,17 @@ const setupCustomWebSocket = (server) => {
 
         ws.on('message', (message) => {
             const data = JSON.parse(message); 
+
+            if(data && data.type == 'thumbnailUpdate' && data.data.thumbnailURL) {
+                try {
+                    const documentId = data.documentId;
+                    const thumbnailURL = data.data.thumbnailURL;
+                    updateThumbnail(documentId, thumbnailURL)
+                } catch (error) {
+                    console.log("Thumbnail updating Error: ", error);
+                }
+            }
+
 
             if(data && data.type == 'titleUpdate' && data.documentId && data.newTitle) {
                 try {

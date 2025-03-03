@@ -259,6 +259,18 @@ const deleteDocument = async (documentId) => {
     }
 }
 
+const updateThumbnail = async (documentId, thumbnailURL) => {
+    try {
+        const updateThumbnail = await Document.findByIdAndUpdate(
+            documentId, 
+            { $set: { preview: thumbnailURL } }
+        )
+        return updateThumbnail;
+    } catch (error) {
+        return console.log("Something went wrong while updating thumbnail")
+    }
+}
+
 module.exports = {
     createDocument,
     getDocumentById,
@@ -271,5 +283,6 @@ module.exports = {
     changeDocumentRole,
     searchDocument,
     getAllDocument,
-    deleteDocument
+    deleteDocument,
+    updateThumbnail
 };
