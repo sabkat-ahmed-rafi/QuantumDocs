@@ -16,7 +16,7 @@ import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
 
 import 'quill/dist/quill.snow.css'
 import "katex/dist/katex.min.css"; 
-import html2canvas from 'html2canvas';
+import generateThumbnail from '@/app/utils/generateThumbnail';
 import { toast } from 'react-toastify';
 
 
@@ -68,7 +68,6 @@ const Document = () => {
     }, 1000);
   }, [isTyping]);
 
-
   const saveDocument = async (oldDelta, delta) => {
 
     const parseDataNewDelta = JSON.stringify(delta);
@@ -79,10 +78,21 @@ const Document = () => {
     if(customProviderRef.current.readyState == WebSocket.OPEN) {
       customProviderRef.current.send(JSON.stringify(updateMessage));
     };
-    const thumbnail = await generateThumbnail();
-    console.log(thumbnail)
-    setTest(thumbnail)
   };
+
+  const saveLatestThumbnail = async () => {
+    try {
+      const thumbnailURL = await generateThumbnail(quillRef);
+      const thumbnailUpdateMessage = { type: 'thumbnailUpdate', documentId, data: { thumbnailURL } };
+
+      if(customProviderRef.current.readyState == WebSocket.OPEN) {
+        customProviderRef.current.send(JSON.stringify(thumbnailUpdateMessage));
+      }
+
+    } catch (error) {  
+      toast.error("Something went wrong")
+    }
+  }
 
   const updateUsers = () => {
       const users = Array.from(providerRef.current?.awareness?.states?.values() || [])
@@ -94,43 +104,9 @@ const Document = () => {
       );
   };
 
-  const generateThumbnail = async () => {
-    if(!quillRef.current) return;
 
-    const quilEditor = quillRef.current.container;
 
-    if (!window.document.body.contains(quilEditor)) return;
-
-    const canvas = await html2canvas(quilEditor, { scale: 0.5, useCORS: true  });
-
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        (blob) => {
-          if(!blob) {
-            reject("Rejected creating preview image");
-            return 
-          }
-          const file = new File([blod], "thumbnail.jpg", { type: "image/jpeg" });
-          return file;
-        }
-      );
-    });
-    
-  };
-
-  const uploadCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_cloudinary_upload_preset);
-    try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_cloudinary_cloud_name}/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-    } catch (error) {
-      toast.error("Somthing went wrong while uploading image");
-    }
-  }
+  
   
 
   useEffect(() => {
@@ -280,7 +256,6 @@ const Document = () => {
                 </div>
               </div>
             </section>
-        <img className='py-[100px] ' src={test} alt="" />
         </div>
 
         {/* Giving custom styles to Cursor and ScrollBar */}
