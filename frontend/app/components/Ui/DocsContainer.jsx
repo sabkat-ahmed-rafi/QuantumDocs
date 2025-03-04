@@ -66,7 +66,7 @@ const DocsContainer = () => {
   }, [user?.email, ownershipFilter])
 
   useEffect(() => {
-    if(!observerRef.current) return;
+    if(!observerRef.current || loading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -81,7 +81,7 @@ const DocsContainer = () => {
 
     return () => observer.disconnect();
 
-  }, [lastId])
+  }, [loading])
 
 
   return (
