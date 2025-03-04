@@ -93,7 +93,7 @@ const DocsContainer = () => {
 
       { loading && <Spinner color='secondary' className='flex justify-center items-center text-xl font-semibold'>Loading</Spinner> }
 
-      <div ref={observerRef} style={{ height: "50px" }} />
+      <div ref={observerRef} style={{ height: "20px" }} />
     </>
   )
 }
