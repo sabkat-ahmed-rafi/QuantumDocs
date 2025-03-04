@@ -9,7 +9,7 @@ const createDocument = async (documentData) => {
     return await document.save();
 };
 
-const getAllDocument = async (userEmail, ownershipFilter) => {
+const getAllDocument = async (userEmail, ownershipFilter, lastId = null, limit = 8) => {
 
     let query;
 
@@ -23,10 +23,22 @@ const getAllDocument = async (userEmail, ownershipFilter) => {
             ]
         };
     }
+
+    if(lastId) {
+        query._id = { $gt: lastId };
+    }
     
     try {
-        const documents = await Document.find(query);
-        return { success: true, message: "Documents found", documents };
+        const documents = await Document.find(query)
+        .sort({ _id: 1 })
+        .limit(limit);
+
+        return { 
+            success: true, 
+            message: "Documents found", 
+            documents,
+            lastId: document.length > 0 ? documents[documents.length - 1]._id : null 
+        };
     } catch (error) {
         return { success: false, message: "Something went wrong" }
     }
