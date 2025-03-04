@@ -14,7 +14,6 @@ export const createUser = createAsyncThunk('auth/createUser',
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
-                photoURL: user.photoURL,
             }
         } catch(error) {
             if(error.message == "Firebase: Error (auth/email-already-in-use).") {
@@ -32,7 +31,6 @@ export const updateUser = createAsyncThunk('auth/updateUser',
             uid: auth.currentUser.uid,
             email: auth.currentUser.email,
             displayName: auth.currentUser.displayName,
-            photoURL: auth.currentUser.photoURL,
         }
     }
 )
@@ -47,7 +45,6 @@ export const loginUser = createAsyncThunk('auth/loginUser',
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
-                photoURL: user.photoURL,
             }
         } catch(error) {
             if(error.message == "Firebase: Error (auth/invalid-credential).") {
@@ -68,7 +65,6 @@ export const googleLogin = createAsyncThunk('auth/googleLogin',
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
-                photoURL: user.photoURL,
             }
     }
 )
