@@ -15,6 +15,16 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "50%": { opacity: "0.5" },
+          "100%": { opacity: "1" }
+        }
+      },
+      animation: {
+        "fade-in": "fadeIn 1s ease-in-out forwards"
+      }
     },
   },
   plugins: [heroui()],

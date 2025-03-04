@@ -1,6 +1,6 @@
 'use client'
 import { logout } from "@/app/slices/authSlice";
-import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem} from "@heroui/react";
+import {Navbar, NavbarContent, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
@@ -76,11 +76,17 @@ export default function NavBar() {
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <div className="w-[45px] lg:w-[50px] rounded-full border-2 border-purple-700">
-            <img
-            className="rounded-full border-2 border-black p-[1px]"
-              src={user?.profilePicture == "" ? getAvatarUrl(user?.name) : user?.profilePicture}
-            />
+            <div className="w-[45px] lg:w-[50px] h-[45px] lg:h-[50px] rounded-full border-2 border-purple-700">
+            {
+              Object.keys(user).length === 0 ?
+              <div
+              className="w-full h-full rounded-full border-2 bg-purple-600 border-black p-[1px] opacity-0 animate-fade-in"></div>
+              :
+              <img
+              className={`rounded-full border-2 border-black p-[1px] w-full h-full object-cover transition-opacity duration-700 `}
+                src={user?.profilePicture == "" ? getAvatarUrl(user?.name) : user?.profilePicture}
+              />
+            }
             </div>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
