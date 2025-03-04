@@ -37,7 +37,7 @@ const getAllDocument = async (userEmail, ownershipFilter, lastId = null, limit =
             success: true, 
             message: "Documents found", 
             documents,
-            lastId: document.length > 0 ? documents[documents.length - 1]._id : null 
+            lastId: documents.length > 0 ? documents[documents.length - 1]._id : null 
         };
     } catch (error) {
         return { success: false, message: "Something went wrong" }
