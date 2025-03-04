@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import useAxiosSecure from "@/app/hooks/useAxiosSecure";
 import DocumentSearch from "../UI/DocumentSearch";
+import getAvatarUrl from "@/app/utils/getAvatarUrl";
 
 
 
@@ -19,7 +20,7 @@ export default function NavBar() {
   const [user, setUser] = useState({})
   const axiosSecure = useAxiosSecure();
   const [search, setSearch] = useState("");
-  console.log(userFromdb)
+  console.log(user)
   
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +64,7 @@ export default function NavBar() {
           type="Search"
           placeholder="Search"
           fullWidth
-          className=" focus:bg-white max-w-[800px] lg:w-[720px] md:w-[400px]"
+          className=" focus:bg-white max-w-[800px] lg:w-[700px] md:w-[400px]"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           startContent={
@@ -75,16 +76,12 @@ export default function NavBar() {
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <Avatar
-              referrerPolicy="no-referrer"
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="secondary"
-              name={user?.name}
-              size="md"
-              src={user.profilePicture || '/images/profilePicture.jpg'}
+            <div className="w-[45px] lg:w-[50px] rounded-full border-2 border-purple-700">
+            <img
+            className="rounded-full border-2 border-black p-[1px]"
+              src={user?.profilePicture == "" ? getAvatarUrl(user?.name) : user?.profilePicture}
             />
+            </div>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2 text-black">
@@ -92,7 +89,7 @@ export default function NavBar() {
               <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
             <DropdownItem className="w-full py-0"><Link href="/signin" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
-            <DropdownItem onClick={handleLogout} className="text-black" key="logout" color="danger">
+            <DropdownItem onPress={handleLogout} className="text-black" key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>
