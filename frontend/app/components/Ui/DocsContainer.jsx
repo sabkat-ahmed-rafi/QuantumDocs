@@ -50,8 +50,10 @@ const DocsContainer = () => {
     try {
       const result = await deleteData(documentId).unwrap();
       if(result.deleteResult.success) {
+        setDocuments((prev) => prev.filter(doc => doc._id !== documentId));
         getAllDocuments();
       };
+      console.log
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -91,7 +93,7 @@ const DocsContainer = () => {
 
       { loading && <Spinner color='secondary' className='flex justify-center items-center text-xl font-semibold'>Loading</Spinner> }
 
-      <div ref={observerRef} style={{ height: "20px" }} />
+      <div ref={observerRef} style={{ height: "50px" }} />
     </>
   )
 }
