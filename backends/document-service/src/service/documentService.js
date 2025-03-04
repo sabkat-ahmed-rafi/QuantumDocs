@@ -18,7 +18,7 @@ const getAllDocument = async (userEmail, ownershipFilter, lastId = null, limit =
     } else if(ownershipFilter === "anyone") {
         query = {
             $or: [
-                query = { "owner.email": userEmail },
+                { "owner.email": userEmail },
                 { sharedPersons: { $elemMatch: { email: userEmail } } }                
             ]
         };
@@ -33,11 +33,14 @@ const getAllDocument = async (userEmail, ownershipFilter, lastId = null, limit =
         .sort({ _id: 1 })
         .limit(limit);
 
+        const hasMore = documents.length === limit;
+
         return { 
             success: true, 
             message: "Documents found", 
             documents,
-            lastId: documents.length > 0 ? documents[documents.length - 1]._id : null 
+            lastId: hasMore > 0 ? documents[documents.length - 1]._id : null,
+            hasMore 
         };
     } catch (error) {
         return { success: false, message: "Something went wrong" }
