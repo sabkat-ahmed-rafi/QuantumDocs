@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-* Now i need to connect the editor with the backend through the y-quill and y-socket
+* now I need to create the documents user's role functionality .
