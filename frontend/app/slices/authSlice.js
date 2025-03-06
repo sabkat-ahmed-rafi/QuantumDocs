@@ -3,6 +3,7 @@ import auth from "../firebase/firebase.init";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-toastify";
 import axios from "axios";
+import getAvatarUrl from "../utils/getAvatarUrl";
 
 
 // create a user 
@@ -31,6 +32,7 @@ export const updateUser = createAsyncThunk('auth/updateUser',
             uid: auth.currentUser.uid,
             email: auth.currentUser.email,
             displayName: auth.currentUser.displayName,
+            photoURL: getAvatarUrl(auth.currentUser.displayName)
         }
     }
 )

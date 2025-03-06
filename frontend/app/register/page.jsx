@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { FaGoogle } from "react-icons/fa";
+import getAvatarUrl from '../utils/getAvatarUrl'
 
 
 
@@ -66,7 +67,7 @@ const Register = () => {
             name: updatedUser?.displayName,
             email: updatedUser?.email,
             password: newUser?.password,
-            profilePicture: '/images/profilePicture.jpg'
+            profilePicture: getAvatarUrl(updatedUser?.displayName)
           }
           if(updatedUser.email) {
             await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, user);
@@ -87,7 +88,7 @@ const Register = () => {
             uid: user?.uid,
             name: user?.displayName,
             email: user?.email,
-            profilePicture: user?.photoURL
+            profilePicture: getAvatarUrl(user?.displayName)
         }
         if(user.email) {
           await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, saveUser);

@@ -19,7 +19,7 @@ export default function NavBar() {
   const [user, setUser] = useState({})
   const axiosSecure = useAxiosSecure();
   const [search, setSearch] = useState("");
-  console.log(user)
+  console.log(userFromdb)
   
   useEffect(() => {
     const fetchUser = async () => {
