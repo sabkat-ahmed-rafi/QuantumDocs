@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import useAxiosSecure from "@/app/hooks/useAxiosSecure";
 import DocumentSearch from "../UI/DocumentSearch";
-import getAvatarUrl from "@/app/utils/getAvatarUrl";
 
 
 
@@ -76,7 +75,7 @@ export default function NavBar() {
       <NavbarContent className="items-center" justify="end">
       <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <div className="w-[45px] lg:w-[50px] h-[45px] lg:h-[50px] rounded-full border-2 border-purple-700">
+            <div className="w-[45px] lg:w-[50px] h-[45px] lg:h-[50px] rounded-full border-2 border-purple-700 cursor-pointer">
             {
               Object.keys(user).length === 0 ?
               <div
@@ -84,7 +83,7 @@ export default function NavBar() {
               :
               <img
               className={`rounded-full border-2 border-black p-[1px] w-full h-full object-cover transition-opacity duration-700 `}
-                src={user?.profilePicture == "" ? getAvatarUrl(user?.name) : user?.profilePicture}
+                src={user?.profilePicture ? user?.profilePicture : '/images/profilePicture.jpg'}
               />
             }
             </div>
