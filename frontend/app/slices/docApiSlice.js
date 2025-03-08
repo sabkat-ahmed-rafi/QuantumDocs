@@ -7,7 +7,10 @@ export const docApiSlice = createApi({
     tagTypes: ['DocumentData'], 
     endpoints: (builder) => ({
         getSingleData: builder.query({
-            query: (documentId) => `/api/document/${documentId}`,
+            query: (documentId) => ({ 
+                url: `/api/document/${documentId}`,
+                credentials: 'include'
+             }),
             keepUnusedDataFor: 0, // Disable caching
             refetchOnMountOrArgChange: true, // Ensure fresh data on mount
             refetchOnFocus: true, // Refetch when the tab gains focus
