@@ -67,6 +67,7 @@ export const googleLogin = createAsyncThunk('auth/googleLogin',
                 uid: user.uid,
                 email: user.email,
                 displayName: user.displayName,
+                photoURL: getAvatarUrl(user.displayName)
             }
     }
 )
