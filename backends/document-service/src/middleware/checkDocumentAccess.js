@@ -20,6 +20,7 @@ const checkDocumentAccess = async (req, res, next) => {
 
         req.userRole = sharedPerson.role;
         next();
+        return;
     };
 
     req.userRole = document.accessStatus.role;
