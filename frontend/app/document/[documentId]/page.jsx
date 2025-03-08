@@ -21,6 +21,7 @@ import "katex/dist/katex.min.css";
 import generateThumbnail from '@/app/utils/generateThumbnail';
 import { toast } from 'react-toastify';
 import debounce from 'lodash.debounce';
+import AccessDenied from '@/app/components/UI/AccessDenied';
 
 
 lineSpinner.register()
@@ -246,14 +247,17 @@ const Document = () => {
   }, [documentGetError]);
 
 
-  if(documentGetError?.data?.message == "Unauthorized access" || documentGetError?.status == 401 || documentGetError?.data?.error == "sessionExpired") {
-    return 
+  
+  if(documentGetError?.data?.message == "Access denied. Document is restricted" && documentGetError?.status == 403) {
+    return <AccessDenied />
   }
 
   return (
     <>
 
-        <div className="custom-scrollbar">
+        {
+          documentGetError == undefined && !isLoading && 
+          <div className="custom-scrollbar">
           {/* Head of document  */}
           <DocumentHead 
           isTyping={isTyping}
@@ -274,7 +278,8 @@ const Document = () => {
                 </div>
               </div>
             </section>
-        </div>
+          </div>
+        }
 
         {/* Giving custom styles to Cursor and ScrollBar */}
         <style jsx global>{`
