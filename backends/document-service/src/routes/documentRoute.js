@@ -1,5 +1,6 @@
 const documentController = require('../controller/documentController');
 const express = require('express');
+const checkDocumentAccess = require('../middleware/checkDocumentAccess');
 const router = express.Router();
 
 // Document Creation
@@ -17,7 +18,7 @@ router.patch('/status/role', documentController.changeDocumentRole); // Change u
 // Document Retrieval
 router.get('/search', documentController.searchDocument); // Search documents
 router.get('/', documentController.getAllDocuments); // Get all documents
-router.get('/:id', documentController.get); // Get a single document
+router.get('/:id', checkDocumentAccess, documentController.get); // Get a single document
 
 // Document Deletion
 router.delete('/:id', documentController.deleteDocument);
