@@ -63,6 +63,9 @@ const googleProvider = new GoogleAuthProvider();
 export const googleLogin = createAsyncThunk('auth/googleLogin',
     async () => {
             const {user} = await signInWithPopup(auth, googleProvider);
+
+            await updateProfile(user, { photoURL: getAvatarUrl(user.displayName) });
+
             return {
                 uid: user.uid,
                 email: user.email,
