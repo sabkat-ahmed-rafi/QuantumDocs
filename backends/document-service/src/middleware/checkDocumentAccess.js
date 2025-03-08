@@ -6,19 +6,25 @@ const checkDocumentAccess = async (req, res, next) => {
 
     const document = await Document.findById( id );
 
-    if(document.owner.email === userEmail) {
+    if (document.owner.email === userEmail) {
         req.userRole = 'owner';
         return next();
     }
 
-    const sharedPerson = document.sharedPersons.find(person => person.email === userEmail);
+    if (document.accessStatus.isRestricted) {
+        const sharedPerson = document.sharedPersons.find(person => person.email === userEmail);
 
-    if(!sharedPerson) {
-        return res.status(403).json({ message: "You don't have acces to this document" });
-    }
+        if (!sharedPerson) {
+            return res.status(403).json({ message: "Access denied. Document is restricted" });
+        };
 
-    req.userRole = sharedPerson.role;
+        req.userRole = sharedPerson.role;
+        next();
+    };
+
+    req.userRole = document.accessStatus.role;
     next();
+
 }
 
 module.exports = checkDocumentAccess;
