@@ -11,6 +11,8 @@ import QuillCursors from 'quill-cursors';
 import Quill from 'quill';
 import katex from "katex";
 import DocumentHead from '@/app/components/DocumentHead/DocumentHead';
+import { useRouter } from 'next/navigation';
+import { lineSpinner } from 'ldrs'
 
 
 
@@ -21,14 +23,15 @@ import { toast } from 'react-toastify';
 import debounce from 'lodash.debounce';
 
 
-
+lineSpinner.register()
 
 const Document = () => {
-
+  
   
   const {documentId} = useParams();
+  const router = useRouter();
   const {user} = useSelector(state => state.auth);
-  const {data: document, isLoading, refetch: documentRefetch} = useGetSingleDataQuery(documentId);
+  const {data: document, isLoading, refetch: documentRefetch, error: documentGetError} = useGetSingleDataQuery(documentId);
   const [activeUsers, setActiveUsers] = useState([]);
   
   
@@ -208,6 +211,17 @@ const Document = () => {
 
   // clean up on unmounting
   useEffect(() => {
+
+    if(documentGetError?.data?.message == "Unauthorized access" && documentGetError?.status == 401) {
+      toast.error("Please log in to view this document");
+      router.push(`/signin`);
+    }
+    if(documentGetError?.data?.error == "sessionExpired" && documentGetError?.status == 401) {
+      toast.error("Session Expired");
+      router.push(`/signin`);
+    }
+
+
     return () => {
       shouldObserveRef.current = false;
       if(ydocRef.current) {
@@ -229,10 +243,12 @@ const Document = () => {
       quillRef.current = null;
       editorRef.current = null;
     };
-  }, []);
+  }, [documentGetError]);
 
 
-
+  if(documentGetError?.data?.message == "Unauthorized access" || documentGetError?.status == 401 || documentGetError?.data?.error == "sessionExpired") {
+    return 
+  }
 
   return (
     <>
