@@ -19,12 +19,13 @@ import { toast } from 'react-toastify';
 
 
 
-const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documentRefetch}) => {
+const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documentRefetch, user}) => {
 
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [copied, setCopied] = useState(false);
-
+  const isOwner = user?.email === document?.document?.owner?.email;
+  const isDisabled = !isOwner;
   
   const handlePeopleWhoHaveAccessRole = async (e, userEmail) => {
     const newRole = e.target.value;
@@ -170,12 +171,13 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
               <ModalBody className='text-black max-h-[405px]'>
                 <div>
                   <Input 
+                  disabled={isDisabled}
                   name='search'
                   type='search'
                   variant="bordered"
                   radius='sm'
                   label="Add people"
-                  className='border-black'
+                  className={`border-black ${isDisabled && "pointer-events-none"}`}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                    />
@@ -186,15 +188,18 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
                     document={document} 
                     handlePeopleWhoHaveAccessRole={handlePeopleWhoHaveAccessRole}
                     handleDeleteAccess={handleDeleteAccess}
+                    isDisabled={isDisabled}
                     />
                 <p className='font-semibold'>General access</p>
                 {
                   document?.document?.accessStatus?.isRestricted ? 
                   <IsRestricted 
+                  isDisabled={isDisabled}
                    handleIsRestricted={handleIsRestricted}
                    document={document}
                    /> : 
                   <NotRestricted 
+                  isDisabled={isDisabled}
                   handleIsRestricted={handleIsRestricted}
                   handleUniversalRole={handleUniversalRole}
                   document={document}

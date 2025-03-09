@@ -17,7 +17,7 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
 
    const isOwner = user?.email === document?.document?.owner?.email;
    const isSharedUser = document?.document?.sharedPersons.some(person => person.email == user?.email);
-   console.log(isOwner, isSharedUser);
+
 
    const uniqueActiveUsers = useMemo(() => {
       const seenUids = new Set();
@@ -76,7 +76,7 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
         {/* Body of Modal and Drawer */}
         <NoteDrawer isOpenNote={isOpenNote} onOpenNoteChange={onOpenNoteChange} document={document} user={user} />
         <MessageDrawer isOpenMessage={isOpenMessage} onOpenMessageChange={onOpenMessageChange} document={document} />
-        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal} document={document} documentRefetch={documentRefetch} />
+        <ShareModal isOpenShareModal={isOpenShareModal} onOpenChangeShareModal={onOpenChangeShareModal} document={document} documentRefetch={documentRefetch} user={user} />
     </>
   )
 }

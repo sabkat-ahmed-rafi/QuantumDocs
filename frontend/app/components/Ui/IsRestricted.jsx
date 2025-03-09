@@ -1,12 +1,12 @@
 import { MdLockOutline } from "react-icons/md";
 
 
-const IsRestricted = ({handleIsRestricted, document}) => {
+const IsRestricted = ({handleIsRestricted, document, isDisabled}) => {
 
 
   return (
     <>
-     <div className='flex justify-between items-center py-2 rounded-md'>     
+     <div className={`flex justify-between items-center py-2 rounded-md ${isDisabled && 'pointer-events-none opacity-50 select-none'}`}>     
       <section className='flex justify-between items-center space-x-2'>
        <p className='bg-slate-100 p-2 rounded-full animate-pulse'>
           <MdLockOutline  className='text-lg' />

@@ -2,10 +2,10 @@ import React from 'react'
 import { FaGlobeAmericas } from "react-icons/fa";
 
 
-const NotRestricted = ({handleIsRestricted, handleUniversalRole, document}) => {
+const NotRestricted = ({handleIsRestricted, handleUniversalRole, document, isDisabled}) => {
   return (
     <>
-        <div className='flex justify-between items-center py-2 rounded-md'>
+        <div className={`flex justify-between items-center py-2 rounded-md ${isDisabled && 'pointer-events-none opacity-50 select-none'}`}>
           <section className='flex justify-between items-center space-x-2'>
             <p className='bg-[#C4EED0] p-2 rounded-full animate-pulse'>
               <FaGlobeAmericas className='text-green-800 text-lg ' />

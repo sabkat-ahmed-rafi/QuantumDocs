@@ -4,7 +4,7 @@ import { MdDelete } from "react-icons/md";
 
 
 
-const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDeleteAccess}) => {
+const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDeleteAccess, isDisabled}) => {
     
     const [clickedUserId, setClickedUserId] = useState(null);
 
@@ -31,7 +31,7 @@ const PeopleWithAccess = ({document, handlePeopleWhoHaveAccessRole, handleDelete
                 {
                  document && [...document?.document?.sharedPersons]?.reverse()?.map(user => <div
                     key={user._id}    
-                    className='flex justify-between items-center py-2 rounded-md transition-all'>
+                    className={`flex justify-between items-center py-2 rounded-md transition-all ${isDisabled && 'pointer-events-none opacity-50 select-none'}`}>
                     <section 
                       className='flex justify-center items-center space-x-2 relative'
                       onClick={() => toggleClick(user._id)} 
