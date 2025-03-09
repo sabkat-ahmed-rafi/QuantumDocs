@@ -26,7 +26,6 @@ const page = () => {
       <section className='h-screen font-sans py-5 px-5'>
          <div className="flex flex-col items-center justify-center">
            <ProfileUpload image={image} handleImageUpload={handleImageUpload} user={user} />
-           <h1 className="md:text-3xl text-lg font-semibold">{user?.displayName}</h1>
          </div>
       </section> 
     </>
