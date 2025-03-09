@@ -15,6 +15,10 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
 
    const {user} = useSelector(state => state.auth);
 
+   const isOwner = user?.email === document?.document?.owner?.email;
+   const isSharedUser = document?.document?.sharedPersons.some(person => person.email == user?.email);
+   console.log(isOwner, isSharedUser);
+
    const uniqueActiveUsers = useMemo(() => {
       const seenUids = new Set();
       return activeUsers.filter((active) => {
@@ -61,7 +65,7 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
-           <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
+           <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
            <AiFillMessage size={20}/>  Messages
             </Button>
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenShareModal}>
