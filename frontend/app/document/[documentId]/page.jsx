@@ -206,31 +206,36 @@ const Document = () => {
     }
     
     // Updating editing access to users 
-    if(document?.document?.owner?.email != user?.email && !document?.document?.accessStatus?.isRestricted) {
-      
-      if(document?.document?.accessStatus?.role == "Editor") {
-        quillRef.current?.enable(true);
-      } else if(document?.document?.accessStatus?.role == "Viewer") {
-        quillRef.current?.enable(false);
-      }
-      
-      const sharedUser = document?.document?.sharedPersons.find(person => person.email === user?.email);
-      if(sharedUser?.role == "Editor") {
-        quillRef.current?.enable(true);
-      } else if(sharedUser?.role == "Viewer") {
-        quillRef.current?.enable(false);
-      }
-      
-    };
-    if(document?.document?.owner?.email != user?.email && document?.document?.accessStatus?.isRestricted) {
-      const sharedUser = document?.document?.sharedPersons.find(person => person.email === user?.email);
+    if(document?.document?.owner?.email != user?.email) {
 
-      if(sharedUser?.role == "Editor") {
-        quillRef.current?.enable(true);
-      } else {
-        quillRef.current?.enable(false);
-      }
+      if(!document?.document?.accessStatus?.isRestricted) {
       
+        if(document?.document?.accessStatus?.role == "Editor") {
+          quillRef.current?.enable(true);
+        } else if(document?.document?.accessStatus?.role == "Viewer") {
+          quillRef.current?.enable(false);
+        }
+      
+        const sharedUser = document?.document?.sharedPersons.find(person => person.email === user?.email);
+        if(sharedUser?.role == "Editor") {
+          quillRef.current?.enable(true);
+        } else if(sharedUser?.role == "Viewer") {
+          quillRef.current?.enable(false);
+        }
+      
+      };
+
+      if(document?.document?.accessStatus?.isRestricted) {
+        const sharedUser = document?.document?.sharedPersons.find(person => person.email === user?.email);
+
+        if(sharedUser?.role == "Editor") {
+          quillRef.current?.enable(true);
+        } else {
+          quillRef.current?.enable(false);
+        }
+
+      };
+
     };
 
   }, [documentId, document, isLoading]);
