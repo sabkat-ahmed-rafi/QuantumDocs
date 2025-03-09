@@ -93,7 +93,7 @@ export default function NavBar() {
               <p className="font-semibold ">Signed in as</p>
               <p className="font-semibold">{user?.email}</p>
             </DropdownItem>
-            <DropdownItem className="w-full py-0"><Link href="/signin" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
+            <DropdownItem className="w-full py-0"><Link href="/mySettings" className="block py-2 text-black  w-full">My Settings</Link></DropdownItem>
             <DropdownItem onPress={handleLogout} className="text-black" key="logout" color="danger">
               Log Out
             </DropdownItem>
