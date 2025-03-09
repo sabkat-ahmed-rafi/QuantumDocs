@@ -23,7 +23,8 @@ const DocsContainer = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const getAllDocuments = async () => {
-
+    
+    if(ownershipFilter) setHasMore(true);
     if (!hasMore || loading) return;
 
     setLoading(true);
@@ -82,7 +83,7 @@ const DocsContainer = () => {
     return () => observer.disconnect();
 
   }, [loading])
-
+  
 
   return (
     <>
