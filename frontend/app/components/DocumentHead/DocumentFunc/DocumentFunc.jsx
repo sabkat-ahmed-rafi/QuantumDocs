@@ -62,7 +62,7 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
            </AvatarGroup>
 
            {/* Buttons of Modal and Drawer */}
-           <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
+           <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
            <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
