@@ -13,7 +13,7 @@ const UserAccessSearch = ({users, handleGiveAccess}) => {
                 key={user._id}
                 onClick={() => handleGiveAccess(user)}
                 avatarProps={{
-                  src: `${user.profilePhoto}`,
+                  src: `${user.profilePicture}`,
                 }}
                 description={`${user.email}`}
                 name={`${user.name}`}
