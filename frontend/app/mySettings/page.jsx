@@ -2,11 +2,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   Button,
   useDisclosure,
 } from "@heroui/react";
