@@ -19,20 +19,22 @@ const page = () => {
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
     const axiosSecure = useAxiosSecure();
     
+    
 
     useEffect(() => {
-      const fetchUser = async () => {
-        try{
-          const result = await axiosSecure.get(`/api/users/${userFromState?.uid}`);
-          setUser(result?.data?.user);
-        }catch(error) {
-          if(error.status != 401) {
-            toast.error("Something went wrong");
-          }
-        }
-      } 
       fetchUser();
     }, [userFromState?.uid])
+
+    const fetchUser = async () => {
+      try{
+        const result = await axiosSecure.get(`/api/users/${userFromState?.uid}`);
+        setUser(result?.data?.user);
+      }catch(error) {
+        if(error.status != 401) {
+          toast.error("Something went wrong");
+        }
+      }
+    };
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
