@@ -70,9 +70,15 @@ const page = () => {
                 { user?.bio == "" ? "Go profile settings write something about yourself" : user?.bio }
               </p>
               <div className="flex space-x-10">
-              <Link href={user?.socialLinks?.linkedin || "#"} target="_blank"><FaLinkedin className="text-[#0077B5]" size={50} /></Link>
-              <Link href={user?.socialLinks?.instagram || "#"} target="_blank"><FaSquareInstagram className="text-[#E4405F]" size={50} /></Link>
-              <Link href={user?.socialLinks?.twitter || "#"} target="_blank"><FaSquareXTwitter size={50} /></Link>
+              {
+                user?.socialLinks?.linkedin && <Link href={user?.socialLinks?.linkedin || "#"} target="_blank"><FaLinkedin className="text-[#0077B5]" size={50} /></Link>
+              }
+              {
+                user?.socialLinks?.instagram && <Link href={user?.socialLinks?.instagram || "#"} target="_blank"><FaSquareInstagram className="text-[#E4405F]" size={50} /></Link>
+              }
+              {
+                user?.socialLinks?.twitter && <Link href={user?.socialLinks?.twitter || "#"} target="_blank"><FaSquareXTwitter size={50} /></Link>
+              }
               </div>
             </div>
         </div>
