@@ -1,11 +1,13 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Button,
   useDisclosure,
+  Tooltip,
 } from "@heroui/react";
 import ProfileUpdateDrawer from "../components/UI/ProfileUpdateDrawer";
+import { FaRegEdit } from "react-icons/fa";
 
 
 const page = () => {
@@ -13,7 +15,11 @@ const page = () => {
     const [image, setImage] = useState(null);
     const {user} = useSelector(state => state.auth);
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
-    console.log(user);
+    
+
+    useEffect(() => {
+
+    }, [])
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
@@ -29,11 +35,15 @@ const page = () => {
   return (
     <>
       <section className='h-screen font-sans py-5 px-5'>
-         <div className="flex flex-col items-center justify-center">
-         <Button onPress={onOpenProfile}>Open Drawer</Button>
-           <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} />
-         </div>
+        <div className="flex flex-col items-center justify-center">
+        </div>
+        <Tooltip placement="left" className="bg-slate-700 text-slate-200" content={"Profile Settings"}>
+          <Button className="rounded-full absolute right-5 bg-white shadow-lg" onPress={onOpenProfile}>
+            <FaRegEdit size={20} />
+          </Button>
+        </Tooltip>
       </section> 
+      <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} />
     </>
   )
 }

@@ -12,13 +12,15 @@ import ProfileUpload from './ProfileUpload';
 const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handleImageUpload, user }) => {
   return (
     <>
-      <Drawer isOpen={isOpenProfile} onOpenChange={onOpenChangeProfile}>
+      <Drawer placement={'left'} isOpen={isOpenProfile} onOpenChange={onOpenChangeProfile}>
         <DrawerContent>
           {(onClose) => (
             <>
-              <DrawerHeader className="flex flex-col gap-1">Drawer Title</DrawerHeader>
+              <DrawerHeader className="flex justify-center">Manage Profile</DrawerHeader>
               <DrawerBody>
-                 <ProfileUpload image={image} handleImageUpload={handleImageUpload} user={user} />
+                 <div className='flex justify-center '>
+                  <ProfileUpload image={image} handleImageUpload={handleImageUpload} user={user} />
+                 </div>
               </DrawerBody>
               <DrawerFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
