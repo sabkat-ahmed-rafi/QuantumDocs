@@ -8,7 +8,7 @@ const ProfileUpload = ({ image, handleImageUpload, user }) => {
       <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56">
         <label className="relative group cursor-pointer block w-full h-full">
           <img
-            src={image || user?.photoURL}
+            src={image || user?.profilePicture}
             alt="Profile"
             className="w-full h-full object-cover rounded-full border-4 border-gray-300"
           />

@@ -8,18 +8,31 @@ import {
 } from "@heroui/react";
 import ProfileUpdateDrawer from "../components/UI/ProfileUpdateDrawer";
 import { FaRegEdit } from "react-icons/fa";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 
 const page = () => {
 
     const [image, setImage] = useState(null);
-    const {user} = useSelector(state => state.auth);
+    const {user: userFromState} = useSelector(state => state.auth);
+    const [user, setUser] = useState({})
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
+    const axiosSecure = useAxiosSecure();
     
 
     useEffect(() => {
-
-    }, [])
+      const fetchUser = async () => {
+        try{
+          const result = await axiosSecure.get(`/api/users/${userFromState?.uid}`);
+          setUser(result?.data?.user);
+        }catch(error) {
+          if(error.status != 401) {
+            toast.error("Something went wrong");
+          }
+        }
+      } 
+      fetchUser();
+    }, [userFromState?.uid])
 
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
@@ -30,7 +43,7 @@ const page = () => {
       }
       
     };
-  
+    console.log(user);
 
   return (
     <>
