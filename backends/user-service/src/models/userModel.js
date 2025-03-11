@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema({
         type: Object,
         default: {
             linkedin: "",
+            instagram: "",
             twitter: "",
-            x: "",
         }
     },
 }, { timestamps: true }); // This will automatically adds the createdAt and updatedAt field
