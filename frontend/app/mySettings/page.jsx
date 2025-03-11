@@ -9,6 +9,10 @@ import {
 import ProfileUpdateDrawer from "../components/UI/ProfileUpdateDrawer";
 import { FaRegEdit } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { FaLinkedin } from "react-icons/fa";
+import { FaSquareInstagram } from "react-icons/fa6";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import Link from "next/link";
 
 
 const page = () => {
@@ -51,7 +55,6 @@ const page = () => {
     <>
       <section className='h-screen font-sans py-5 px-5'>
         <div className="flex flex-col items-center justify-center">
-          <div>
             <div className="p-4">
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56">
                       <img
@@ -61,7 +64,17 @@ const page = () => {
                       />
                   </div>
             </div>
-          </div>
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <h1 className="text-2xl font-semibold">{user?.name}</h1>
+              <p className="w-96 text-center text-slate-600">
+                { user?.bio == "" ? "Go profile settings write something about yourself" : user?.bio }
+              </p>
+              <div className="flex space-x-10">
+              <Link href={user?.socialLinks?.linkedin || "#"} target="_blank"><FaLinkedin className="text-[#0077B5]" size={50} /></Link>
+              <Link href={user?.socialLinks?.instagram || "#"} target="_blank"><FaSquareInstagram className="text-[#E4405F]" size={50} /></Link>
+              <Link href={user?.socialLinks?.twitter || "#"} target="_blank"><FaSquareXTwitter size={50} /></Link>
+              </div>
+            </div>
         </div>
         <Tooltip placement="left" className="bg-slate-700 text-slate-200" content={"Profile Settings"}>
           <Button className="rounded-full absolute top-5 right-5 bg-white shadow-lg" onPress={onOpenProfile}>
