@@ -51,9 +51,20 @@ const page = () => {
     <>
       <section className='h-screen font-sans py-5 px-5'>
         <div className="flex flex-col items-center justify-center">
+          <div>
+            <div className="p-4">
+                  <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56">
+                      <img
+                        src={image || user?.profilePicture}
+                        alt="Profile"
+                        className="w-full h-full object-cover rounded-full border-4 border-gray-300"
+                      />
+                  </div>
+            </div>
+          </div>
         </div>
         <Tooltip placement="left" className="bg-slate-700 text-slate-200" content={"Profile Settings"}>
-          <Button className="rounded-full absolute right-5 bg-white shadow-lg" onPress={onOpenProfile}>
+          <Button className="rounded-full absolute top-5 right-5 bg-white shadow-lg" onPress={onOpenProfile}>
             <FaRegEdit size={20} />
           </Button>
         </Tooltip>
