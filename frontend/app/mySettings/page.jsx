@@ -72,7 +72,7 @@ const page = () => {
       };
       
       try {
-        const result = await axiosSecure.patch(`/updateProfile`, data);
+        const result = await axiosSecure.patch(`/api/users/updateProfile`, data);
         console.log(result)
       } catch (error) {
         toast.error("Something went wrong")
