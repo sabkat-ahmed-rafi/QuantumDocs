@@ -1,5 +1,4 @@
 const userService = require('.././services/userService');
-const config = require('../config/config')
 
 
 exports.createUser = async (req, res) => {
@@ -79,4 +78,17 @@ exports.getFavourite = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+}
+
+exports.updateProfile = async (req, res) => {
+   try {
+    const data = req.body.data;
+    const user = req.user;
+    if(data && user) {
+        const updatedProfile = await userService.updateProfile(data, user);
+        res.status(200).json({ updatedProfile });
+    }
+   } catch (error) {
+    res.status(500).json({ error: error.message });
+   }
 }

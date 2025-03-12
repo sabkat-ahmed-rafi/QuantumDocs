@@ -89,6 +89,12 @@ const getFavourite = async (documentId, userEmail) => {
     }
 }
 
+const updateProfile = async (data, user) => {
+    const { name, bio, linkedin, instagram, twitter, profilePicture } = data;
+    const userId = user?._id;
+    console.log(userId);
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
@@ -96,5 +102,6 @@ module.exports = {
     searchUsers,
     addToFavourite,
     removeFavourite,
-    getFavourite
+    getFavourite,
+    updateProfile
 }
