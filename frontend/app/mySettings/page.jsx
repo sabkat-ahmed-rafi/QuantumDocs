@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Button,
@@ -13,15 +13,19 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaSquareInstagram } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import Link from "next/link";
+import uploadCloudinary from "../utils/uploadCloudinary";
+import { toast } from "react-toastify";
 
 
 const page = () => {
 
     const [image, setImage] = useState(null);
+    const uploadImageRef = useRef(null);
     const {user: userFromState} = useSelector(state => state.auth);
     const [user, setUser] = useState({})
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
     const axiosSecure = useAxiosSecure();
+    const formRef = useRef(null);
     
     
 
@@ -43,12 +47,39 @@ const page = () => {
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
       if (file) {
+        uploadImageRef.current = file;
         const reader = new FileReader();
         reader.onload = () => setImage(reader.result);
         reader.readAsDataURL(file);
       }
       
     };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(formRef.current);
+      const data = Object.fromEntries(formData.entries());
+      let imageUrl;
+      
+      
+      if(uploadImageRef.current) {
+        imageUrl = await uploadCloudinary(uploadImageRef.current);
+      };
+      
+      if(imageUrl) {
+        data.profilePicture = imageUrl;
+      };
+      
+      try {
+        const result = await axiosSecure.patch(`/updateProfile`, data);
+        console.log(result)
+      } catch (error) {
+        toast.error("Something went wrong")
+      }
+      
+    }
+
     console.log(user);
 
   return (
@@ -58,7 +89,7 @@ const page = () => {
             <div className="p-4">
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56">
                       <img
-                        src={image || user?.profilePicture}
+                        src={user?.profilePicture || "/images/profilePicture.jpg"}
                         alt="Profile"
                         className="w-full h-full object-cover rounded-full border-4 border-gray-300"
                       />
@@ -88,7 +119,7 @@ const page = () => {
           </Button>
         </Tooltip>
       </section> 
-      <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} />
+      <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} formRef={formRef} handleSubmit={handleSubmit} />
     </>
   )
 }

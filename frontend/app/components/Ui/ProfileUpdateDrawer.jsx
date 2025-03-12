@@ -11,13 +11,14 @@ import {
   } from "@heroui/react";
 import ProfileUpload from './ProfileUpload';
 
-const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handleImageUpload, user }) => {
+const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handleImageUpload, user, formRef, handleSubmit }) => {
   return (
     <>
       <Drawer placement={'left'} isOpen={isOpenProfile} onOpenChange={onOpenChangeProfile}>
         <DrawerContent>
           {(onClose) => (
             <>
+            <form ref={formRef} onSubmit={handleSubmit} >
               <DrawerHeader className="flex justify-center">Manage Profile</DrawerHeader>
               <DrawerBody>
                  <div className='flex justify-center '>
@@ -34,10 +35,11 @@ const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handle
                 <Button className='hover:text-red-600 text-purple-600' color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="secondary" onPress={onClose}>
-                Apply Changes
+                <Button type='submit' color="secondary" onPress={onClose}>
+                  Apply Changes
                 </Button>
               </DrawerFooter>
+            </form>
             </>
           )}
         </DrawerContent>
