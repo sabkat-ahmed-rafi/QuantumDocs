@@ -61,6 +61,10 @@ const page = () => {
       const formData = new FormData(formRef.current);
       const data = Object.fromEntries(formData.entries());
       let imageUrl;
+
+      if(data.name == user?.name || data.bio == user?.bio || data.linkedin == user?.socialLinks?.linkedin || data.instagram == user?.socialLinks?.instagram || data.twitter == user?.socialLinks?.twitter) {
+        return toast.error("Don't provide same data")
+      }
       
       
       if(uploadImageRef.current) {
