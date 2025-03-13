@@ -72,13 +72,13 @@ const page = () => {
         if (twitter.value && twitter.value !== user?.socialLinks?.twitter) updatedData.twitter = twitter.value;
     
         // Handle Image Upload
-        // let imageUrl;
-        // if (uploadImageRef.current) {
-        //   imageUrl = await uploadCloudinary(uploadImageRef.current);
-        // }
-        // if (imageUrl) {
-        //   updatedData.profilePicture = imageUrl;
-        // }
+        let imageUrl;
+        if (uploadImageRef.current) {
+          imageUrl = await uploadCloudinary(uploadImageRef.current);
+        }
+        if (imageUrl) {
+          updatedData.profilePicture = imageUrl;
+        }
     
         if (Object.keys(updatedData).length === 0) return;
     

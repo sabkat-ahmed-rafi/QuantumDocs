@@ -1,5 +1,6 @@
 const User = require('.././models/userModel');
 const userFavDocModel = require('../models/userFavDocModel');
+const axios = require('axios');
 
 // Create a user 
 const createUser = async (userData) => {
@@ -121,7 +122,7 @@ const updateProfile = async (data, user) => {
                 `${process.env.document_service}/api/document/updateUser`,
                 updateDocService
             );
-            
+
         };
         return { success: true, message: "User profile updated" };
 

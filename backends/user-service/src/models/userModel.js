@@ -43,8 +43,6 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true }); // This will automatically adds the createdAt and updatedAt field
 
 
-// Creating index on email field to optimize search queries
-userSchema.index({ email: 1 }); // Ascending order index
 
 // middleware and methods
 hashedPassMiddleware(userSchema);
