@@ -24,4 +24,7 @@ router.get('/:id', verifyToken, checkDocumentAccess, documentController.get); //
 // Document Deletion
 router.delete('/:id', documentController.deleteDocument);
 
+// User Update Route
+router.patch('/updateUser', documentController.updateUser);
+
 module.exports = router;
