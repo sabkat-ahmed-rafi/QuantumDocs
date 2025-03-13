@@ -286,6 +286,40 @@ const updateThumbnail = async (documentId, thumbnailURL) => {
     }
 }
 
+const updateUser = async (email, name, photo) => {
+    try {
+
+        const updateFields = {}; 
+
+        if (name) updateFields['owner.name'] = name;
+        if (photo) updateFields['owner.photo'] = photo;
+    
+        if (Object.keys(updateFields).length > 0) {
+          await Document.updateMany(
+            { 'owner.email': email },
+            { $set: updateFields }
+          );
+        }
+
+        const sharedUpdateFields = {};
+
+        if (name) sharedUpdateFields['sharedPersons.$.name'] = name;
+        if (photo) sharedUpdateFields['sharedPersons.$.photo'] = photo;
+    
+        if (Object.keys(sharedUpdateFields).length > 0) {
+          await Document.updateMany(
+            { 'sharedPersons.email': email },
+            { $set: sharedUpdateFields }
+          );
+        }
+
+
+        return { success: true, message: "Document deleted successfully" };
+    } catch (error) {
+        return { success: false, message: error.message }
+    }
+}
+
 module.exports = {
     createDocument,
     getDocumentById,
@@ -299,5 +333,6 @@ module.exports = {
     searchDocument,
     getAllDocument,
     deleteDocument,
-    updateThumbnail
+    updateThumbnail,
+    updateUser
 };
