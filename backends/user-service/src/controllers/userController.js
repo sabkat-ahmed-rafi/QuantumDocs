@@ -82,9 +82,10 @@ exports.getFavourite = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
    try {
-    const data = req.body.data;
+    const data = req.body;
     const user = req.user;
-    if(data && user) {
+    console.log(data, user)
+    if(data) {
         const updatedProfile = await userService.updateProfile(data, user);
         res.status(200).json({ updatedProfile });
     }

@@ -35,7 +35,7 @@ const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handle
                 <Button className='hover:text-red-600 text-purple-600' color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button type='submit' color="secondary" onPress={onClose}>
+                <Button type='submit' color="secondary">
                   Apply Changes
                 </Button>
               </DrawerFooter>

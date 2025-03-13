@@ -15,6 +15,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import uploadCloudinary from "../utils/uploadCloudinary";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 
 const page = () => {
@@ -56,36 +57,44 @@ const page = () => {
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(formRef.current);
-      const data = Object.fromEntries(formData.entries());
-      let imageUrl;
-
-      if(data.name == user?.name || data.bio == user?.bio || data.linkedin == user?.socialLinks?.linkedin || data.instagram == user?.socialLinks?.instagram || data.twitter == user?.socialLinks?.twitter) {
-        return toast.error("Don't provide same data")
-      }
-      
-      
-      if(uploadImageRef.current) {
-        imageUrl = await uploadCloudinary(uploadImageRef.current);
-      };
-      
-      if(imageUrl) {
-        data.profilePicture = imageUrl;
-      };
-      
       try {
-        const result = await axiosSecure.patch(`/api/users/updateProfile`, data);
-        console.log(result)
+        e.preventDefault();
+    
+        const { name, bio, linkedin, instagram, twitter } = e.target.elements;
+    
+        let updatedData = {};
+    
+        if (name.value && name.value !== user?.name) updatedData.name = name.value;
+        if (bio.value && bio.value !== user?.bio) updatedData.bio = bio.value;
+        if (linkedin.value && linkedin.value !== user?.socialLinks?.linkedin) updatedData.linkedin = linkedin.value;
+        if (instagram.value && instagram.value !== user?.socialLinks?.instagram) updatedData.instagram = instagram.value;
+        if (twitter.value && twitter.value !== user?.socialLinks?.twitter) updatedData.twitter = twitter.value;
+    
+        // Handle Image Upload
+        // let imageUrl;
+        // if (uploadImageRef.current) {
+        //   imageUrl = await uploadCloudinary(uploadImageRef.current);
+        // }
+        // if (imageUrl) {
+        //   updatedData.profilePicture = imageUrl;
+        // }
+    
+        console.log("Updated Data:", updatedData);
+    
+        const result = await axiosSecure.patch(
+          `/api/users/updateUser`, updatedData
+        );
+    
+        console.log("API Response:", result);
       } catch (error) {
-        toast.error("Something went wrong")
+        console.log("API Error:", error);
       }
-      
-    }
+    
+    };
+    
 
-    console.log(user);
 
+    
   return (
     <>
       <section className='h-screen font-sans py-5 px-5'>
