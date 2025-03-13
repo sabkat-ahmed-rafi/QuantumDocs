@@ -102,3 +102,14 @@ exports.deleteDocument = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.updateUser = async (req, res) => {
+	const updateDocService = req.body;
+	const { email, name, photo } = updateDocService;
+    try {
+        const updateResult = await documentService.updateUser( email, name, photo );
+        res.status(200).json({ updateResult });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
