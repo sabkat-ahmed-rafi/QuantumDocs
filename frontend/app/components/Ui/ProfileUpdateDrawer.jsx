@@ -10,15 +10,16 @@ import {
     Textarea,
   } from "@heroui/react";
 import ProfileUpload from './ProfileUpload';
+import { CgSpinnerTwoAlt } from 'react-icons/cg';
 
-const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handleImageUpload, user, formRef, handleSubmit }) => {
+const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handleImageUpload, user,handleSubmit, updateLoading }) => {
   return (
     <>
       <Drawer placement={'left'} isOpen={isOpenProfile} onOpenChange={onOpenChangeProfile}>
         <DrawerContent>
           {(onClose) => (
             <>
-            <form ref={formRef} onSubmit={handleSubmit} >
+            <form onSubmit={(e) => {handleSubmit(e, onClose)}} >
               <DrawerHeader className="flex justify-center">Manage Profile</DrawerHeader>
               <DrawerBody>
                  <div className='flex justify-center '>
@@ -36,7 +37,12 @@ const ProfileUpdateDrawer = ({ isOpenProfile, onOpenChangeProfile, image, handle
                   Cancel
                 </Button>
                 <Button type='submit' color="secondary">
-                  Apply Changes
+                  {
+                  updateLoading ?
+                   <CgSpinnerTwoAlt className='mx-auto animate-spin text-2xl' /> 
+                   : 
+                   "Apply Changes"
+                  }
                 </Button>
               </DrawerFooter>
             </form>

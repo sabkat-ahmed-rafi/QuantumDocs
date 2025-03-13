@@ -26,7 +26,7 @@ const page = () => {
     const [user, setUser] = useState({})
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
     const axiosSecure = useAxiosSecure();
-    const formRef = useRef(null);
+    const [updateLoading, setUpdateLoading] = useState(false);
     
     
 
@@ -56,9 +56,10 @@ const page = () => {
       
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e, onClose) => {
       try {
         e.preventDefault();
+        setUpdateLoading(true)
     
         const { name, bio, linkedin, instagram, twitter } = e.target.elements;
     
@@ -87,13 +88,16 @@ const page = () => {
         if(result.data.updatedProfile) {
           fetchUser();
           toast.success("Profile updated successfully");
+          setUpdateLoading(false);
         }
         console.log("API Response:", result);
       } catch (error) {
         console.log("API Error:", error);
+        setUpdateLoading(false);
         toast.error("Something went wrong");
       }
-    
+      
+      onClose();
     };
     
 
@@ -136,7 +140,7 @@ const page = () => {
           </Button>
         </Tooltip>
       </section> 
-      <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} formRef={formRef} handleSubmit={handleSubmit} />
+      <ProfileUpdateDrawer isOpenProfile={isOpenProfile} onOpenChangeProfile={onOpenChangeProfile} image={image} handleImageUpload={handleImageUpload} user={user} handleSubmit={handleSubmit} updateLoading={updateLoading} />
     </>
   )
 }
