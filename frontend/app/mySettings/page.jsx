@@ -79,15 +79,19 @@ const page = () => {
         //   updatedData.profilePicture = imageUrl;
         // }
     
-        console.log("Updated Data:", updatedData);
+        if (Object.keys(updatedData).length === 0) return;
     
         const result = await axiosSecure.patch(
           `/api/users/updateUser`, updatedData
         );
-    
+        if(result.data.updatedProfile) {
+          fetchUser();
+          toast.success("Profile updated successfully");
+        }
         console.log("API Response:", result);
       } catch (error) {
         console.log("API Error:", error);
+        toast.error("Something went wrong");
       }
     
     };

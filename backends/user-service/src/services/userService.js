@@ -90,7 +90,45 @@ const getFavourite = async (documentId, userEmail) => {
 }
 
 const updateProfile = async (data, user) => {
-   
+   try {
+
+    if (data.linkedin || data.instagram || data.twitter) {
+        data.socialLinks = {};
+        if (data.linkedin) data.socialLinks.linkedin = data.linkedin;
+        if (data.instagram) data.socialLinks.instagram = data.instagram;
+        if (data.twitter) data.socialLinks.twitter = data.twitter;
+  
+        delete data.linkedin;
+        delete data.instagram;
+        delete data.twitter;
+      }
+
+    const updatedUser = await User.findOneAndUpdate(
+        { uid : user.uid },
+        { $set: data },
+        { new: true }
+    );
+    if(updatedUser._id) {
+        
+        const updateDocService = {};
+        if (data.name) updateDocService.name = data.name;
+        if (data.profilePicture) updateDocService.photo = data.profilePicture;
+        
+        if (Object.keys(updateDocService).length > 0) {
+            updateDocService.email = user.email;
+            
+            // await axios.patch(
+            //     `${process.env.document_service}/api/documents/user`,
+            //     updateDocService
+            // );
+            
+        };
+        return { success: true, message: "User profile updated" };
+
+    }
+   } catch (error) {
+    return { success: false, message: "Something went wrong" };
+   }
 }
 
 module.exports = {
