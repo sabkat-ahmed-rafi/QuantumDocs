@@ -31,7 +31,9 @@ const page = () => {
     
 
     useEffect(() => {
-      fetchUser();
+      if (userFromState?.uid) {
+        fetchUser();
+      }
     }, [userFromState?.uid])
 
     const fetchUser = async () => {
