@@ -117,10 +117,10 @@ const updateProfile = async (data, user) => {
         if (Object.keys(updateDocService).length > 0) {
             updateDocService.email = user.email;
             
-            // await axios.patch(
-            //     `${process.env.document_service}/api/documents/user`,
-            //     updateDocService
-            // );
+            await axios.patch(
+                `${process.env.document_service}/api/document/updateUser`,
+                updateDocService
+            );
             
         };
         return { success: true, message: "User profile updated" };
