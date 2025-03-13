@@ -15,7 +15,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import uploadCloudinary from "../utils/uploadCloudinary";
 import { toast } from "react-toastify";
-import axios from "axios";
+
 
 
 const page = () => {
