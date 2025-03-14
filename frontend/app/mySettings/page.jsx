@@ -15,7 +15,7 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import uploadCloudinary from "../utils/uploadCloudinary";
 import { toast } from "react-toastify";
-
+import { useDispatch } from "react-redux";
 
 
 const page = () => {
@@ -27,6 +27,7 @@ const page = () => {
     const {isOpen: isOpenProfile, onOpen: onOpenProfile, onOpenChange: onOpenChangeProfile} = useDisclosure();
     const axiosSecure = useAxiosSecure();
     const [updateLoading, setUpdateLoading] = useState(false);
+    const dispatch = useDispatch();
     
     
 
@@ -66,8 +67,12 @@ const page = () => {
         const { name, bio, linkedin, instagram, twitter } = e.target.elements;
     
         let updatedData = {};
+        let firebaseUpdate = {};
     
-        if (name.value && name.value !== user?.name) updatedData.name = name.value;
+        if (name.value && name.value !== user?.name) {
+          updatedData.name = name.value;
+          firebaseUpdate.name = name.value;
+        }
         if (bio.value && bio.value !== user?.bio) updatedData.bio = bio.value;
         if (linkedin.value && linkedin.value !== user?.socialLinks?.linkedin) updatedData.linkedin = linkedin.value;
         if (instagram.value && instagram.value !== user?.socialLinks?.instagram) updatedData.instagram = instagram.value;
@@ -80,6 +85,7 @@ const page = () => {
         }
         if (imageUrl) {
           updatedData.profilePicture = imageUrl;
+          firebaseUpdate.photo = imageUrl;
         }
     
         if (Object.keys(updatedData).length === 0) return;
@@ -89,6 +95,9 @@ const page = () => {
         );
         if(result.data.updatedProfile) {
           fetchUser();
+          if (Object.keys(firebaseUpdate).length > 0) {
+            await dispatch(updateUser(firebaseUpdate)).unwrap();
+          }
           toast.success("Profile updated successfully");
           setUpdateLoading(false);
         }
