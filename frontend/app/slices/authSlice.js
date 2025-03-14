@@ -26,13 +26,23 @@ export const createUser = createAsyncThunk('auth/createUser',
 
 // update a user 
 export const updateUser = createAsyncThunk('auth/updateUser', 
-    async ({name}) => {
-        await updateProfile(auth.currentUser, {displayName: name});
+    async ({ name, photo }) => {
+
+        const updateData = {};
+
+        if (name) {
+            updateData.displayName = name;
+        }
+        if (photoURL) {
+            updateData.photoURL = photo;
+        }
+
+        await updateProfile(auth.currentUser, updateData);
         return {
             uid: auth.currentUser.uid,
             email: auth.currentUser.email,
             displayName: auth.currentUser.displayName,
-            photoURL: getAvatarUrl(auth.currentUser.displayName)
+            photoURL: auth.currentUser.photoURL || getAvatarUrl(auth.currentUser.displayName)
         }
     }
 )
