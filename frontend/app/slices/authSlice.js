@@ -26,7 +26,7 @@ export const createUser = createAsyncThunk('auth/createUser',
 
 // update a user 
 export const updateUser = createAsyncThunk('auth/updateUser', 
-    async ({ name, photo }) => {
+    async ({ name = null, photo = null }) => {
 
         const updateData = {};
 
