@@ -30,12 +30,8 @@ export const updateUser = createAsyncThunk('auth/updateUser',
 
         const updateData = {};
 
-        if (name) {
-            updateData.displayName = name;
-        }
-        if (photo) {
-            updateData.photoURL = photo;
-        }
+        if (name) updateData.displayName = name;
+        if (photo) updateData.photoURL = photo;
 
         await updateProfile(auth.currentUser, updateData);
         return {
