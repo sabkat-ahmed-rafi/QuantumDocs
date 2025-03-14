@@ -130,7 +130,7 @@ const page = () => {
             </div>
             <div className="flex flex-col items-center justify-center space-y-4">
               <h1 className="text-2xl font-semibold">{user?.name}</h1>
-              <p className="w-96 text-center text-slate-600">
+              <p className="md:w-96 text-center text-slate-600">
                 { user?.bio == "" ? "Go profile settings write something about yourself" : user?.bio }
               </p>
               <div className="flex space-x-10">
