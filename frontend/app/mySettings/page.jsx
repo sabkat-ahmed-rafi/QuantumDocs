@@ -16,6 +16,7 @@ import Link from "next/link";
 import uploadCloudinary from "../utils/uploadCloudinary";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { updateUser } from "../slices/authSlice";
 
 
 const page = () => {
