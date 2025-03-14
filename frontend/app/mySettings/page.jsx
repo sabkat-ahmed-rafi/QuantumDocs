@@ -17,6 +17,7 @@ import uploadCloudinary from "../utils/uploadCloudinary";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../slices/authSlice";
+import isValidSocialLink from "../utils/isValidSocialLinks";
 
 
 const page = () => {
@@ -78,6 +79,17 @@ const page = () => {
         if (linkedin.value && linkedin.value !== user?.socialLinks?.linkedin) updatedData.linkedin = linkedin.value;
         if (instagram.value && instagram.value !== user?.socialLinks?.instagram) updatedData.instagram = instagram.value;
         if (twitter.value && twitter.value !== user?.socialLinks?.twitter) updatedData.twitter = twitter.value;
+        
+        if (
+          (updatedData.linkedin && !isValidSocialLink("linkedin", updatedData.linkedin)) || 
+          (updatedData.instagram && !isValidSocialLink("instagram", updatedData.instagram)) || 
+          (updatedData.twitter && !isValidSocialLink("twitter", updatedData.twitter))
+        ) {
+          toast.error("Invalid URL");
+          setUpdateLoading(false);
+          return;
+        }
+        
     
         // Handle Image Upload
         let imageUrl;
@@ -89,7 +101,10 @@ const page = () => {
           firebaseUpdate.photo = imageUrl;
         }
     
-        if (Object.keys(updatedData).length === 0) return;
+        if (Object.keys(updatedData).length === 0) {
+          setUpdateLoading(false);
+          return;
+        };
     
         const result = await axiosSecure.patch(
           `/api/users/updateUser`, updatedData

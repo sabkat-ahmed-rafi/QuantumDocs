@@ -7,3 +7,5 @@ const isValidSocialLink = (platform, url) => {
   
     return regexes[platform]?.test(url) ?? false;
   };
+
+export default isValidSocialLink;
