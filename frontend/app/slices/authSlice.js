@@ -33,7 +33,7 @@ export const updateUser = createAsyncThunk('auth/updateUser',
         if (name) {
             updateData.displayName = name;
         }
-        if (photoURL) {
+        if (photo) {
             updateData.photoURL = photo;
         }
 
