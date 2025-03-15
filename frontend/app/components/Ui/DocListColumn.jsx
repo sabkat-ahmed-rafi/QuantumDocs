@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { SiGoogledocs } from 'react-icons/si'
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@heroui/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Link from 'next/link';
+import { TbLoader2 } from "react-icons/tb";
 
 const DocListColumn = ({ documents, formatDate, deleteDocument, handleCopyDocumentLink }) => {
+
+  const [loading, setLoading] = useState(null);
 
   return (
     <>
@@ -17,14 +20,21 @@ const DocListColumn = ({ documents, formatDate, deleteDocument, handleCopyDocume
             >
               <div className="flex-1  space-y-2 px-4 ">
                 <div className="flex items-center justify-between">
-                <Link href={`/document/${document._id}`} className='flex items-center space-x-5'>
-                  <SiGoogledocs size={20} className="text-purple-500" />
+                <Link onClick={() => setLoading(document._id)} 
+                href={`/document/${document._id}`} 
+                className='flex items-center space-x-5'>
+                  {
+                    loading == document._id ? 
+                    <TbLoader2 size={20} className='animate-spin' />
+                     : 
+                     <SiGoogledocs size={20} className="text-purple-500" />
+                  }
                   <h1 className="font-semibold font-sans">{document.title}</h1>
                 </Link>
                 <p className='text-sm font-sans text-slate-500'>{formatDate(document.updatedAt)}</p>
                 <Dropdown className='dropdown'>
                     <DropdownTrigger>
-                      <button onClick={(e) => e.stopPropagation()} className='p-2 rounded-full hover:bg-slate-200 outline-none'><BsThreeDotsVertical /></button>
+                      <button className='p-2 rounded-full hover:bg-slate-200 outline-none'><BsThreeDotsVertical /></button>
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Static Actions">
                       {/* <DropdownItem key="new"></DropdownItem> */}
