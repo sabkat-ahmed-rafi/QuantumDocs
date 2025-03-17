@@ -34,6 +34,7 @@
     "react-toastify": "^10.0.6",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.8.1",
     "y-quill": "^1.0.0",
     "y-websocket": "^2.1.0",
     "yjs": "^13.6.21"
