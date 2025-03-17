@@ -1,4 +1,5 @@
 const { Server } = require('socket.io');
+const { handleGroupMessage } = require('./handleGroupMessage');
 
 const initializeSocket = (server) => {
     const io = new Server(server, { 
@@ -11,6 +12,7 @@ const initializeSocket = (server) => {
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
 
+        handleGroupMessage(io, socket);
 
         socket.on("disconnect", () => {
             console.log(`User disconnected: ${socket.id}`);
