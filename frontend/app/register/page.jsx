@@ -88,7 +88,7 @@ const Register = () => {
             uid: user?.uid,
             name: user?.displayName,
             email: user?.email,
-            profilePicture: getAvatarUrl(user?.displayName)
+            profilePicture: user?.photoURL
         }
         if(user.email) {
           await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/users`, saveUser);
