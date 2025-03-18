@@ -11,18 +11,28 @@ import {
     Tooltip
   } from "@heroui/react";
 import socket from '@/app/utils/socket';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
 
-  const [text, setText] = useState('')
+  const [text, setText] = useState('');
   const [message, setMessage] = useState({});
-  const [allMessages, setAllMessages] = useState([])
+  const [allMessages, setAllMessages] = useState([]);
 
   useEffect(() => {
     socket.on("receive-group-message", (message) => {
       console.log(message);
+      setAllMessages(prevMessages => [...prevMessages, message]);
     });
+  }, []);
+
+  useEffect(() => {
+    const groupId = document?.document?.id;
+    if(groupId) {
+      fetchAllMessages(groupId);
+    }
   }, [])
 
   const handleSubmitMessage = async (e) => {
@@ -37,11 +47,25 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
       name: user?.displayName
     };
 
-    socket.emit('send-group-message', { sender, groupId, text })
+    socket.emit('send-group-message', { sender, groupId, text });
 
     setText('');
     
+  };
+
+  const fetchAllMessages = async (groupId) => {
+    try {
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}`)
+        console.log(result);
+        if(result.data.allMessagesResult.success) {
+          setAllMessages(result.data.allMessagesResult?.messages)
+        };
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   }
+
+  console.log(allMessages)
 
   return (
     <>
@@ -57,30 +81,19 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
               <hr />
               <DrawerBody className='text-black'>
-                {/* remote user message */}
-                <div className='mb-1'>
-                  <div className='flex items-end space-x-2'>
-                    <Tooltip content="Sabkat Ahmed Rafi" color='secondary'>
-                      <Avatar size="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-                    </Tooltip>
-                    <p className='bg-slate-500 text-white px-4 py-2 rounded-[15px] text-left rounded-bl-[0px] inline-block w-[200px]'>
-                       Click the close button dfghssss rtqewrgv 34r tgfqwrfv q4r tqrt qwe twer qwerqw console.error( rwe qwer qwtasdf);
-                    </p>
-                  </div>
-                  <p className='text-sm text-slate-400 text-left ml-11'>12:30 am - 30 september</p>
-                </div>
-                {/* local user message */}
-                <div className='mb-1'>
-                  <div className='flex justify-end items-end space-x-2'>
-                    <p className='bg-purple-500 text-white px-4 py-2 rounded-[15px] text-left rounded-br-[0px] inline-block w-[200px]'>
-                       Click
-                    </p>
-                    <Tooltip content="Sabkat Ahmed Rafi" color='secondary'>
-                      <Avatar size="sm" src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-                    </Tooltip>
-                  </div>
-                  <p className='text-sm text-slate-400 text-right mr-11'>12:30 pm - 30 september</p>
-                </div>
+                {
+                  allMessages.map((message, index) => <div key={index} className='mb-1'>
+                    <div className={`flex ${message.sender.email == user.email ? 'justify-end space-x-2' : 'flex-row-reverse justify-end gap-2'} items-end`}>
+                      <p className={`${message.sender.email !== user.email ? 'bg-slate-500' : 'bg-purple-500'} text-white px-4 py-2 rounded-[15px] text-left ${message.sender.email == user.email ? 'rounded-br-[0px]' : 'rounded-bl-[0px]'} inline-block w-[200px]`}>
+                        {message.text}
+                      </p>
+                      <Tooltip content={`${message.sender.name}`} color='secondary'>
+                        <Avatar size="sm" src={`${message.sender.photo}`} />
+                      </Tooltip>
+                    </div>
+                    <p className={`text-sm text-slate-400 ${message.sender.email == user.email ? 'text-right mr-11' : 'text-left ml-11'}`}>12:30 pm - 30 september</p>
+                  </div>)
+                }
               </DrawerBody>
               <hr />
               <form onSubmit={handleSubmitMessage}>
