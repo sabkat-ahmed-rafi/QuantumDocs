@@ -4,7 +4,7 @@ import DocumentInfo from './DocumentInfo/DocumentInfo'
 import DocumentFunc from './DocumentFunc/DocumentFunc'
 import socket from '@/app/utils/socket'
 
-const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef, user }) => {
+const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef, user, documentId }) => {
 
   useEffect(() => {
 
@@ -12,6 +12,7 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, docu
 
     const isOwner = user?.email == document?.document?.owner?.email;
     const isSharedUser = document?.document?.sharedPersons?.some(person => person.email == user?.email) 
+    const groupId = documentId;
 
     if(isOwner || isSharedUser) {
 
@@ -19,6 +20,9 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, docu
 
       socket.on('connect', () => {
         console.log(`Connected: ${socket.id}`);
+
+        socket.emit("join-group-message", groupId);
+
       });
   
       return () => {

@@ -299,6 +299,7 @@ const Document = () => {
           documentRefetch={documentRefetch}
           quillRef={quillRef}
           user={user}
+          documentId={documentId}
           />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
