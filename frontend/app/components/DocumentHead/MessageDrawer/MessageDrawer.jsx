@@ -18,19 +18,25 @@ import axios from 'axios';
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
 
   const [text, setText] = useState('');
-  const [message, setMessage] = useState({});
+  // const [message, setMessage] = useState({});
   const [allMessages, setAllMessages] = useState([]);
 
   useEffect(() => {
     socket.on("receive-group-message", (message) => {
       console.log(message);
-      setAllMessages(prevMessages => [...prevMessages, message]);
+      setAllMessages(prevMessages => {
+        if (!prevMessages.some(m => m._id === message._id)) {
+          return [...prevMessages, message];
+        }
+        return prevMessages;
+      });
     });
   }, []);
 
   useEffect(() => {
     const groupId = document?.document?.id;
-    if(groupId) {
+    if(groupId && allMessages.length === 0) {
+      console.log("clicking")
       fetchAllMessages(groupId);
     }
   }, [])
@@ -65,7 +71,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     }
   }
 
-  console.log(allMessages)
+  
 
   return (
     <>
