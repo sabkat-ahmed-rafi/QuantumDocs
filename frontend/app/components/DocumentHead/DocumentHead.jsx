@@ -4,20 +4,30 @@ import DocumentInfo from './DocumentInfo/DocumentInfo'
 import DocumentFunc from './DocumentFunc/DocumentFunc'
 import socket from '@/app/utils/socket'
 
-const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef }) => {
+const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef, user }) => {
 
   useEffect(() => {
-    socket.connect();
 
-    socket.on('connect', () => {
-      console.log(`Connected: ${socket.id}`);
-    });
+    if(!document || !user) return;
 
-    return () => {
-      socket.disconnect();
-    };
+    const isOwner = user?.email == document?.document?.owner?.email;
+    const isSharedUser = document?.document?.sharedPersons?.some(person => person.email == user?.email) 
 
-  }, [])
+    if(isOwner || isSharedUser) {
+
+      socket.connect();
+
+      socket.on('connect', () => {
+        console.log(`Connected: ${socket.id}`);
+      });
+  
+      return () => {
+        socket.disconnect();
+      };
+
+    } 
+
+  }, [document, user])
 
   return (
     <>

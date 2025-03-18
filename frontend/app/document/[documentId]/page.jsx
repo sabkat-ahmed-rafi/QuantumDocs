@@ -298,6 +298,7 @@ const Document = () => {
           activeUsers={activeUsers}
           documentRefetch={documentRefetch}
           quillRef={quillRef}
+          user={user}
           />
           {/* Main section of Editor */}
             <section className='text-black bg-[#F9FBFD]  min-h-[1000px]'> 
