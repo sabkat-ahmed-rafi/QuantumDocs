@@ -16,7 +16,7 @@ app.use(cors({
 );
 
 // Routes 
-app.use('api/messages/', messageRoute);
+app.use('/api/messages', messageRoute);
 
 
 module.exports = app;
