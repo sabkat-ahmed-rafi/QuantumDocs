@@ -1,13 +1,15 @@
-const handleGroupMessage = (io, socket) => {
-    socket.on('send-group-message', ({ sender, groupId, message }) => {
-        console.log(`Group ${groupId} received message from ${sender}: ${message}`);
+const Message = require('../models/messageModel');
 
-        io.to(groupId).emit('receive-group-message', { sender, message })
+const handleGroupMessage = (io, socket) => {
+    socket.on('send-group-message', async ({ sender, groupId, text }) => {
+        console.log(sender, groupId, text)
+        const message = await Message.create({ text, groupId, sender, readBy: [sender.uid] });
+
+        io.to(groupId).emit('receive-group-message', message);
     });
 
     socket.on('join-group-message', (groupId) => {
         socket.join(groupId);
-        console.log(`User ${socket.id} joined group ${groupId}`);
     })
 }; 
 
