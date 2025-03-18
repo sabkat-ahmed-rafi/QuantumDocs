@@ -1,8 +1,8 @@
 const handleGroupMessage = (io, socket) => {
-    socket.on('group-message', ({ sender, groupId, message }) => {
+    socket.on('send-group-message', ({ sender, groupId, message }) => {
         console.log(`Group ${groupId} received message from ${sender}: ${message}`);
 
-        io.to(groupId).emit('group-message', { sender, message })
+        io.to(groupId).emit('receive-group-message', { sender, message })
     });
 
     socket.on('join-group-message', (groupId) => {
