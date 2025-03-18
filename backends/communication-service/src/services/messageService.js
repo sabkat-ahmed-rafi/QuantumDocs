@@ -8,3 +8,7 @@ const getMessages = async (groupId) => {
         return { success: false, message: "Something went wrong" };
     }
 }
+
+module.exports = {
+    getMessages,
+}
