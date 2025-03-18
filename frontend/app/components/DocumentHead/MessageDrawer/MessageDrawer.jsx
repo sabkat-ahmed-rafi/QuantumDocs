@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -10,8 +10,39 @@ import {
     Avatar,
     Tooltip
   } from "@heroui/react";
+import socket from '@/app/utils/socket';
 
-const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document}) => {
+
+const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
+
+  const [text, setText] = useState('')
+  const [message, setMessage] = useState({});
+  const [allMessages, setAllMessages] = useState([])
+
+  useEffect(() => {
+    socket.on("receive-group-message", (message) => {
+      console.log(message);
+    });
+  }, [])
+
+  const handleSubmitMessage = async (e) => {
+    e.preventDefault();
+
+    const groupId = document?.document?.id;
+    if(!text.trim() || !groupId) return; 
+    const sender = {
+      uid: user?.uid,
+      photo: user?.photoURL,
+      email: user?.email,
+      name: user?.displayName
+    };
+
+    socket.emit('send-group-message', { sender, groupId, text })
+
+    setText('');
+    
+  }
+
   return (
     <>
         <Drawer
@@ -21,7 +52,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document}) => {
         onOpenChange={onOpenMessageChange}
       >
         <DrawerContent>
-          {(onClose) => (
+          {() => (
             <>
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
               <hr />
@@ -52,16 +83,18 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document}) => {
                 </div>
               </DrawerBody>
               <hr />
-              <DrawerFooter className='flex-col'>
-                <div className='mb-2'>
-                  <Input className='text-black' variant="bordered" size='sm' label="message" type="text" />
+              <form onSubmit={handleSubmitMessage}>
+              <DrawerFooter className='flex justify-center items-center'>
+                <div className='w-full'>
+                  <Input value={text} onChange={e => setText(e.target.value)} name='text' className='text-black' variant="faded" size='sm' label="message" type="text" />
                 </div>
                 <div className='flex justify-end space-x-3'>
-                  <Button color="secondary" className='rounded-full'>
+                  <Button type='submit' color="secondary" className='rounded'>
                     Send 
                   </Button>  
                 </div>
               </DrawerFooter>
+              </form>
             </>
           )}
         </DrawerContent>
