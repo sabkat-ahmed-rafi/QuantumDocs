@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -9,16 +9,17 @@ import {
     Input,
     Avatar,
     Tooltip
-  } from "@heroui/react";
+} from "@heroui/react";
 import socket from '@/app/utils/socket';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import scrollBottom from '@/app/utils/scrollBottom';
 
 
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
 
   const [text, setText] = useState('');
-  // const [message, setMessage] = useState({});
+  const messageEndRef = useRef(null);
   const [allMessages, setAllMessages] = useState([]);
 
   useEffect(() => {
@@ -39,7 +40,8 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
       console.log("clicking")
       fetchAllMessages(groupId);
     }
-  }, [])
+    scrollBottom(messageEndRef);
+  }, [allMessages])
 
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
@@ -100,6 +102,10 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
                     <p className={`text-sm text-slate-400 ${message.sender.email == user.email ? 'text-right mr-11' : 'text-left ml-11'}`}>12:30 pm - 30 september</p>
                   </div>)
                 }
+                {
+                  allMessages.length == 0 && <h1 className='h-full flex justify-center items-center font-bold text-lg font-sans text-slate-300'>No messages</h1>
+                }
+                <div ref={messageEndRef} />
               </DrawerBody>
               <hr />
               <form onSubmit={handleSubmitMessage}>
