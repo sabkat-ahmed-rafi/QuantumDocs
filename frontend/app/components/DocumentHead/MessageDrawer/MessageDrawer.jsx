@@ -33,7 +33,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     if(groupId && allMessages.length === 0) {
       fetchAllMessages(groupId); // fetching messages from database
     }
-  }, [])
+  }, [document?.document?.id])
 
   useEffect(() => {
     scrollBottom(messageEndRef); // focus on the last message on every incoming message
