@@ -37,7 +37,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
 
   useEffect(() => {
     scrollBottom(messageEndRef); // focus on the last message on every incoming message
-  }, [allMessages])
+  }, [allMessages, isOpenMessage])
 
   const handleSubmitMessage = async (e) => {
     e.preventDefault();
