@@ -14,6 +14,7 @@ import socket from '@/app/utils/socket';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import scrollBottom from '@/app/utils/scrollBottom';
+import messageTimeFormat from '@/app/utils/messageTimeFormat';
 
 
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
@@ -32,6 +33,9 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     if(groupId && allMessages.length === 0) {
       fetchAllMessages(groupId); // fetching messages from database
     }
+  }, [])
+
+  useEffect(() => {
     scrollBottom(messageEndRef); // focus on the last message on every incoming message
   }, [allMessages])
 
@@ -63,6 +67,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
       toast.error("Something went wrong");
     }
   }, []);
+  
   
   const handleReceiveMessage = (message) => {
     setAllMessages(prevMessages => {
@@ -100,7 +105,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
                         <Avatar size="sm" src={`${message.sender.photo}`} />
                       </Tooltip>
                     </div>
-                    <p className={`text-sm text-slate-400 ${message.sender.email == user.email ? 'text-right mr-11' : 'text-left ml-11'}`}>12:30 pm - 30 september</p>
+                    <p className={`text-sm text-slate-400 ${message.sender.email == user.email ? 'text-right mr-11' : 'text-left ml-11'}`}>{messageTimeFormat(message.createdAt)}</p>
                   </div>)
                 }
                 {/* Showing "No messages" if there is no message */}
