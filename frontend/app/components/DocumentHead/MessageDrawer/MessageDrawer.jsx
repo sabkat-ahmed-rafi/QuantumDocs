@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -23,24 +23,16 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
   const [allMessages, setAllMessages] = useState([]);
 
   useEffect(() => {
-    socket.on("receive-group-message", (message) => {
-      console.log(message);
-      setAllMessages(prevMessages => {
-        if (!prevMessages.some(m => m._id === message._id)) {
-          return [...prevMessages, message];
-        }
-        return prevMessages;
-      });
-    });
+    socket.on("receive-group-message", handleReceiveMessage); // receiving message
+    return () => socket.off("receive-group-message", handleReceiveMessage); // cleaning event listener
   }, []);
 
   useEffect(() => {
     const groupId = document?.document?.id;
     if(groupId && allMessages.length === 0) {
-      console.log("clicking")
-      fetchAllMessages(groupId);
+      fetchAllMessages(groupId); // fetching messages from database
     }
-    scrollBottom(messageEndRef);
+    scrollBottom(messageEndRef); // focus on the last message on every incoming message
   }, [allMessages])
 
   const handleSubmitMessage = async (e) => {
@@ -61,17 +53,25 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     
   };
 
-  const fetchAllMessages = async (groupId) => {
+  const fetchAllMessages = useCallback(async (groupId) => {
     try {
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}`)
-        console.log(result);
-        if(result.data.allMessagesResult.success) {
-          setAllMessages(result.data.allMessagesResult?.messages)
-        };
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}`);
+      if (result.data.allMessagesResult.success) {
+        setAllMessages(result.data.allMessagesResult?.messages);
+      }
     } catch (error) {
       toast.error("Something went wrong");
     }
-  }
+  }, []);
+  
+  const handleReceiveMessage = (message) => {
+    setAllMessages(prevMessages => {
+      if (!prevMessages.some(m => m._id === message._id)) {
+        return [...prevMessages, message];
+      }
+      return prevMessages;
+    });
+  };
 
   
 
@@ -89,6 +89,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
               <hr />
               <DrawerBody className='text-black'>
+                {/* showing message on UI  */}
                 {
                   allMessages.map((message, index) => <div key={index} className='mb-1'>
                     <div className={`flex ${message.sender.email == user.email ? 'justify-end space-x-2' : 'flex-row-reverse justify-end gap-2'} items-end`}>
@@ -102,9 +103,11 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
                     <p className={`text-sm text-slate-400 ${message.sender.email == user.email ? 'text-right mr-11' : 'text-left ml-11'}`}>12:30 pm - 30 september</p>
                   </div>)
                 }
+                {/* Showing "No messages" if there is no message */}
                 {
                   allMessages.length == 0 && <h1 className='h-full flex justify-center items-center font-bold text-lg font-sans text-slate-300'>No messages</h1>
                 }
+                {/* taking reference to show the last message on every message came */}
                 <div ref={messageEndRef} />
               </DrawerBody>
               <hr />
@@ -114,7 +117,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
                   <Input value={text} onChange={e => setText(e.target.value)} name='text' className='text-black' variant="faded" size='sm' label="message" type="text" />
                 </div>
                 <div className='flex justify-end space-x-3'>
-                  <Button type='submit' color="secondary" className='rounded'>
+                  <Button type='submit' color="secondary" className='rounded font-sans font-semibold'>
                     Send 
                   </Button>  
                 </div>
