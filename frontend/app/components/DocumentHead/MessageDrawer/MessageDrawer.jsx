@@ -21,7 +21,11 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
 
   const [text, setText] = useState('');
   const messageEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const [allMessages, setAllMessages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     socket.on("receive-group-message", handleReceiveMessage); // receiving message
@@ -57,16 +61,24 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     
   };
 
-  const fetchAllMessages = useCallback(async (groupId) => {
+  const fetchAllMessages = useCallback(async (groupId, pageNum = 1, reset = false) => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
     try {
-      const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}`);
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}?page=${pageNum}&limit=10`);
       if (result.data.allMessagesResult.success) {
-        setAllMessages(result.data.allMessagesResult?.messages);
+        const newMessages = result.data.allMessagesResult.messages;
+        setAllMessages(prev => reset ? newMessages : [...newMessages, ...prev]);
+        setHasMore(newMessages.length === 10); 
+        setPage(pageNum + 1);
       }
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [isLoading, hasMore]);
   
   
   const handleReceiveMessage = (message) => {
@@ -78,7 +90,14 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
     });
   };
 
-  
+  const handleScroll = () => {
+    if (!messagesContainerRef.current) return;
+    const { scrollTop } = messagesContainerRef.current;
+
+    if (scrollTop === 0 && !isLoading && hasMore) {
+      fetchAllMessages(document?.document?.id, page);
+    }
+  };  
 
   return (
     <>
@@ -93,7 +112,8 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
             <>
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
               <hr />
-              <DrawerBody className='text-black'>
+              <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black'>
+              {isLoading && <p className="text-center text-gray-400">Loading...</p>}
                 {/* showing message on UI  */}
                 {
                   allMessages.map((message, index) => <div key={index} className='mb-1'>
