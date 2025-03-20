@@ -35,7 +35,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
   useEffect(() => {
     const groupId = document?.document?.id;
     if(groupId && allMessages.length === 0) {
-      fetchAllMessages(groupId); // fetching messages from database
+      fetchAllMessages(groupId, 1, true); // fetching messages from database
     }
   }, [document?.document?.id])
 
@@ -69,7 +69,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
       const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}?page=${pageNum}&limit=10`);
       if (result.data.allMessagesResult.success) {
         const newMessages = result.data.allMessagesResult.messages;
-        setAllMessages(prev => reset ? newMessages : [...newMessages, ...prev]);
+        setAllMessages(prev => reset ? newMessages : [...prev, ...newMessages]);
         setHasMore(newMessages.length === 10); 
         setPage(pageNum + 1);
       }
@@ -116,7 +116,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
               {isLoading && <p className="text-center text-gray-400">Loading...</p>}
                 {/* showing message on UI  */}
                 {
-                  allMessages.map((message, index) => <div key={index} className='mb-1'>
+                  [...allMessages].reverse().map((message, index) => <div key={index} className='mb-1'>
                     <div className={`flex ${message.sender.email == user.email ? 'justify-end space-x-2' : 'flex-row-reverse justify-end gap-2'} items-end`}>
                       <p className={`${message.sender.email !== user.email ? 'bg-slate-500' : 'bg-purple-500'} text-white px-4 py-2 rounded-[15px] text-left ${message.sender.email == user.email ? 'rounded-br-[0px]' : 'rounded-bl-[0px]'} inline-block w-[200px]`}>
                         {message.text}
