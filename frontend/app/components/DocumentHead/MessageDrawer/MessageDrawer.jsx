@@ -84,7 +84,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
   const handleReceiveMessage = (message) => {
     setAllMessages(prevMessages => {
       if (!prevMessages.some(m => m._id === message._id)) {
-        return [...prevMessages, message];
+        return [message, ...prevMessages];
       }
       return prevMessages;
     });
