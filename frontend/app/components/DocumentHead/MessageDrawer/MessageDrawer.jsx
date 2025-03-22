@@ -8,7 +8,8 @@ import {
     Button,
     Input,
     Avatar,
-    Tooltip
+    Tooltip,
+    Spinner
 } from "@heroui/react";
 import socket from '@/app/utils/socket';
 import { toast } from 'react-toastify';
@@ -22,6 +23,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
   const [text, setText] = useState('');
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+  const isUserAtBottomRef = useRef(true);
   const [allMessages, setAllMessages] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -40,7 +42,9 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
   }, [document?.document?.id])
 
   useEffect(() => {
-    scrollBottom(messageEndRef); // focus on the last message on every incoming message
+    if(isUserAtBottomRef.current) {
+      scrollBottom(messageEndRef); // focus on the last message on every incoming message
+    } 
   }, [allMessages, isOpenMessage])
 
   const handleSubmitMessage = async (e) => {
@@ -66,13 +70,23 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
 
     setIsLoading(true);
     try {
+      // Showing the last message first after scrolling the top to see previous message 
+      const messagesContainer = messagesContainerRef.current;
+      const previousScrollHeight = messagesContainer ? messagesContainer.scrollHeight : 0;
+
       const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/getMessages/${groupId}?page=${pageNum}&limit=10`);
       if (result.data.allMessagesResult.success) {
         const newMessages = result.data.allMessagesResult.messages;
         setAllMessages(prev => reset ? newMessages : [...prev, ...newMessages]);
         setHasMore(newMessages.length === 10); 
         setPage(pageNum + 1);
-      }
+        // Restore scroll position after messages load
+        requestAnimationFrame(() => {
+          if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight - previousScrollHeight - 100;
+          }
+        });
+      };
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -92,11 +106,13 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
 
   const handleScroll = () => {
     if (!messagesContainerRef.current) return;
-    const { scrollTop } = messagesContainerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
 
     if (scrollTop === 0 && !isLoading && hasMore) {
       fetchAllMessages(document?.document?.id, page);
-    }
+    };
+
+    isUserAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 10;
   };  
 
   return (
@@ -112,8 +128,8 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
             <>
               <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
               <hr />
-              <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black'>
-              {isLoading && <p className="text-center text-gray-400">Loading...</p>}
+              <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
+              {isLoading && <Spinner color='secondary' className='flex justify-center items-center text-xl font-semibold mt-2'>Loading</Spinner>}
                 {/* showing message on UI  */}
                 {
                   [...allMessages].reverse().map((message, index) => <div key={index} className='mb-1'>
