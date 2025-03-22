@@ -18,7 +18,7 @@ import scrollBottom from '@/app/utils/scrollBottom';
 import messageTimeFormat from '@/app/utils/messageTimeFormat';
 
 
-const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => {
+const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setUnreadCount}) => {
 
   const [text, setText] = useState('');
   const messageEndRef = useRef(null);
@@ -122,6 +122,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user}) => 
         isKeyboardDismissDisabled={true}
         isOpen={isOpenMessage}
         onOpenChange={onOpenMessageChange}
+        onClose={() => setUnreadCount(0)}
       >
         <DrawerContent>
           {() => (
