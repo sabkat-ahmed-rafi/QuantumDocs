@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import socket from "@/app/utils/socket";
 
 
 const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
@@ -33,8 +34,19 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
    }, [activeUsers, user?.uid])
 
    useEffect(() => {
-      fetchUnreadCount(user.uid, document?.document?.id);
-   }, [user.uid, document?.document?.id]);
+      fetchUnreadCount(user?.uid, document?.document?.id);
+   }, [user?.uid, document?.document?.id]);
+
+   useEffect(() => {
+      socket.on('receive-unread-group-message', receiveUnreadMessageCount);
+      return () => socket.off('receive-unread-group-message', receiveUnreadMessageCount);
+   }, []);
+
+   const receiveUnreadMessageCount = ({count, senderUid}) => {
+      if(senderUid !== user?.uid) {
+         setUnreadCount(prevCount => prevCount + count);
+      }
+   };
 
    const fetchUnreadCount = async (userId, groupId) => {
       try {
@@ -45,6 +57,15 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
       } catch (error) {
         toast.error("Something went wrong")
       }
+   };
+
+   const handleMarkAsRead = () => {
+      const userId = user?.uid;
+      const groupId = document?.document?.id;
+      if(userId && groupId) {
+         socket.emit('group-message-mark-as-read', {userId, groupId});
+         setUnreadCount(0);
+      };
    };
 
    //  For Share Modal 
@@ -85,7 +106,7 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
            </Button>
             {
                unreadCount > 0 ? <Badge color="danger" content={unreadCount >= 10 ? "9+" : unreadCount } shape="rectangle" showOutline={false} >
-               <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
+               <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={() => {onOpenMessage(); handleMarkAsRead()}}> 
                 <AiFillMessage size={20}/>  Messages
                </Button>
              </Badge> 
