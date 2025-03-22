@@ -21,7 +21,19 @@ const getUnreadMessagesCount = async (userId, groupId) => {
     }
 };
 
+const markAsRead = async (userId, groupId) => {
+    try {
+        await Message.updateMany(
+            { groupId, readBy: { $ne: userId } },
+            { $addToSet: { readBy: userId } }
+        )
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+};
+
 module.exports = {
     getMessages,
-    getUnreadMessagesCount
+    getUnreadMessagesCount, 
+    markAsRead
 }
