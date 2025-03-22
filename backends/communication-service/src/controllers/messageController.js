@@ -10,4 +10,14 @@ exports.getAllMessages = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+};
+
+exports.getUnreadMessagesCount = async (req, res) => {
+    try {
+        const { userId, groupId } = req.params;
+        const countResult = await messageService.getUnreadMessagesCount(userId, groupId);
+        res.status(200).json({ countResult });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 }
