@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-* now i have to do something so that the scroll does not work if the user go above
+* now I have to make the message notification UI
