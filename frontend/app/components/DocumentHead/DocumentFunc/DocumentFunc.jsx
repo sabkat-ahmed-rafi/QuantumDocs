@@ -1,6 +1,6 @@
 'use client'
 
-import {Button, useDisclosure, Avatar, AvatarGroup, Tooltip} from "@heroui/react";
+import {Button, useDisclosure, Avatar, AvatarGroup, Tooltip, Badge} from "@heroui/react";
 import ShareModal from '../ShareModal/ShareModal';
 import { BiWorld } from 'react-icons/bi';
 import { AiFillMessage } from "react-icons/ai";
@@ -8,12 +8,15 @@ import { GiNotebook } from "react-icons/gi";
 import MessageDrawer from "../MessageDrawer/MessageDrawer";
 import NoteDrawer from "../NoteDrawer/NoteDrawer";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
 
    const {user} = useSelector(state => state.auth);
+   const [unreadCount, setUnreadCount] = useState(0);
 
    const isOwner = user?.email === document?.document?.owner?.email;
    const isSharedUser = document?.document?.sharedPersons.some(person => person.email == user?.email);
@@ -28,6 +31,21 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
          return true;
       });
    }, [activeUsers, user?.uid])
+
+   useEffect(() => {
+      fetchUnreadCount(user.uid, document?.document?.id);
+   }, [user.uid, document?.document?.id]);
+
+   const fetchUnreadCount = async (userId, groupId) => {
+      try {
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_communication_service}/api/messages/unread/${userId}/${groupId}`);
+        if(result?.data?.countResult?.success) {
+         setUnreadCount(result.data.countResult.unreadMessageCount);
+        }  
+      } catch (error) {
+        toast.error("Something went wrong")
+      }
+   };
 
    //  For Share Modal 
     const {isOpen: isOpenShareModal, onOpen: onOpenShareModal, onOpenChange: onOpenChangeShareModal} = useDisclosure();
@@ -65,9 +83,17 @@ const DocumentFunc = ({activeUsers, document, documentRefetch}) => {
            <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenNote}>
               <GiNotebook size={20} /> Notes
            </Button>
-           <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
-           <AiFillMessage size={20}/>  Messages
+            {
+               unreadCount > 0 ? <Badge color="danger" content={unreadCount >= 10 ? "9+" : unreadCount } shape="rectangle" showOutline={false} >
+               <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
+                <AiFillMessage size={20}/>  Messages
+               </Button>
+             </Badge> 
+             :
+             <Button isDisabled={!isOwner && !isSharedUser} className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenMessage}> 
+               <AiFillMessage size={20}/>  Messages
             </Button>
+            }
            <Button  className='bg-[#C9A9E9] md:p-2 px-3' onPress={onOpenShareModal}>
               <BiWorld size={20} /> Share
            </Button>
