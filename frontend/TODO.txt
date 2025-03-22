@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 
-* now I have to make the message notification UI
+* now I need to make the group video calling functionality

@@ -1,3 +1,7 @@
+========= TODO ==========
+
 For development : NEXT_PUBLIC_socket_server=ws://yourdomain.com
 
 For Production  : NEXT_PUBLIC_socket_server=wss://yourdomain.com
+
+* Now I need to make optimizations so that this backend can handle millions of user
