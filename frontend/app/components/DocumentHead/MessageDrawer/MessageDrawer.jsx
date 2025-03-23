@@ -16,6 +16,9 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import scrollBottom from '@/app/utils/scrollBottom';
 import messageTimeFormat from '@/app/utils/messageTimeFormat';
+import { useDisclosure } from "@heroui/react";
+import VideoCallModal from '../../UI/VideoCallModal';
+import { IoVideocam } from "react-icons/io5";
 
 
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setUnreadCount}) => {
@@ -28,6 +31,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const {isOpen: isOpenVideoCall, onOpen: onOpenVideoCall, onOpenChange: onOpenChangeVideoCall} = useDisclosure();
 
   useEffect(() => {
     socket.on("receive-group-message", handleReceiveMessage); // receiving message
@@ -127,7 +131,9 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
         <DrawerContent>
           {() => (
             <>
-              <DrawerHeader className="flex flex-col gap-1 text-black font-extrabold">Team Messages</DrawerHeader>
+              <DrawerHeader className="flex items-center gap-5 text-black font-extrabold">
+                Team Messages <IoVideocam onClick={onOpenVideoCall} className='text-purple-700 cursor-pointer' size={30} />
+              </DrawerHeader>
               <hr />
               <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
               {isLoading && <Spinner color='secondary' className='flex justify-center items-center text-xl font-semibold mt-2'>Loading</Spinner>}
@@ -169,6 +175,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           )}
         </DrawerContent>
       </Drawer>
+      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} />
     </>
   )
 }
