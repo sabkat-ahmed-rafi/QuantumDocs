@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -30,8 +30,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall }) => {
                         ${users.length == 3 && "w-60 h-32 md:w-52 md:h-80 xl:w-[450px] xl:h-[600px]"}
                         ${users.length == 4 && "w-40 h-48 md:w-80 xl:w-[550px] xl:h-[300px]"}
                         ${users.length == 1 && "h-96 w-60 xl:w-[500px] xl:h-[600px]"}
-                        md:rounded-lg border border-gray-400 object-fit`}
-                      src="/video.mp4"
+                        md:rounded-lg border object-fit border-purple-600`}
                     ></video>
                   ))}
                   </div>
