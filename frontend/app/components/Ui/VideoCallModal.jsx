@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
-import "react-grid-layout/css/styles.css";
-import "react-resizable/css/styles.css";
+
 
 const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall }) => {
 
