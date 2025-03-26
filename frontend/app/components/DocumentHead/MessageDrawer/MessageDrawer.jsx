@@ -113,7 +113,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
 
     if (scrollTop === 0 && !isLoading && hasMore) {
-      fetchAllMessages(document?.document?.id, page);
+      fetchAllMessages(document?.document?.id, page); // fetching old message on scroll above
     };
 
     isUserAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 10;
