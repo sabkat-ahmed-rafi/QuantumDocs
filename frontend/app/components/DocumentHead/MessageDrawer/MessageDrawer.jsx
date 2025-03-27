@@ -120,6 +120,14 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   };  
 
   const askedForPermission =  async () => {
+    const cameraPerm = await navigator.permissions.query({ name: "camera" });
+    const micPerm = await navigator.permissions.query({ name: "microphone" });
+
+    if (cameraPerm.state === "denied" || micPerm.state === "denied") {
+      toast.error("Please enable Camera & Microphone");
+      return;
+    }
+
     try {
       await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       onOpenVideoCall();
