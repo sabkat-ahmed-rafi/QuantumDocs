@@ -119,6 +119,15 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     isUserAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 10;
   };  
 
+  const askedForPermission =  async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      onOpenVideoCall();
+    } catch (error) {
+      toast.error("Permisson denied");
+    }
+  }
+
   return (
     <>
         <Drawer
@@ -132,7 +141,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-5 text-black font-extrabold">
-                Team Messages <IoVideocam onClick={onOpenVideoCall} className='text-purple-700 cursor-pointer' size={30} />
+                Team Messages <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} />
               </DrawerHeader>
               <hr />
               <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
