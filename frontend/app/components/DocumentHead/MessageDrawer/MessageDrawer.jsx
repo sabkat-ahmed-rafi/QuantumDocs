@@ -19,6 +19,9 @@ import messageTimeFormat from '@/app/utils/messageTimeFormat';
 import { useDisclosure } from "@heroui/react";
 import VideoCallModal from '../../UI/VideoCallModal';
 import { IoVideocam } from "react-icons/io5";
+import AgoraRTC from "agora-rtc-sdk-ng";
+
+
 
 
 const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setUnreadCount}) => {
@@ -32,6 +35,13 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const {isOpen: isOpenVideoCall, onOpen: onOpenVideoCall, onOpenChange: onOpenChangeVideoCall} = useDisclosure();
+
+  const agoraAppId = process.env.NEXT_PUBLIC_agora_appId;
+  const [joined, setJoined] = useState(false);
+  const [localStream, setLocalStream] = useState(null);
+  const client = useRef(null);
+  const localVideo = useRef(null); 
+  const remoteVideos = useRef([]);
 
   useEffect(() => {
     socket.on("receive-group-message", handleReceiveMessage); // receiving message
@@ -129,12 +139,35 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     }
 
     try {
-      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       onOpenVideoCall();
+      initilizedCall();
     } catch (error) {
       toast.error("Permisson denied");
     }
-  }
+  };
+
+  const initilizedCall = async () => {
+    const groupId = document?.document?.id;
+    const userUid = user?.uid;
+    if(!joined && agoraAppId) {
+
+      if (!client.current) {
+        client.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+      }
+
+      const localUserStream = await AgoraRTC.createMicrophoneAndCameraTracks();
+      setLocalStream(localUserStream);
+      console.log(localUserStream)
+
+      if (localVideo.current) {
+        localUserStream[1].play(localVideo.current);
+      }
+      
+      await client.current.join(agoraAppId, groupId, null, userUid);
+      await client.current.publish(localUserStream);
+      setJoined(true);
+    }
+  };
 
   return (
     <>
@@ -192,7 +225,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           )}
         </DrawerContent>
       </Drawer>
-      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} />
+      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} remoteVideos={remoteVideos} setJoined={setJoined} joined={joined} />
     </>
   )
 }
