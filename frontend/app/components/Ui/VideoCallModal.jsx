@@ -25,10 +25,10 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall }) => {
                       controls
                       className={`
                         ${users.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${users.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[450px] xl:h-[600px]"}
-                        ${users.length == 3 && "w-40 h-48 md:w-80 xl:w-[550px] xl:h-[300px]"}
+                        ${users.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[400px] xl:h-[450px]"}
+                        ${users.length == 3 && "w-40 h-48 md:w-80 xl:w-[300px] xl:h-[400px]"}
                         ${users.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${users.length == 1 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px] xl:h-[600px]"}
+                        ${users.length == 1 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px] xl:h-[450px]"}
                         md:rounded-lg border object-fit border-purple-600`}
                     ></video>
                   ))}
@@ -36,10 +36,10 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall }) => {
                       controls
                       className={`
                         ${users.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${users.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[450px] xl:h-[600px]"}
-                        ${users.length == 3 && "w-40 h-48 md:w-80 xl:w-[550px] xl:h-[300px]"}
+                        ${users.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[400px] xl:h-[450px]"}
+                        ${users.length == 3 && "w-40 h-48 md:w-80 xl:w-[300px] xl:h-[400px]"}
                         ${users.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${users.length == 1 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px] xl:h-[600px]"}
+                        ${users.length == 1 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px] xl:h-[450px]"}
                         md:rounded-lg border object-fit border-red-600`}
                     ></video>
                   </div>
