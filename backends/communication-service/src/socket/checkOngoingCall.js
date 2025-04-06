@@ -4,6 +4,7 @@ const GroupCall = require('../models/groupCallSchema');
 const checkOngoingCall = async (io, socket) => {
 
   socket.on('start-call', async (groupId, startedBy) => {
+    console.log(groupId, startedBy);
     try {
       let call = await GroupCall.findOne({ groupId });
 
