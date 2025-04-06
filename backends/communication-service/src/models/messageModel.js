@@ -9,6 +9,11 @@ const messageSchema = new mongoose.Schema({
         email: { type: String },
         name: { type: String }
     },
+    groupCall: {
+        ongoing: { type: Boolean, default: false },
+        startedBy: { type: String },
+        createdAt: { type: Date, default: Date.now }
+    },
     readBy: [{ type: String }],
     createdAt: { type: Date, default: Date.now },
 });
