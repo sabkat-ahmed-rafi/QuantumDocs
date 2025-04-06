@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
-import AgoraRTC from "agora-rtc-sdk-ng";
 
 
 
 
-const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, client, localStream, remoteVideos, setJoined, joined }) => {
+const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, client, localStream, setJoined, joined }) => {
 
   const [users, setUsers] = useState([]);
 

@@ -225,7 +225,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           )}
         </DrawerContent>
       </Drawer>
-      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} remoteVideos={remoteVideos} setJoined={setJoined} joined={joined} />
+      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} setJoined={setJoined} joined={joined} />
     </>
   )
 }
