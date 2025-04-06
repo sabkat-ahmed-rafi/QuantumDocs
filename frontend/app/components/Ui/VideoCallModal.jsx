@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, user } from '@heroui/react'
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
 import socket from '@/app/utils/socket';
 
@@ -37,7 +37,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
 
     // Event handler for remote user unpublishing their stream
     client.current.on('user-unpublished', (user) => {
-      setUsers((prevUsers) => prevUsers.filter((el) => el.id !== user.uid));
+      setUsers((prevUsers) => prevUsers.filter((el) => el.uid !== user.uid));
     });
     
     // Optional: Error handling
@@ -88,11 +88,13 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
   }, [document?.document?.id]);
 
   const onCloseVideoCall = () => {
-    console.log('sabkat ahmed rafi');
     if(users.length === 0) {
       endCall();
       const groupId = document?.document?.id;
       socket.emit("end-call", groupId);
+      console.log(users.length);
+    } else {
+      endCall();
     }
 
   };
@@ -137,7 +139,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
                 
               </ModalBody>
               <ModalFooter className='flex justify-center bg-slate-50 fixed bottom-0 w-full'>
-                <div onClick={() => { endCall(); onClose(); }} className='bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-500'><MdCallEnd className='text-white' size={40} /></div>
+                <div onClick={() => { onCloseVideoCall(); onClose(); }} className='bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-500'><MdCallEnd className='text-white' size={40} /></div>
               </ModalFooter>
             </>
           )}

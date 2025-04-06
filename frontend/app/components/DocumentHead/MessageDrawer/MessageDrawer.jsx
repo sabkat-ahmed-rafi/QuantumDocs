@@ -151,7 +151,11 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     const groupId = document?.document?.id;
     const userUid = user?.uid;
     if(!joined && agoraAppId) {
-      socket.emit("start-call", groupId, userUid);
+      
+      if(!callOngoing) {
+        socket.emit("start-call", groupId, userUid);
+      }
+
       if (!client.current) {
         client.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
       }
@@ -167,6 +171,11 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
       await client.current.join(agoraAppId, groupId, null, userUid);
       await client.current.publish(localUserStream);
       setJoined(true);
+
+      if(callOngoing) {
+        onOpenVideoCall();
+      }
+       
     }
   };
 
@@ -190,7 +199,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-5 text-black font-extrabold">
-                Team Messages {callOngoing ? <button className='text-small text-purple-700 font-sans font-semibold flex items-center gap-2 cursor-pointer animate__animated animate__tada animate__infinite	infinite'><IoVideocam /> Join Ongoing Call</button> : <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} /> }
+                Team Messages {callOngoing ? <button onClick={initilizedCall} className='text-small text-purple-700 font-sans font-semibold flex items-center gap-2 cursor-pointer animate__animated animate__tada animate__infinite	infinite'><IoVideocam /> Join Ongoing Call</button> : <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} /> }
               </DrawerHeader>
               <hr />
               <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
