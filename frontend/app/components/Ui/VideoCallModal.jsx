@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, user } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
+import socket from '@/app/utils/socket';
 
 
 
 
-const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, client, localStream, setJoined, joined }) => {
+
+const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, client, localStream, setJoined, joined, document, setCallOngoing }) => {
 
   const [users, setUsers] = useState([]);
 
   const initAgora = async () => {
     
-
     client.current.on('user-published', (user, mediaType) => {
-      console.log(mediaType)
       if(mediaType === 'video') {
         client.current.subscribe(user, mediaType).then(() => {
           setUsers(prev => [...prev, user]);
@@ -50,8 +50,8 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
   const endCall = async () => {
     if (joined) {
       await client.current.leave();
-      localStream[0].close();
-      localStream[1].close();
+      if (localStream && localStream[0]) localStream[0].close();
+      if (localStream && localStream[1]) localStream[1].close();
       localStream = null;
       setUsers([]);
       setJoined(false);
@@ -69,9 +69,37 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
     };
   }, [isOpenVideoCall, client.current])
 
+
+  // Listen for call start/end events in real-time
+  useEffect(() => {
+      const groupId = document?.document?.id;
+      socket.on("call-started", (id) => {
+        if (id === groupId) setCallOngoing(true);
+      });
+  
+      socket.on("call-ended", (id) => {
+        if (id === groupId) setCallOngoing(false);
+      });
+  
+      return () => {
+        socket.off("call-started");
+        socket.off("call-ended");
+      };
+  }, [document?.document?.id]);
+
+  const onCloseVideoCall = () => {
+    console.log('sabkat ahmed rafi');
+    if(users.length === 0) {
+      endCall();
+      const groupId = document?.document?.id;
+      socket.emit("end-call", groupId);
+    }
+
+  };
+
   return (
     <>
-      <Modal size='full' isOpen={isOpenVideoCall} onOpenChange={onOpenChangeVideoCall} >
+      <Modal onClose={onCloseVideoCall} size='full' isOpen={isOpenVideoCall} onOpenChange={onOpenChangeVideoCall} >
         <ModalContent>
           {(onClose) => (
             <>

@@ -41,7 +41,8 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   const [localStream, setLocalStream] = useState(null);
   const client = useRef(null);
   const localVideo = useRef(null); 
-  const remoteVideos = useRef([]);
+  const [callOngoing, setCallOngoing] = useState(false);
+  
 
   useEffect(() => {
     socket.on("receive-group-message", handleReceiveMessage); // receiving message
@@ -150,14 +151,14 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     const groupId = document?.document?.id;
     const userUid = user?.uid;
     if(!joined && agoraAppId) {
-
+      socket.emit("start-call", groupId, userUid);
       if (!client.current) {
         client.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
       }
 
       const localUserStream = await AgoraRTC.createMicrophoneAndCameraTracks();
       setLocalStream(localUserStream);
-      console.log(localUserStream)
+      
 
       if (localVideo.current) {
         localUserStream[1].play(localVideo.current);
@@ -168,6 +169,13 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
       setJoined(true);
     }
   };
+
+  useEffect(() => {
+    const groupId = document?.document?.id;
+    socket.emit("check-call-status", groupId, (status) => {
+      setCallOngoing(status);
+    });
+  }, [document?.document?.id]);
 
   return (
     <>
@@ -182,7 +190,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-5 text-black font-extrabold">
-                Team Messages <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} />
+                Team Messages {callOngoing ? <button className='text-small text-purple-700 font-sans font-semibold flex items-center gap-2 cursor-pointer animate__animated animate__tada animate__infinite	infinite'><IoVideocam /> Join Ongoing Call</button> : <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} /> }
               </DrawerHeader>
               <hr />
               <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
@@ -225,7 +233,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           )}
         </DrawerContent>
       </Drawer>
-      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} setJoined={setJoined} joined={joined} />
+      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} setJoined={setJoined} joined={joined} document={document} setCallOngoing={setCallOngoing} />
     </>
   )
 }
