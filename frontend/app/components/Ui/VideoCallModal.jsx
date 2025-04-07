@@ -40,11 +40,11 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
       setUsers((prevUsers) => prevUsers.filter((el) => el.uid !== user.uid));
     });
     
-    // Optional: Error handling
+    // Error handling
     client.current.on('error', (error) => {
-      console.error('Agora error', error);
+      console.log('Agora error', error);
     });
-    console.log(localStream, localVideo.current)
+    
   };
 
   const endCall = async () => {

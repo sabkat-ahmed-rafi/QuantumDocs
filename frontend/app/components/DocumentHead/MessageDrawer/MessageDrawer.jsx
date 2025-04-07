@@ -130,7 +130,8 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     isUserAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 10;
   };  
 
-  const askedForPermission =  async () => {
+  const initilizedCall = async () => {
+
     const cameraPerm = await navigator.permissions.query({ name: "camera" });
     const micPerm = await navigator.permissions.query({ name: "microphone" });
 
@@ -139,42 +140,41 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
       return;
     }
 
-    try {
-      onOpenVideoCall();
-      initilizedCall();
-    } catch (error) {
-      toast.error("Permisson denied");
-    }
-  };
-
-  const initilizedCall = async () => {
     const groupId = document?.document?.id;
     const userUid = user?.uid;
     if(!joined && agoraAppId) {
       
-      if(!callOngoing) {
-        socket.emit("start-call", groupId, userUid);
-      }
-
       if (!client.current) {
         client.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
       }
 
-      const localUserStream = await AgoraRTC.createMicrophoneAndCameraTracks();
-      setLocalStream(localUserStream);
-      
+      try {
+        const localUserStream = await AgoraRTC.createMicrophoneAndCameraTracks();
+        setLocalStream(localUserStream);
 
-      if (localVideo.current) {
-        localUserStream[1].play(localVideo.current);
+        if(callOngoing) {
+          onOpenVideoCall();
+        } else {
+          onOpenVideoCall();
+        }
+        
+        if(!callOngoing) {
+          socket.emit("start-call", groupId, userUid);
+        }
+  
+        if (localVideo.current) {
+          localUserStream[1].play(localVideo.current);
+        }
+        
+        await client.current.join(agoraAppId, groupId, null, userUid);
+        await client.current.publish(localUserStream);
+        setJoined(true);
+  
+        
+      } catch (error) {
+        toast.error('Permission denied')
       }
-      
-      await client.current.join(agoraAppId, groupId, null, userUid);
-      await client.current.publish(localUserStream);
-      setJoined(true);
 
-      if(callOngoing) {
-        onOpenVideoCall();
-      }
        
     }
   };
@@ -199,7 +199,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-5 text-black font-extrabold">
-                Team Messages {callOngoing ? <button onClick={initilizedCall} className='text-small text-purple-700 font-sans font-semibold flex items-center gap-2 cursor-pointer animate__animated animate__tada animate__infinite	infinite'><IoVideocam /> Join Ongoing Call</button> : <IoVideocam onClick={() => askedForPermission()} className='text-purple-700 cursor-pointer' size={30} /> }
+                Team Messages {callOngoing ? <button onClick={initilizedCall} className='text-small text-purple-700 font-sans font-semibold flex items-center gap-2 cursor-pointer animate__animated animate__tada animate__infinite	infinite'><IoVideocam /> Join Ongoing Call</button> : <IoVideocam onClick={() => initilizedCall()} className='text-purple-700 cursor-pointer' size={30} /> }
               </DrawerHeader>
               <hr />
               <DrawerBody ref={messagesContainerRef} onScroll={handleScroll} className='text-black scrollbar-hide'>
