@@ -87,6 +87,13 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, localVideo, cl
       };
   }, [document?.document?.id]);
 
+  useEffect(() => {
+    if (isOpenVideoCall && localStream && localVideo.current) {
+      localStream[1].play(localVideo.current);
+    }
+  }, [isOpenVideoCall, localStream]);
+  
+
   const onCloseVideoCall = () => {
     if(users.length === 0) {
       endCall();

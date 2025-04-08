@@ -1,4 +1,4 @@
 ========== TODO ===========
 
 * Bug: now i need to remove the red UI error if user denied the video and audio permission
-* Bug: now i need to fix why the remote user can't see their own face
+* Bug: now i need to fix why the local user can't see their own face

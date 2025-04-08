@@ -161,10 +161,6 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
         if(!callOngoing) {
           socket.emit("start-call", groupId, userUid);
         }
-  
-        if (localVideo.current) {
-          localUserStream[1].play(localVideo.current);
-        }
         
         await client.current.join(agoraAppId, groupId, null, userUid);
         await client.current.publish(localUserStream);
