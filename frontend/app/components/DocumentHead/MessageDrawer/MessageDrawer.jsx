@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     Drawer,
     DrawerContent,
@@ -19,7 +19,7 @@ import messageTimeFormat from '@/app/utils/messageTimeFormat';
 import { useDisclosure } from "@heroui/react";
 import VideoCallModal from '../../UI/VideoCallModal';
 import { IoVideocam } from "react-icons/io5";
-import AgoraRTC from "agora-rtc-sdk-ng";
+import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
 
 
 
@@ -36,12 +36,11 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   const [isLoading, setIsLoading] = useState(false);
   const {isOpen: isOpenVideoCall, onOpen: onOpenVideoCall, onOpenChange: onOpenChangeVideoCall} = useDisclosure();
 
-  const agoraAppId = process.env.NEXT_PUBLIC_agora_appId;
-  const [joined, setJoined] = useState(false);
-  const [localStream, setLocalStream] = useState(null);
-  const client = useRef(null);
-  const localVideo = useRef(null); 
   const [callOngoing, setCallOngoing] = useState(false);
+  const [calling, setCalling] = useState(false);
+  const client = useMemo(() => AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' }), []);
+
+
   
 
   useEffect(() => {
@@ -131,48 +130,13 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   };  
 
   const initilizedCall = async () => {
-
-    const cameraPerm = await navigator.permissions.query({ name: "camera" });
-    const micPerm = await navigator.permissions.query({ name: "microphone" });
-
-    if (cameraPerm.state === "denied" || micPerm.state === "denied") {
-      toast.error("Please enable Camera & Microphone");
-      return;
-    }
-
     const groupId = document?.document?.id;
     const userUid = user?.uid;
-    if(!joined && agoraAppId) {
-      
-      if (!client.current) {
-        client.current = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
-      }
-
-      try {
-        const localUserStream = await AgoraRTC.createMicrophoneAndCameraTracks();
-        setLocalStream(localUserStream);
-
-        if(callOngoing) {
-          onOpenVideoCall();
-        } else {
-          onOpenVideoCall();
-        }
-        
-        if(!callOngoing) {
-          socket.emit("start-call", groupId, userUid);
-        }
-        
-        await client.current.join(agoraAppId, groupId, null, userUid);
-        await client.current.publish(localUserStream);
-        setJoined(true);
-  
-        
-      } catch (error) {
-        toast.error('Permission denied')
-      }
-
-       
+    if(!callOngoing) {
+      socket.emit("start-call", groupId, userUid);
     }
+    setCalling(true);
+    onOpenVideoCall();
   };
 
   useEffect(() => {
@@ -184,7 +148,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
 
   return (
     <>
-        <Drawer
+      <Drawer
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         isOpen={isOpenMessage}
@@ -238,7 +202,19 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
           )}
         </DrawerContent>
       </Drawer>
-      <VideoCallModal isOpenVideoCall={isOpenVideoCall} onOpenChangeVideoCall={onOpenChangeVideoCall} localVideo={localVideo} client={client} localStream={localStream} setJoined={setJoined} joined={joined} document={document} setCallOngoing={setCallOngoing} />
+      {isOpenVideoCall && (
+      <AgoraRTCProvider client={client}>
+        <VideoCallModal 
+          isOpenVideoCall={isOpenVideoCall}
+          onOpenChangeVideoCall={onOpenChangeVideoCall}
+          document={document}
+          setCallOngoing={setCallOngoing}
+          calling={calling}
+          setCalling={setCalling}
+        />
+      </AgoraRTCProvider>
+      )}
+
     </>
   )
 }

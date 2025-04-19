@@ -13,7 +13,7 @@
     "@react-aria/overlays": "^3.25.0",
     "@reduxjs/toolkit": "^2.3.0",
     "@svgr/webpack": "^8.1.0",
-    "agora-rtc-sdk-ng": "^4.23.2",
+    "agora-rtc-react": "^2.4.0",
     "animate.css": "^4.1.1",
     "axios": "^1.7.8",
     "file-saver": "^2.0.5",

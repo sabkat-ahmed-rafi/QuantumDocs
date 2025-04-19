@@ -1,4 +1,2 @@
 ========== TODO ===========
 
-* Bug: now i need to remove the red UI error if user denied the video and audio permission
-* Bug: when a user cut the call and rejoin the call he can see all the other users but other users can see him but the border line exist so we can say that the user exist but other users can't see him after he rejoins
