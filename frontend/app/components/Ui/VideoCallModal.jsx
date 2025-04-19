@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
+import { AiOutlineAudio } from "react-icons/ai";
+import { AiOutlineAudioMuted } from "react-icons/ai";
+
 import socket from '@/app/utils/socket';
-import AgoraRTC, {
+import {
   LocalUser, // Plays the microphone audio track and the camera video track
   RemoteUser, // Plays the remote user audio and video tracks
   useIsConnected, // Returns whether the SDK is connected to Agora's server
@@ -129,6 +132,11 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
               </ModalBody>
               <ModalFooter className='flex justify-center bg-slate-50 fixed bottom-0 w-full'>
                 <div onClick={ () => { onCloseVideoCall(onClose); }} className='bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-500'><MdCallEnd className='text-white' size={40} /></div>
+                {
+                  micOn ? <div onClick={() => setMic(false)} className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudio className='text-white' size={40} /></div>
+                  :
+                  <div onClick={() => setMic(true)} className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudioMuted className='text-white' size={40} /></div>
+                }
               </ModalFooter>
             </>
           )}
