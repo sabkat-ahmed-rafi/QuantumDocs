@@ -146,6 +146,20 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     });
   }, [document?.document?.id]);
 
+    // Listen for call start/end events in real-time
+    useEffect(() => {
+
+      const groupId = document?.document?.id;
+      socket.on("call-started", (id) => {
+        if (id === groupId) setCallOngoing(true);
+      });
+  
+      socket.on("call-ended", (id) => {
+        if (id === groupId) setCallOngoing(false);
+      });
+
+  }, [document?.document?.id]);
+
   return (
     <>
       <Drawer

@@ -87,6 +87,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                   >
                   {remoteUsers.map((user, index) => (
                       <div
+                      key={index}
                       className={`
                         ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
                         ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
