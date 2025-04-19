@@ -86,36 +86,43 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                   className="flex justify-center items-center flex-wrap sm:gap-1"
                   >
                   {remoteUsers.map((user, index) => (
-                      <RemoteUser
+                      <div
+                      className={`
+                        ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
+                        ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
+                        ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
+                        ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
+                        ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
+                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-purple-600`}
+                      >
+                        <RemoteUser
                         user={user}
                         key={index}
-                        style={{width: '90%', height: 300 }}
-                        className={`
-                          ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                          ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
-                          ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
-                          ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                          ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
-                          ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-purple-600`}
+                        style={{borderRadius: "8px"}}
+
                       ></RemoteUser>
+                      </div>
                     ))}
+                      <div
+                      className={`
+                        ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
+                        ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
+                        ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
+                        ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
+                        ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
+                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-red-600`}
+                      >
                       <LocalUser
                         audioTrack={localMicrophoneTrack}
                         videoTrack={localCameraTrack}
                         cameraOn={cameraOn}
                         micOn={micOn}
                         playAudio={false}
-                        style={{width: '90%', height: 300 }}
-                        className={`
-                          ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                          ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
-                          ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
-                          ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                          ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
-                          ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-red-600`}
+                        style={{borderRadius: "8px"}}
                         >
                         <samp>You</samp>
                       </LocalUser>
+                      </div>
                   </div>
                 }                
               </ModalBody>
