@@ -16,6 +16,7 @@ import {
   usePublish, // Publish the local tracks
   useRemoteUsers, // Retrieve the list of remote users
 } from "agora-rtc-react";
+import { toast } from 'react-toastify';
 
 
 
@@ -93,7 +94,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
       onClose();
 
     } catch (err) {
-      console.error("Error during call cleanup:", err);
+      toast.error("Something went wrong");
     }
 
   };
