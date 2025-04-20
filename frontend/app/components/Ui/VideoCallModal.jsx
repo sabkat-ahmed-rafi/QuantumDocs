@@ -3,7 +3,8 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@herou
 import { MdCallEnd } from "react-icons/md";
 import { AiOutlineAudio } from "react-icons/ai";
 import { AiOutlineAudioMuted } from "react-icons/ai";
-
+import { FaVideo } from "react-icons/fa";
+import { FaVideoSlash } from "react-icons/fa";
 import socket from '@/app/utils/socket';
 import {
   LocalUser, // Plays the microphone audio track and the camera video track
@@ -38,7 +39,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
       setMic(true);
       setCamera(true);
     }
-  }, [micOn, cameraOn])
+  }, [])
   
   const remoteUsers = useRemoteUsers();
 
@@ -57,6 +58,27 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
       });
 
   }, [document?.document?.id]);
+
+  useEffect(() => {
+    
+    const handleBeforeUnload = () => {
+      const groupId = document?.document?.id;
+      if (remoteUsers.length === 0) {
+        socket.emit("end-call", groupId);
+      }
+    };
+  
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (remoteUsers.length === 0) {
+        const groupId = document?.document?.id;
+        socket.emit("end-call", groupId);
+      }
+    };
+
+  }, [])
   
   const onCloseVideoCall = async (onClose) => {
     try {
@@ -131,11 +153,16 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                 }                
               </ModalBody>
               <ModalFooter className='flex justify-center bg-slate-50 fixed bottom-0 w-full'>
+                {
+                  cameraOn ? <div onClick={ () =>  setCamera(false) } className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><FaVideo className='text-white' size={40} /></div>
+                  :
+                  <div onClick={ () => setCamera(true) } className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><FaVideoSlash className='text-white' size={40} /></div>
+                }
                 <div onClick={ () => { onCloseVideoCall(onClose); }} className='bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-500'><MdCallEnd className='text-white' size={40} /></div>
                 {
-                  micOn ? <div onClick={() => setMic(false)} className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudio className='text-white' size={40} /></div>
+                  micOn ? <div onClick={ () => setMic(false) } className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudio className='text-white' size={40} /></div>
                   :
-                  <div onClick={() => setMic(true)} className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudioMuted className='text-white' size={40} /></div>
+                  <div onClick={() => setMic(true) } className='bg-slate-400 p-2 rounded-full cursor-pointer hover:bg-slate-500'><AiOutlineAudioMuted className='text-white' size={40} /></div>
                 }
               </ModalFooter>
             </>
