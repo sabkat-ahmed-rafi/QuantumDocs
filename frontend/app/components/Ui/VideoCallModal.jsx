@@ -116,11 +116,11 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                       key={index}
                       className={`
                         ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
-                        ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
+                        ${remoteUsers.length == 2 && "flex w-[150px] h-[200px] md:w-52 md:h-80 xl:w-[350px] xl:h-[430px] rounded-lg"}
+                        ${remoteUsers.length == 3 && "w-40 h-[150px] md:w-72 md:h-40 xl:w-[300px] xl:h-[400px] rounded-lg"}
                         ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
-                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-purple-600`}
+                        ${remoteUsers.length == 1 && "w-60 h-[170px] md:w-80 md:h-[320px] xl:w-[400px] xl:h-[400px]"}
+                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} rounded-lg border object-fit border-purple-600 animate__animated animate__zoomIn`}
                       >
                         <RemoteUser
                         user={user}
@@ -133,11 +133,11 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                       <div
                       className={`
                         ${remoteUsers.length >= 5 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[450px]"}
-                        ${remoteUsers.length == 3 && "w-40 h-48 md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
+                        ${remoteUsers.length == 2 && "w-60 h-32 md:w-52 md:h-80 xl:w-[350px] xl:h-[430px]"}
+                        ${remoteUsers.length == 3 && "w-40 h-[150px] md:w-72 md:h-40 xl:w-[300px] xl:h-[400px]"}
                         ${remoteUsers.length == 4 && "w-40 sm:w-52 xl:w-[320px] h-32 xl:h-[220px] sm:h-48"}
-                        ${remoteUsers.length == 1 && "w-60 h-48 md:w-80 md:h-[320px] xl:w-[550px] xl:h-[450px]"}
-                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} md:rounded-lg border object-fit border-red-600`}
+                        ${remoteUsers.length == 1 && "w-60 h-[170px] md:w-80 md:h-[320px] xl:w-[400px] xl:h-[400px]"}
+                        ${remoteUsers.length == 0 && "w-60 h-48 md:w-80 md:h-96 xl:w-[550px]"} rounded-lg border object-fit border-red-600 animate__animated animate__zoomIn`}
                       >
                       <LocalUser
                         audioTrack={localMicrophoneTrack}
