@@ -1,3 +1,4 @@
 ========== TODO ===========
 
-* Now I need to fix the UI of the group video call.
+* Now I need to disabled the download pdf and docx form of the document for unsharable users.
+* Now I need to write the documentation.

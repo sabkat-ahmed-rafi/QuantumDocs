@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { MdCallEnd } from "react-icons/md";
 import { AiOutlineAudio } from "react-icons/ai";
@@ -26,6 +26,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
 
   const [startTime, setStartTime] = useState(null);
   const [duration, setDuration] = useState("00:00");
+  const remoteUsersRef = useRef();
 
 
   const [appId, setAppId] = useState(process.env.NEXT_PUBLIC_agora_appId);
@@ -46,6 +47,8 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
   }, [])
   
   const remoteUsers = useRemoteUsers();
+ 
+  
 
 
 
@@ -64,10 +67,14 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
   }, [document?.document?.id]);
 
   useEffect(() => {
+    remoteUsersRef.current = remoteUsers.length;
+  }, [remoteUsers]);
+
+  useEffect(() => {
     
     const handleBeforeUnload = () => {
       const groupId = document?.document?.id;
-      if (remoteUsers.length === 0) {
+      if (remoteUsersRef.current === 0) {
         socket.emit("end-call", groupId);
       }
     };
@@ -76,10 +83,6 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      if (remoteUsers.length === 0) {
-        const groupId = document?.document?.id;
-        socket.emit("end-call", groupId);
-      }
     };
 
   }, [])
@@ -112,6 +115,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
     try {
       
       setCalling(false);
+      console.log(remoteUsers.length)
       
       if (remoteUsers.length === 0) {
         const groupId = document?.document?.id;
