@@ -24,6 +24,9 @@ import { toast } from 'react-toastify';
 
 const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setCallOngoing, calling, setCalling }) => {
 
+  const [startTime, setStartTime] = useState(null);
+  const [duration, setDuration] = useState("00:00");
+
 
   const [appId, setAppId] = useState(process.env.NEXT_PUBLIC_agora_appId);
   const [channel, setChannel] = useState(document?.document?.id);
@@ -80,6 +83,30 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
     };
 
   }, [])
+
+  useEffect(() => {
+    if (!isConnected) return;
+  
+    const startTime = Date.now();
+    setStartTime(startTime);
+  
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const hours = Math.floor(elapsed / 3600);
+      const minutes = Math.floor((elapsed % 3600) / 60);
+      const seconds = elapsed % 60;
+  
+      const formatted =
+        hours > 0
+          ? `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+          : `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  
+      setDuration(formatted);
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, [isConnected]);
+  
   
   const onCloseVideoCall = async (onClose) => {
     try {
@@ -105,7 +132,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="font-extrabold bg-slate-50 font-sans text-2xl flex justify-center">Video Call</ModalHeader>
+              <ModalHeader className="font-extrabold bg-slate-50 font-sans text-2xl flex justify-center">Video Call <p className='left-4 font-serif font-thin relative min-w-[80px] '>{duration}</p></ModalHeader>
               <ModalBody className='bg-slate-50 overflow-y'>
                 {
                   isConnected && <div  
@@ -126,7 +153,6 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
                         user={user}
                         key={index}
                         style={{borderRadius: "8px"}}
-
                       ></RemoteUser>
                       </div>
                     ))}
