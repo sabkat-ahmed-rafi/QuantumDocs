@@ -16,7 +16,7 @@ import { FaRegStar } from "react-icons/fa6";
 
 
 
-const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
+const DocumentInfo = ({isTyping, document, customProviderRef, quillRef, isOwner, isSharedUser}) => {
 
 
     const [title, setTitle] = useState("");
@@ -157,6 +157,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
             <div className='flex-col space-y-3'>
                 <div className='flex items-center space-x-3'>
                     <input 
+                        disabled={!isOwner && !isSharedUser}
                         name="title"
                         value={title || ""}  
                         onChange={(e) => setTitle(e.target.value)}
@@ -185,11 +186,20 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef}) => {
                 </div>
                 <div className='flex font-sans text-sm font-[500]'>
                     <button
+
+                     disabled={!isOwner && !isSharedUser}
                      onClick={handleDownloadDOCX}
-                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download DOCS</button>
+                     className={`px-2 py-1 rounded-md 
+                        ${!isOwner && !isSharedUser 
+                          ? 'cursor-not-allowed opacity-50' 
+                          : 'hover:bg-slate-200'}`}>Download DOCS</button>
                     <button 
+                     disabled={!isOwner && !isSharedUser}
                      onClick={handleDownloadPDF}
-                     className='px-2 py-1 hover:bg-slate-200 rounded-md'>Download PDF</button>
+                     className={`px-2 py-1 rounded-md 
+                        ${!isOwner && !isSharedUser 
+                          ? 'cursor-not-allowed opacity-50' 
+                          : 'hover:bg-slate-200'}`}>Download PDF</button>
                 </div>
             </div>
         </section>

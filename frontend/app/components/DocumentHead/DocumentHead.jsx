@@ -6,12 +6,13 @@ import socket from '@/app/utils/socket'
 
 const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, documentRefetch, quillRef, user, documentId }) => {
 
+  const isOwner = user?.email == document?.document?.owner?.email;
+  const isSharedUser = document?.document?.sharedPersons?.some(person => person.email == user?.email) 
+
   useEffect(() => {
 
     if(!document || !user) return;
-
-    const isOwner = user?.email == document?.document?.owner?.email;
-    const isSharedUser = document?.document?.sharedPersons?.some(person => person.email == user?.email) 
+    
     const groupId = documentId;
 
     if(isOwner || isSharedUser) {
@@ -42,6 +43,8 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, docu
                 document={document} 
                 customProviderRef={customProviderRef}
                 quillRef={quillRef}
+                isOwner={isOwner}
+                isSharedUser={isSharedUser}
                  />
             </div>
             <div>
