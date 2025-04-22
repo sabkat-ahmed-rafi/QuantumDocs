@@ -133,7 +133,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
     const groupId = document?.document?.id;
     const userUid = user?.uid;
     if(!callOngoing) {
-      socket.emit("start-call", groupId, userUid);
+      socket.emit("start-call", groupId, userUid); // To show the call ongoing UI
     }
     setCalling(true);
     onOpenVideoCall();
@@ -142,7 +142,7 @@ const MessageDrawer = ({isOpenMessage, onOpenMessageChange, document, user, setU
   useEffect(() => {
     const groupId = document?.document?.id;
     socket.emit("check-call-status", groupId, (status) => {
-      setCallOngoing(status);
+      setCallOngoing(status); // To show the Call button checking call status
     });
   }, [document?.document?.id]);
 

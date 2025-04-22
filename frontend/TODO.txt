@@ -1,4 +1,4 @@
 ========== TODO ===========
 
-* Now I need to disabled the download pdf and docx form of the document for unsharable users.
 * Now I need to write the documentation.
+* Now I need to show the favourite docs of each user.

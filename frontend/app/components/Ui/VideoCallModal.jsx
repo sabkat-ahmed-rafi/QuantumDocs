@@ -39,7 +39,8 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
   
   useJoin({ appid: appId, channel: channel, token: null }, calling);
   usePublish([localMicrophoneTrack, localCameraTrack]);
-  useEffect(() => {
+  useEffect(() => { 
+    // To on the mic and camera on the first render
     if(!micOn && !cameraOn) {
       setMic(true);
       setCamera(true);
@@ -57,17 +58,17 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
 
       const groupId = document?.document?.id;
       socket.on("call-started", (id) => {
-        if (id === groupId) setCallOngoing(true);
+        if (id === groupId) setCallOngoing(true); // To show the Call onGoing button on real-time
       });
   
       socket.on("call-ended", (id) => {
-        if (id === groupId) setCallOngoing(false);
+        if (id === groupId) setCallOngoing(false); // To show the the call initialize button on real-time
       });
 
   }, [document?.document?.id]);
 
   useEffect(() => {
-    remoteUsersRef.current = remoteUsers.length;
+    remoteUsersRef.current = remoteUsers.length; // Counting remoteUsers precisely
   }, [remoteUsers]);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
       }
     };
   
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload); // To show the initialized call button while the existing of one user on call
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -115,7 +116,7 @@ const VideoCallModal = ({ isOpenVideoCall, onOpenChangeVideoCall, document, setC
     try {
       
       setCalling(false);
-      console.log(remoteUsers.length)
+      
       
       if (remoteUsers.length === 0) {
         const groupId = document?.document?.id;
