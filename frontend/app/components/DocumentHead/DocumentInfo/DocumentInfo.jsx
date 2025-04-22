@@ -27,12 +27,13 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef, isOwner,
 
     useEffect(() => {
         if (document?.document?.title) {
-            setTitle(document.document.title);
+            setTitle(document.document.title); // Setting the title on first render
         }
     }, [document?.document?.title]);
 
 
     useEffect(() => {
+        // Checking if the document is the user's favourite or not
         if (document?.document?.id && user?.uid) {
             getFavourite();
         }
@@ -52,6 +53,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef, isOwner,
     }
 
     const handleKeyDownUpdate = (e) => {
+        // Updating the doc title on user's enter press
         if(e.key === 'Enter') {
             e.preventDefault();
             updateDocTitle();
@@ -134,6 +136,7 @@ const DocumentInfo = ({isTyping, document, customProviderRef, quillRef, isOwner,
     }
 
     const getFavourite = async () => {
+        // Checking if the document is the user's favourite or not
         const documentId = document?.document?.id;
         const userEmail = user?.email;
         try {
