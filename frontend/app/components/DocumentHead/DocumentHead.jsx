@@ -11,6 +11,8 @@ const DocumentHead = ({ isTyping, document, customProviderRef, activeUsers, docu
 
   useEffect(() => {
 
+    // Connecting a user with the socket server when user enters a doc route
+    
     if(!document || !user) return;
     
     const groupId = documentId;
