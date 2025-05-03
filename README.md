@@ -8,8 +8,8 @@
 -  **Rich-text editing** with Quill.js
 -  **Real-time collaboration and CRDT** powered by Y.js and WebSockets
 -  **Real-Time Communication** with messaging and video calls using Socket.IO and Agora RTC
-- **Role-based access control** for managing user permissions (admin, editor, viewer)
-- **Download documents** as PDF and DOCX formats
+-  **Role-based access control** for managing user permissions (admin, editor, viewer)
+-  **Download documents** as PDF and DOCX formats
 -  **User notes** for leaving notes or comments within documents
 -  **Real-time Presence Indicators** to show who is currently online or viewing/editing the document
 -  **Typing Indicators** to see when someone is typing in a shared document
@@ -21,7 +21,8 @@
 ## 🔧 Tech Stack
 
 - **Frontend**: Next.js, Tailwind CSS, Quill.js  
-- **Backend**: Node.js, Express, Socket.IO  
+- **Backend**: Node.js, Express, Socket.IO 
+- **Microservices**: User Service, Document Service, Communication Service 
 - **Database**: MongoDB  
 - **Real-time Sync**: Y.js (CRDT)  
 - **Video/Audio**: Agora RTC  
