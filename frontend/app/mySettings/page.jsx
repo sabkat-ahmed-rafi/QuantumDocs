@@ -20,7 +20,7 @@ import { updateUser } from "../slices/authSlice";
 import isValidSocialLink from "../utils/isValidSocialLinks";
 
 
-const page = () => {
+const Page = () => {
 
     const [image, setImage] = useState(null);
     const uploadImageRef = useRef(null);
@@ -172,4 +172,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

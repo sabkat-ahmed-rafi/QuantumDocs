@@ -167,7 +167,7 @@ const ShareModal = ({isOpenShareModal, onOpenChangeShareModal, document, documen
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-black text-2xl font-medium">Share "{document.document.title}"</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-black text-2xl font-medium">Share &quot;{document.document.title}&quot;</ModalHeader>
               <ModalBody className='text-black max-h-[405px]'>
                 <div>
                   <Input 

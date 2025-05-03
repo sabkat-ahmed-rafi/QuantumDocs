@@ -94,7 +94,7 @@ const SignIn = () => {
          <p className='font-semibold font-sans'>Use your Quantum Account</p>
          </div>
          <p className='italic'>
-            Don't have any account? <Link className='text-purple-500' href="/register">Create</Link>
+            Don&apos;t have any account? <Link className='text-purple-500' href="/register">Create</Link>
          </p>
         </div>
         <div className='w-full space-y-6 mt-14'>
