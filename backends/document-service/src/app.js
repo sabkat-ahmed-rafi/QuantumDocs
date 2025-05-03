@@ -8,6 +8,8 @@ const noteRoute = require('./routes/noteRoute');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Middlewares 
 app.use(cookieParser());
 app.use(express.json());
