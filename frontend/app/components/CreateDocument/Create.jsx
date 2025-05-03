@@ -1,5 +1,5 @@
 import React from 'react'
-import AddDocument from '../UI/AddDocument';
+import AddDocument from '../Ui/AddDocument';
 export const Create = () => {
   return (
     <>

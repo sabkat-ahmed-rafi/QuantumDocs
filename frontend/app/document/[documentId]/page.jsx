@@ -21,7 +21,7 @@ import "katex/dist/katex.min.css";
 import generateThumbnail from '@/app/utils/generateThumbnail';
 import { toast } from 'react-toastify';
 import debounce from 'lodash.debounce';
-import AccessDenied from '@/app/components/UI/AccessDenied';
+import AccessDenied from '@/app/components/Ui/AccessDenied';
 
 
 lineSpinner.register()

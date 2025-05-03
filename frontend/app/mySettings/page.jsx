@@ -6,7 +6,7 @@ import {
   useDisclosure,
   Tooltip,
 } from "@heroui/react";
-import ProfileUpdateDrawer from "../components/UI/ProfileUpdateDrawer";
+import ProfileUpdateDrawer from "../components/Ui/ProfileUpdateDrawer";
 import { FaRegEdit } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { FaLinkedin } from "react-icons/fa";

@@ -1,7 +1,7 @@
 import { Create } from "./components/CreateDocument/Create";
 import NavBar from "./components/Navbar/NavBar"
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute"
-import DocsContainer from "./components/UI/DocsContainer";
+import DocsContainer from "./components/Ui/DocsContainer";
 
 export default function Home() {
   return (

@@ -17,7 +17,7 @@ import axios from 'axios';
 import scrollBottom from '@/app/utils/scrollBottom';
 import messageTimeFormat from '@/app/utils/messageTimeFormat';
 import { useDisclosure } from "@heroui/react";
-import VideoCallModal from '../../UI/VideoCallModal';
+import VideoCallModal from '../../Ui/VideoCallModal';
 import { IoVideocam } from "react-icons/io5";
 import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
 

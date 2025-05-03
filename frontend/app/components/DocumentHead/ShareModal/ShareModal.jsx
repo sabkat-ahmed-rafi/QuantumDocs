@@ -8,10 +8,10 @@ import {
   Button,
   Input,
 } from "@heroui/react";
-import IsRestricted from '../../UI/IsRestricted';
-import NotRestricted from '../../UI/NotRestricted';
-import PeopleWithAccess from '../../UI/PeopleWithAccess';
-import UserAccessSearch from '../../UI/UserAccessSearch';
+import IsRestricted from '../../Ui/IsRestricted';
+import NotRestricted from '../../Ui/NotRestricted';
+import PeopleWithAccess from '../../Ui/PeopleWithAccess';
+import UserAccessSearch from '../../Ui/UserAccessSearch';
 import { MdOutlineContentCopy } from "react-icons/md";
 import 'animate.css';
 import axios from 'axios'; 

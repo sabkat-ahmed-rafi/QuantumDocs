@@ -8,7 +8,7 @@ import { SiGoogledocs } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import useAxiosSecure from "@/app/hooks/useAxiosSecure";
-import DocumentSearch from "../UI/DocumentSearch";
+import DocumentSearch from "../Ui/DocumentSearch";
 
 
 
