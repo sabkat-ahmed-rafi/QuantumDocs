@@ -6,7 +6,7 @@ exports.setJwt = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", 
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
         }).send({ success: true })
     } catch(error) {
         console.error("JWT Generation Error:", error.message);
