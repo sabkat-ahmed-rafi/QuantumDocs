@@ -12,7 +12,6 @@ export const docApiSlice = createApi({
         getSingleData: builder.query({
             query: (documentId) => ({ 
                 url: `/api/document/${documentId}`,
-                credentials: 'include'
              }),
             keepUnusedDataFor: 0, // Disable caching
             refetchOnMountOrArgChange: true, // Ensure fresh data on mount
