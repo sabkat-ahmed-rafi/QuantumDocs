@@ -5,8 +5,8 @@ exports.setJwt = async (req, res) => {
         const token = await jwtService.generateJwtToken(req.body);
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true, 
-            sameSite: "None",
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
         }).send({ success: true })
     } catch(error) {
         console.error("JWT Generation Error:", error.message);
