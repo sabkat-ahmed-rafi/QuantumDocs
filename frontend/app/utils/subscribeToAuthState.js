@@ -5,7 +5,13 @@ import axios from "axios";
 
 const setTokenInCookies = async (user) => {
     try{
-        await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/setJwt`, user, {withCredentials: true})
+        const result = await axios.post(`${process.env.NEXT_PUBLIC_user_service}/api/setJwt`, user, {withCredentials: true})
+        const token = result.data.token;
+        if(token) {
+            localStorage.setItem("token", token);
+        } else {
+            console.log("Something went wrong while setting the token")
+        }
     } catch(error) {
         console.log("Something wrong when setting the token in the cookies")
     }

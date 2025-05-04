@@ -19,13 +19,26 @@ const useAxiosSecure = () => {
     const toastShownRef = useRef(false); 
 
     useEffect(() => {
+        // Request interceptor to attach the token
+        const requestInterceptor = axiosSecure.interceptors.request.use(
+            (config) => {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        // Existing response interceptor setup
         if(!interceptorRef.current) {
             interceptorRef.current = axiosSecure.interceptors.response.use(
                 (response) => response,
                 async (error) => {
                     const status = error.response?.status;
                     const message = error.response?.data?.error || "Unknown Error";
-    
+                    console.log(error)
                     if(status == 401 && message == "sessionExpired") {
                         if (!toastShownRef.current) {
                             toastShownRef.current = true;
@@ -45,6 +58,7 @@ const useAxiosSecure = () => {
         }
 
         return () => {
+            axiosSecure.interceptors.request.eject(requestInterceptor);
             if(interceptorRef.current !== null) {
                 axiosSecure.interceptors.response.eject(interceptorRef.current);
                 interceptorRef.current = null;

@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { useGetSingleDataQuery } from '@/app/slices/docApiSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { WebsocketProvider } from 'y-websocket';
 import * as Y from 'yjs';
@@ -22,6 +22,7 @@ import generateThumbnail from '@/app/utils/generateThumbnail';
 import { toast } from 'react-toastify';
 import debounce from 'lodash.debounce';
 import AccessDenied from '@/app/components/Ui/AccessDenied';
+import logOut from '@/app/utils/logOut';
 
 
 lineSpinner.register()
@@ -30,6 +31,7 @@ const Document = () => {
   
   
   const {documentId} = useParams();
+  const dispatch = useDispatch();
   const router = useRouter();
   const {user} = useSelector(state => state.auth);
   const {data: document, isLoading, refetch: documentRefetch, error: documentGetError} = useGetSingleDataQuery(documentId);
@@ -247,10 +249,13 @@ const Document = () => {
 
     if(documentGetError?.data?.message == "Unauthorized access" && documentGetError?.status == 401) {
       console.log(documentGetError)
+      logOut(dispatch);
       toast.error("Please log in to view this document");
       router.push(`/signin`);
     }
-    if(documentGetError?.data?.error == "sessionExpired" && documentGetError?.status == 401) {
+    if(documentGetError?.data?.error == "sessionExpired" && documentGetError?.status == 401) 
+    {
+      logOut(dispatch);
       toast.error("Session Expired");
       router.push(`/signin`);
     }

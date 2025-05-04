@@ -87,7 +87,7 @@ export const logout = createAsyncThunk('auth/logout',
     async () => {
         try{
             await signOut(auth);
-            await axios.get(`${process.env.NEXT_PUBLIC_user_service}/api/clearJwt`, {withCredentials: true})
+            localStorage.removeItem("token");
         } catch(error) {
             console.log("Something is wrong with the logout function in authslice")
         }
