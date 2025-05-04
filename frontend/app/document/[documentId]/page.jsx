@@ -246,6 +246,7 @@ const Document = () => {
   useEffect(() => {
 
     if(documentGetError?.data?.message == "Unauthorized access" && documentGetError?.status == 401) {
+      console.log(documentGetError)
       toast.error("Please log in to view this document");
       router.push(`/signin`);
     }
