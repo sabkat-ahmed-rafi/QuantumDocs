@@ -4,7 +4,7 @@ exports.setJwt = async (req, res) => {
     try{
         const token = await jwtService.generateJwtToken(req.body);
         res.cookie("token", token, {
-            httpOnly: true,
+            // httpOnly: true,
             secure: process.env.NODE_ENV === "production", 
             sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
         }).send({ success: true })
