@@ -3,7 +3,10 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 export const docApiSlice = createApi({
     reducerPath: 'docApiSlice',
-    baseQuery: fetchBaseQuery({baseUrl: process.env.NEXT_PUBLIC_document_service}),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: process.env.NEXT_PUBLIC_document_service,
+        credentials: 'include',
+     }),
     tagTypes: ['DocumentData'], 
     endpoints: (builder) => ({
         getSingleData: builder.query({
@@ -20,14 +23,16 @@ export const docApiSlice = createApi({
             query: (newDocumentData) => ({
                 url: `/api/document`,
                 method: 'POST',
-                body: newDocumentData
+                body: newDocumentData,
+                credentials: 'omit'
             }),
             invalidatesTags: ['DocumentData']
         }),
         deleteData: builder.mutation({
             query: (documentId) => ({
                 url: `/api/document/${documentId}`,
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'omit'
             }),
             invalidatesTags: ['DocumentData']
         }),
