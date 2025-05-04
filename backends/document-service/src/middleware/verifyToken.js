@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     
     
     const token = req.cookies?.token;
-    console.log(token);
+    console.log(req.headers.cookie);
     if(!token) {
         return res.status(401).send({ message: "Unauthorized access" });
     }
