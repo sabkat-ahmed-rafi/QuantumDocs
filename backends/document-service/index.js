@@ -8,7 +8,7 @@ const PORT = config.port;
 
 connectDB();
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Document service is running on port ${PORT}`);
 })
 

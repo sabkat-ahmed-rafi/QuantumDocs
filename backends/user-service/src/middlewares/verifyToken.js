@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     
     const token = authHeader.split(" ")[1];
-    console.log(token);
     if(!token) {
         return res.status(401).send({ message: "Unauthorized access" });
     }
