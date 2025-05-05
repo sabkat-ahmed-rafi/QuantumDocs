@@ -3,7 +3,7 @@ const { updateDocument, updateDocTitle, updateThumbnail } = require('../service/
 
 
 const setupCustomWebSocket = (server) => {
-    const customWS = new WebSocket.Server({ noServer: true, port: 5003 });
+    const customWS = new WebSocket.Server({ noServer: true });
 
     customWS.on('connection', (ws) => {
         console.log('Custom WebSocket connected');
