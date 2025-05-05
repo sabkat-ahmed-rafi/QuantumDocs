@@ -12,8 +12,8 @@ connectDB();
 const server = http.createServer(app);
 
 // Initialize WebSocket servers
-const yWebSocketServer = setupYWebSocket();       // returns a ws.Server
-const customWebSocketServer = setupCustomWebSocket(); // returns a ws.Server
+const yWebSocketServer = setupYWebSocket(server);       // returns a ws.Server
+const customWebSocketServer = setupCustomWebSocket(server); // returns a ws.Server
 
 server.on('upgrade', (request, socket, head) => {
     const pathname = request.url;
