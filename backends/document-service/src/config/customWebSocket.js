@@ -49,7 +49,7 @@ const setupCustomWebSocket = (server) => {
             console.error('Custom WebSocket error:', err);
         });
     });
-    return customWS;
+
 };
 
 module.exports = { setupCustomWebSocket };

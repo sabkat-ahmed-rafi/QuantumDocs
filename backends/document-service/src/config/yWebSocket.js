@@ -7,7 +7,7 @@ const setupYWebSocket  = (server) => {
     yws.on('connection', (ws, req) => {
         setupWSConnection(ws, req);
     });
-    return yws;
+
 };
 
 module.exports = { setupYWebSocket  };
