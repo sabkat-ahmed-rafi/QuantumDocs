@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const { updateDocument, updateDocTitle, updateThumbnail } = require('../service/documentService');
 
 
-const setupCustomWebSocket = (server) => {
+const setupCustomWebSocket = () => {
     const customWS = new WebSocket.Server({ noServer: true });
 
     customWS.on('connection', (ws) => {
@@ -49,7 +49,7 @@ const setupCustomWebSocket = (server) => {
             console.error('Custom WebSocket error:', err);
         });
     });
-
+    return customWS;
 };
 
 module.exports = { setupCustomWebSocket };
