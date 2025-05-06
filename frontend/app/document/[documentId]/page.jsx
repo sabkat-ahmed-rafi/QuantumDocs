@@ -81,9 +81,14 @@ const Document = () => {
     const parseJsonNewDelta = JSON.parse(parseDataNewDelta);
     const parseJsonOldDelta = JSON.parse(parseOldDelta);
     const updateMessage = { type: 'update', documentId, data: {parseJsonOldDelta, parseJsonNewDelta} };
-    if(customProviderRef.current.readyState == WebSocket.OPEN) {
-      customProviderRef.current.send(JSON.stringify(updateMessage));
-    };
+    try {
+      if (customProviderRef.current && customProviderRef.current.readyState === WebSocket.OPEN) {
+        customProviderRef.current.send(JSON.stringify(updateMessage));
+      }
+    } catch (err) {
+      toast.error("Custom WebSocket send failed:", err);
+    }
+      
   };
 
   const saveLatestThumbnail = async () => {
