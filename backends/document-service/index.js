@@ -14,15 +14,21 @@ const server = http.createServer(app);
 
 // WebSocket server
 const customWS = setupCustomWebSocket();
-setupYWebSocket(server);
+const yws = setupYWebSocket();
 
 server.on('upgrade', (req, socket, head) => {
     if (req.url === '/custom-ws') {
-        customWS.handleUpgrade(req, socket, head, (ws) => {
-            customWS.emit('connection', ws, req);
-        });
+      customWS.handleUpgrade(req, socket, head, (ws) => {
+        customWS.emit('connection', ws, req);
+      });
+    } else if (req.url.startsWith('/yjs')) {
+      yws.handleUpgrade(req, socket, head, (ws) => {
+        yws.emit('connection', ws, req);
+      });
+    } else {
+      socket.destroy(); // Reject unknown upgrade paths
     }
-});
+  });
 
 server.listen(PORT, () => {
     console.log(`Document service is running on port ${PORT}`);
