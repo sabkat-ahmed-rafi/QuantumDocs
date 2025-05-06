@@ -197,7 +197,7 @@ const Document = () => {
       if(shouldObserveRef.current && source === 'user') {
         handleTyping();
         saveDocument(oldDelta, delta);
-        debouncedThumbnailSave()
+        // debouncedThumbnailSave()
       };
     });
       
