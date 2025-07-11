@@ -1,4 +1,4 @@
 ========== TODO ===========
 
-* Now I need to write the documentation.
-* Now I need to show the favourite docs of each user.
+* I have to use protected route only for when user login to his vault.
+* I have to use axiosSecure only after user logs in.
